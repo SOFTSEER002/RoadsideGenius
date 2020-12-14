@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignupActivity">
+    tools:context=".Activities.SignupActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,7 +33,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:text="Create\nnew account"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/circle_color"
+                android:textColor="#9C9C9C"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -99,10 +99,11 @@
                     android:layout_height="45dp"
                     android:background="@drawable/et_bg_blue" />
 
-                <Button
+                <android.widget.Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:textColor="#fff"
                     android:background="@drawable/button_bg_blue"
                     android:text="Sign up" />
 
@@ -128,7 +129,7 @@
                         android:layout_marginHorizontal="5dp"
                         android:text="Sign in"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/circle_color"
+                        android:textColor="#9C9C9C"
                         android:textStyle="bold" />
 
                 </LinearLayout>

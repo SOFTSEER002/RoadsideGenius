@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#fff"
     android:fitsSystemWindows="true"
-    tools:context=".LoginTypeActvvity">
+    tools:context=".Activities.LoginTypeActvvity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,6 +26,7 @@
             android:textColor="#000" />
 
         <android.widget.Button
+            android:id="@+id/adminButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"

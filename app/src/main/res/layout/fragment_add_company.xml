@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.Admin.Navigation.fragment.AddCompanyFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Company Name"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/nameET"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/et_bg_blue"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Company Email"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/emailET"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/et_bg_blue"
+                android:inputType="textEmailAddress"
+                android:paddingHorizontal="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Company Number"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:id="@+id/numberET"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/et_bg_blue"
+                android:inputType="textPhonetic"
+                android:paddingHorizontal="15dp" />
+
+            <TextView
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="Vendor ID"
+                android:textColor="@color/black" />
+
+            <EditText
+                android:visibility="gone"
+                android:id="@+id/vendorET"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/et_bg_blue"
+                android:inputType="textPhonetic"
+                android:paddingHorizontal="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="L 9 Forms"
+                android:textColor="@color/black" />
+
+            <Spinner
+                android:id="@+id/l9formsSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/et_bg_blue"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="15dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="W 9 Forms"
+                android:textColor="@color/black" />
+
+            <Spinner
+                android:id="@+id/w9formsSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/et_bg_blue"
+                android:inputType="textPersonName"
+                android:paddingHorizontal="15dp" />
+
+            <Button
+                android:id="@+id/addCompanyButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="20dp"
+                android:background="@drawable/button_bg_blue"
+                android:text="Submit"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="#fff" />
+        </LinearLayout>
+    </ScrollView>
+
+</FrameLayout>

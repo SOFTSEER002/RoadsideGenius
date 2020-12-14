@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignupActivity">
+    tools:context=".Activities.SignupActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -139,6 +139,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Notes"
+                    android:layout_marginBottom="5dp"
                     android:textStyle="bold" />
 
                 <EditText

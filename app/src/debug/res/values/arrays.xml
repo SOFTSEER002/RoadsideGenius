@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="ld_activityScreenTitles">
+        <item>Dashboard</item>
+        <item>Add Driver</item>
+        <item>Add Company</item>
+        <item>Drivers List</item>
+        <item>Services</item>
+        <item>Log Out</item>
+    </string-array>
+
+    <string-array name="ld_activityScreenTitlesDriver">
+        <item>Task List</item>
+        <item>Task History</item>
+        <item>Analytics</item>
+        <item>Chat</item>
+        <item>Settings</item>
+        <item>Support</item>
+        <item>Log Out</item>
+    </string-array>
+
+    <array name="ld_activityScreenIconsDriver">
+        <item>@drawable/ic_baseline_view_list_24</item>
+        <item>@drawable/ic_baseline_history_24</item>
+        <item>@drawable/ic_outline_analytics_24</item>
+        <item>@drawable/ic_baseline_message_24</item>
+        <item>@drawable/ic_baseline_settings_24</item>
+        <item>@drawable/ic_baseline_support_agent_24</item>
+        <item>@drawable/ic_logout_grey600_24dp</item>
+    </array>
+    <array name="ld_activityScreenIcons">
+        <item>@drawable/ic_home_outline_grey600_24dp</item>
+        <item>@drawable/driver</item>
+        <item>@drawable/building</item>
+        <item>@drawable/driver</item>
+        <item>@drawable/ic_baseline_miscellaneous_services_24</item>
+        <item>@drawable/ic_logout_grey600_24dp</item>
+    </array>
+
+</resources>
