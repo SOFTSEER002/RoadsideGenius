@@ -71,6 +71,7 @@ public class ServiceFragment extends Fragment {
     SharedPreferenceMethod sharedPreferenceMethod;
     ServiceListAdapter serviceListAdapter;
     CustomProgressBar customProgressBar;
+    boolean allowRefresh = false;
 
     void initUI(View view) {
         recyclerView = view.findViewById(R.id.serviceListRecycler);
@@ -91,6 +92,25 @@ public class ServiceFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         getServiceList();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Initialize();
+        if (allowRefresh) {
+            allowRefresh = false;
+            getServiceList();
+
+            //call your initialization code here
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!allowRefresh)
+            allowRefresh = true;
     }
 
     void getServiceList() {

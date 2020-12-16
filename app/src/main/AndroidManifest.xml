@@ -20,13 +20,18 @@
         android:theme="@style/Theme.RoadsideGenius"
         android:usesCleartextTraffic="true">
         <activity
-            android:name=".Activities.Admin.AddServiceActivity"
+            android:name=".Activities.Admin.AssignJobActivity"
             android:label="@string/titleDashboard"></activity>
+        <activity
+            android:name=".Activities.Admin.AddServiceActivity"
+            android:label="@string/titleDashboard" />
         <activity
             android:name=".Activities.EditActivity"
             android:label="@string/titleDashboard" />
-        <activity android:name=".Activities.Customer.DashboardCustomerActivity" />
-        <activity android:name=".Activities.Customer.VerifyOTPActivity" />
+        <activity
+            android:name=".Activities.Customer.DashboardCustomerActivity"
+            android:label="@string/titleDashboard" />
+        <activity android:name=".Activities.Customer.CustomerNavigation.Activity.VerifyOTPActivity" />
         <activity
             android:name=".Activities.Driver.DriverDashboardActivity"
             android:label="@string/titleDashboard" />
@@ -34,7 +39,7 @@
             android:name=".Activities.Admin.Navigation.DashboardAdminActivity"
             android:label="@string/titleDashboard" />
         <activity android:name=".Activities.Admin.AdminLoginActivity" />
-        <activity android:name=".Activities.Customer.CustomerLoginActivity" />
+        <activity android:name=".Activities.Customer.CustomerNavigation.Activity.CustomerLoginActivity" />
         <activity android:name=".Activities.Driver.DriverLoginActvity" />
         <activity android:name=".Activities.LoginTypeActvvity" />
         <!--

@@ -44,14 +44,18 @@
         <Button
             android:id="@+id/cancelDeletion"
             android:layout_width="0dp"
+            android:background="@drawable/button_bg_blue"
             android:layout_height="wrap_content"
+            android:textColor="#fff"
             android:layout_marginHorizontal="5dp"
             android:layout_weight=".5"
             android:text="No" />
 
         <Button
+            android:background="@drawable/button_bg_blue"
             android:id="@+id/yesButton"
             android:layout_width="0dp"
+            android:textColor="#fff"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
             android:layout_weight=".5"

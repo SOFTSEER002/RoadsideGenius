@@ -2,13 +2,17 @@ package com.doozycod.roadsidegenius;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.doozycod.roadsidegenius.Activities.Customer.DashboardCustomerActivity;
 import com.doozycod.roadsidegenius.Activities.Driver.DriverDashboardActivity;
@@ -18,8 +22,6 @@ import com.doozycod.roadsidegenius.PushNotification.MyFirebaseMessagingService;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Timer;
@@ -36,7 +38,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
         Log.e("TAG", "onCreate: " + sharedPreferenceMethod.getLogin());
-        if(sharedPreferenceMethod.getFCMToken().equals("")){
+        if (sharedPreferenceMethod.getFCMToken().equals("")) {
             generatePushToken();
         }
         new Timer().schedule(new TimerTask() {
@@ -66,11 +68,22 @@ public class SplashActivity extends AppCompatActivity {
             }
         }, 3000);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(this, MyFirebaseMessagingService.class));
-        } else {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            String CHANNEL_ID = "my_channel_01";
+//            NotificationChannel channel = new NotificationChannel(CHANNEL_ID,
+//                    "Channel human readable title",
+//                    NotificationManager.IMPORTANCE_DEFAULT);
+//
+//            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+//
+//            Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+//                    .setContentTitle("")
+//                    .setContentText("").build();
+//
+//            startForeground(1, notification);
+//        } else {
             startService(new Intent(this, MyFirebaseMessagingService.class));
-        }
+//        }
         android_id = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         if (sharedPreferenceMethod.getDeviceId().equals("")) {

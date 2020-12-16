@@ -43,6 +43,7 @@ public class DriversListFragment extends Fragment {
     ApiService apiService;
     CustomProgressBar customProgressBar;
     List<Driver> driverList = new ArrayList<>();
+    boolean allowRefresh = false;
 
     public static DriversListFragment createFor(String text) {
         DriversListFragment fragment = new DriversListFragment();
@@ -56,6 +57,25 @@ public class DriversListFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //Initialize();
+        if (allowRefresh) {
+            allowRefresh = false;
+            getDrivers();
+
+            //call your initialization code here
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (!allowRefresh)
+            allowRefresh = true;
     }
 
     @Override
@@ -78,11 +98,13 @@ public class DriversListFragment extends Fragment {
     }
 
     void getDrivers() {
+
         customProgressBar.showProgress();
         apiService.getDriverList(sharedPreferenceMethod.getJWTToken()).enqueue(new Callback<DriversListModel>() {
             @Override
             public void onResponse(Call<DriversListModel> call, Response<DriversListModel> response) {
                 customProgressBar.hideProgress();
+                allowRefresh = true;
 
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     driverList = response.body().getResponse().getDrivers();

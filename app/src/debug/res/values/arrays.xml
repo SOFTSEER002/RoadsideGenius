@@ -19,7 +19,17 @@
         <item>Support</item>
         <item>Log Out</item>
     </string-array>
+    <string-array name="ld_activityScreenTitlesCustomer">
+        <item>Request a Service</item>
+        <item></item>
+        <item>Log Out</item>
+    </string-array>
 
+    <array name="ld_activityScreenIconsCustomer">
+        <item>@drawable/ic_baseline_miscellaneous_services_24</item>
+        <item>0</item>
+        <item>@drawable/ic_logout_grey600_24dp</item>
+    </array>
     <array name="ld_activityScreenIconsDriver">
         <item>@drawable/ic_baseline_view_list_24</item>
         <item>@drawable/ic_baseline_history_24</item>

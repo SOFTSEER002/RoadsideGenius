@@ -10,7 +10,11 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.doozycod.roadsidegenius.Adapter.AdminPagerAdapter;
+import com.doozycod.roadsidegenius.Adapter.TabLayoutPagerAdapter;
 import com.doozycod.roadsidegenius.R;
+import com.doozycod.roadsidegenius.Utils.CustomViewPager;
+import com.google.android.material.tabs.TabLayout;
 
 
 /**
@@ -29,23 +33,31 @@ public class CenteredTextFragment extends Fragment {
         return fragment;
     }
 
+
+    AdminPagerAdapter pagerAdapter;
+    CustomViewPager viewPager;
+    TabLayout tabLayout;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_text, container, false);
+        View view= inflater.inflate(R.layout.fragment_text, container, false);
+        pagerAdapter = new AdminPagerAdapter(getFragmentManager());
+        viewPager = view.findViewById(R.id.pager);
+        tabLayout = view.findViewById(R.id.tab_layout_main);
+
+        viewPager.setSwipeable(true);
+
+        tabLayout.setupWithViewPager(viewPager);
+        viewPager.setAdapter(pagerAdapter);
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         Bundle args = getArguments();
         final String text = args != null ? args.getString(EXTRA_TEXT) : "";
-        TextView textView = view.findViewById(R.id.text);
-        textView.setText(text);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(v.getContext(), text, Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 }

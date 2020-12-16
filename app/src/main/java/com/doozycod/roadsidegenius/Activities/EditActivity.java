@@ -194,18 +194,18 @@ public class EditActivity extends AppCompatActivity {
                 customProgressBar.hideProgress();
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     Toast.makeText(EditActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
-                    emailET.setText("");
-                    nameET.setText("");
-                    numberET.setText("");
-                    driverET.setText("");
-                    driverAddressET.setText("");
-                    driverZipcodeET.setText("");
-                    serviceAreaET.setText("");
-                    serviceTypeET.setText("");
-                    serviceMakeET.setText("");
-                    serviceYearET.setText("");
-                    serviceModelET.setText("");
-                    payperJobET.setText("");
+//                    emailET.setText("");
+//                    nameET.setText("");
+//                    numberET.setText("");
+//                    driverET.setText("");
+//                    driverAddressET.setText("");
+//                    driverZipcodeET.setText("");
+//                    serviceAreaET.setText("");
+//                    serviceTypeET.setText("");
+//                    serviceMakeET.setText("");
+//                    serviceYearET.setText("");
+//                    serviceModelET.setText("");
+//                    payperJobET.setText("");
                 } else {
                     Toast.makeText(EditActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
 

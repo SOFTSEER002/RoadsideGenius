@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.doozycod.roadsidegenius.Activities.Admin.AdminLoginActivity;
-import com.doozycod.roadsidegenius.Activities.Customer.CustomerLoginActivity;
+import com.doozycod.roadsidegenius.Activities.Customer.CustomerNavigation.Activity.CustomerLoginActivity;
 import com.doozycod.roadsidegenius.Activities.Driver.DriverLoginActvity;
 import com.doozycod.roadsidegenius.R;
 

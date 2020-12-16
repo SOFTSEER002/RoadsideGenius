@@ -28,7 +28,6 @@ import com.doozycod.roadsidegenius.Activities.Admin.Navigation.fragment.ServiceF
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerAdapter;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerItem;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.SimpleItem;
-import com.doozycod.roadsidegenius.Activities.Customer.DashboardCustomerActivity;
 import com.doozycod.roadsidegenius.Activities.LoginTypeActvvity;
 import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
@@ -36,8 +35,6 @@ import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
-
-import kotlin.jvm.internal.Ref;
 
 public class DashboardAdminActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener, ServiceFragment.OnFragmentChangeListener {
     private static final int POS_DASHBOARD = 0;

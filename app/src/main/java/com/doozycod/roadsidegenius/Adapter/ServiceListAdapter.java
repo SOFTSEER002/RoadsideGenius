@@ -96,7 +96,7 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
 
     void deleteDriver(String id) {
         customProgressBar.showProgress();
-        apiService.deleteDriver(sharedPreferenceMethod.getJWTToken(), id).enqueue(new Callback<AdminRegisterModel>() {
+        apiService.deleteService(sharedPreferenceMethod.getJWTToken(), id).enqueue(new Callback<AdminRegisterModel>() {
             @Override
             public void onResponse(Call<AdminRegisterModel> call, Response<AdminRegisterModel> response) {
                 customProgressBar.hideProgress();
@@ -106,7 +106,6 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
                     Toast.makeText(context, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
-
                 }
 
             }

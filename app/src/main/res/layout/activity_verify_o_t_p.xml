@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Customer.VerifyOTPActivity">
+    tools:context=".Activities.Customer.CustomerNavigation.Activity.VerifyOTPActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
 
     <LinearLayout
         android:visibility="gone"
-        android:id="@+id/resendOTP"
+        android:id="@+id/resendOTPView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/otp_view"
@@ -44,10 +44,11 @@
             android:text="OTP Taking too long? " />
 
         <TextView
+            android:id="@+id/resendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_regular"
-            android:text="Resend OTP"
+            android:text="Resend"
             android:textColor="@color/black"
             android:textStyle="bold" />
     </LinearLayout>

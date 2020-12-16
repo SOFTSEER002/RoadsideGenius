@@ -1,11 +1,13 @@
 package com.doozycod.roadsidegenius.Service;
 
 
+import com.doozycod.roadsidegenius.Model.AddCustomerNumberModel.VerifyOTPModel;
 import com.doozycod.roadsidegenius.Model.AdminRegisterModel;
 import com.doozycod.roadsidegenius.Model.Company.CompanyModel;
 import com.doozycod.roadsidegenius.Model.Customer.CustomerLoginModel;
 import com.doozycod.roadsidegenius.Model.DriverList.DriversListModel;
 import com.doozycod.roadsidegenius.Model.DriverLogin.DriverLoginModel;
+import com.doozycod.roadsidegenius.Model.JobList.JobsListModel;
 import com.doozycod.roadsidegenius.Model.OTP.OTPModel;
 import com.doozycod.roadsidegenius.Model.ServiceList.ServiceListModel;
 
@@ -26,12 +28,24 @@ public interface ApiService {
             @Field("device_id") String device_id,
             @Field("push_token") String push_token);
 
-
     //    Customer Login
     @POST("customer/login.php")
     @FormUrlEncoded
     Call<CustomerLoginModel> customerLogin(
             @Field("phone") String number);
+
+    //    get unassigned jobs
+    @POST("job/unassigned.php")
+    @FormUrlEncoded
+    Call<JobsListModel> getJobsList(
+            @Field("jwt") String jwt);
+
+    //    Customer Login
+    @POST("customer/add-number.php")
+    @FormUrlEncoded
+    Call<VerifyOTPModel> addCustomerNumber(
+            @Field("jwt") String jwt,
+            @Field("number") String number);
 
     //    Service List
     @POST("service/list-all.php")
@@ -57,6 +71,45 @@ public interface ApiService {
             @Field("type") String type,
             @Field("cost") String cost,
             @Field("description") String description);
+
+
+    //    Service Add
+    @POST("customer/create-job.php")
+    @FormUrlEncoded
+    Call<AdminRegisterModel> createJobRequest(
+            @Field("jwt") String jwt,
+            @Field("customer_id") String customer_id,
+            @Field("customer_name") String customer_name,
+            @Field("customer_number") String customer_number,
+            @Field("customer_pickup") String customer_pickup,
+            @Field("customer_dropoff") String customer_dropoff,
+            @Field("customer_email") String customer_email,
+            @Field("service_needed") String service_needed,
+            @Field("customer_notes") String customer_notes,
+            @Field("amount_quoted") String amount_quoted);
+
+
+    //    Assign new Job
+    @POST("admin/assign-job.php")
+    @FormUrlEncoded
+    Call<AdminRegisterModel> assignJob(
+            @Field("jwt") String jwt,
+            @Field("job_id") String job_id,
+            @Field("driver_id") String driver_id,
+            @Field("dispatch_date") String dispatch_date,
+            @Field("site") String site,
+            @Field("eta") String eta,
+            @Field("status") String status,
+            @Field("vehicle_make") String vehicle_make,
+            @Field("vehicle_model") String vehicle_model,
+            @Field("vehicle_color") String vehicle_color,
+            @Field("dispatched") String dispatched,
+            @Field("total_job_time") String total_job_time,
+            @Field("total_miles") String total_miles,
+            @Field("invoice_total") String invoice_total,
+            @Field("comments") String comments,
+            @Field("truck") String truck
+    );
 
 
     //    company register
@@ -125,6 +178,13 @@ public interface ApiService {
     @POST("driver/delete.php")
     @FormUrlEncoded
     Call<AdminRegisterModel> deleteDriver(
+            @Field("jwt") String jwt,
+            @Field("id") String id);
+
+    //    delete service
+    @POST("service/delete.php")
+    @FormUrlEncoded
+    Call<AdminRegisterModel> deleteService(
             @Field("jwt") String jwt,
             @Field("id") String id);
 
