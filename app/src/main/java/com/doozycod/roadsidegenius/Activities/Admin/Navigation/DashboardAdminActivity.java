@@ -28,6 +28,7 @@ import com.doozycod.roadsidegenius.Activities.Admin.Navigation.fragment.ServiceF
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerAdapter;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerItem;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.SimpleItem;
+import com.doozycod.roadsidegenius.Activities.Customer.CustomerNavigation.Fragments.RequestServiceFragment;
 import com.doozycod.roadsidegenius.Activities.LoginTypeActvvity;
 import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
@@ -40,9 +41,10 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
     private static final int POS_DASHBOARD = 0;
     private static final int POS_ADD_DRIVER = 1;
     private static final int POS_ADD_COMPANY = 2;
-    private static final int POS_DRIVER_LIST = 3;
-    private static final int POS_SERVICES = 4;
-    private static final int POS_LOGOUT = 5;
+    private static final int POS_CREATE_JOB = 3;
+    private static final int POS_DRIVER_LIST = 4;
+    private static final int POS_SERVICES = 5;
+    private static final int POS_LOGOUT = 6;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
@@ -85,6 +87,7 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
                 createItemFor(POS_DASHBOARD).setChecked(true),
                 createItemFor(POS_ADD_DRIVER),
                 createItemFor(POS_ADD_COMPANY),
+                createItemFor(POS_CREATE_JOB),
                 createItemFor(POS_DRIVER_LIST),
                 createItemFor(POS_SERVICES),
                 createItemFor(POS_LOGOUT)));
@@ -125,6 +128,11 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
         if (position == POS_DASHBOARD) {
             toolbar_title.setText("Dashboard");
             Fragment selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
+            showFragment(selectedScreen);
+        }
+        if (position == POS_CREATE_JOB) {
+            toolbar_title.setText("Create Job");
+            Fragment selectedScreen = new RequestServiceFragment();
             showFragment(selectedScreen);
         }
         if (position == POS_DRIVER_LIST) {

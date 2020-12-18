@@ -19,6 +19,7 @@ import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerAdapte
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerItem;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.SimpleItem;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.SpaceItem;
+import com.doozycod.roadsidegenius.Activities.Customer.CustomerNavigation.Fragments.CustomerRequestTabsFragment;
 import com.doozycod.roadsidegenius.Activities.Customer.CustomerNavigation.Fragments.RequestServiceFragment;
 import com.doozycod.roadsidegenius.Activities.LoginTypeActvvity;
 import com.doozycod.roadsidegenius.R;
@@ -29,8 +30,8 @@ import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 import java.util.Arrays;
 
 public class DashboardCustomerActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
-    private static final int POS_REQUEST = 0;
-    private static final int POS_TASK_HISTORY = 1;
+    private static final int POS_REQUEST = 1;
+    private static final int POS_DASHBOARD = 0;
     private static final int POS_LOGOUT = 2;
 
     private String[] screenTitles;
@@ -64,8 +65,8 @@ public class DashboardCustomerActivity extends AppCompatActivity implements Draw
         screenIcons = loadScreenIcons();
         screenTitles = loadScreenTitles();
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
+                createItemFor(POS_DASHBOARD).setChecked(true),
                 createItemFor(POS_REQUEST).setChecked(true),
-                new SpaceItem(48),
                 createItemFor(POS_LOGOUT)));
         adapter.setListener(this);
 
@@ -74,24 +75,29 @@ public class DashboardCustomerActivity extends AppCompatActivity implements Draw
         list.setLayoutManager(new LinearLayoutManager(this));
         list.setAdapter(adapter);
 
-        adapter.setSelected(POS_REQUEST);
+        adapter.setSelected(POS_DASHBOARD);
     }
 
     @Override
     public void onItemSelected(int position) {
         Fragment selectedScreen;
         switch (position) {
+            case 0:
+                toolbar_title.setText("Dashboard");
+                selectedScreen = new CustomerRequestTabsFragment();
+                showFragment(selectedScreen);
+                break;
+            case 1:
+                toolbar_title.setText("Request a service");
+                selectedScreen = new RequestServiceFragment();
+                showFragment(selectedScreen);
+                break;
             case 2:
                 sharedPreferenceMethod.removeLogin();
                 startActivity(new Intent(DashboardCustomerActivity.this, LoginTypeActvvity.class));
                 finishAffinity();
                 break;
 
-            default:
-                toolbar_title.setText("Request a service");
-                selectedScreen = new RequestServiceFragment();
-                showFragment(selectedScreen);
-                break;
 
         }
         slidingRootNav.closeMenu();

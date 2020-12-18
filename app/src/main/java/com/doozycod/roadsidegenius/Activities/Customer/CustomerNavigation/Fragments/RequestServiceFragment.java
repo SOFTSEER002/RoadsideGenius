@@ -5,6 +5,8 @@ import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.doozycod.roadsidegenius.Activities.Admin.Navigation.fragment.CenteredTextFragment;
 import com.doozycod.roadsidegenius.Adapter.AutoCompleteAdapter;
 import com.doozycod.roadsidegenius.Model.AddCustomerNumberModel.VerifyOTPModel;
 import com.doozycod.roadsidegenius.Model.AdminRegisterModel;
@@ -75,21 +78,16 @@ public class RequestServiceFragment extends Fragment {
     String otpString = "";
     boolean isSent = false;
     String number = "";
+    Toolbar toolbar;
 
     public RequestServiceFragment() {
         // Required empty public constructor
     }
 
+
     private void initAutoCompleteTextView(View view) {
 
-        notesET = view.findViewById(R.id.notesET);
-        amount_quoted = view.findViewById(R.id.amount_quoted);
-        requestButton = view.findViewById(R.id.requestButton);
-        contactDialogButton = view.findViewById(R.id.contactDialogButton);
-        vendorIDSpinner = view.findViewById(R.id.vendorIDSpinner);
-        serviceTypeSpinner = view.findViewById(R.id.serviceTypeSpinner);
-        contactNumberTxt = view.findViewById(R.id.contactNumberTxt);
-        fullNameET = view.findViewById(R.id.fullNameET);
+
         getLocationET = view.findViewById(R.id.getPickupLocationET);
         getDropOffLocation = view.findViewById(R.id.getDropOffLocationET);
         getLocationET.setThreshold(1);
@@ -109,6 +107,16 @@ public class RequestServiceFragment extends Fragment {
     }
 
     void initUI(View view) {
+
+        notesET = view.findViewById(R.id.notesET);
+        amount_quoted = view.findViewById(R.id.amount_quoted);
+        requestButton = view.findViewById(R.id.requestButton);
+        contactDialogButton = view.findViewById(R.id.contactDialogButton);
+        customerEmailET = view.findViewById(R.id.customerEmailET);
+        vendorIDSpinner = view.findViewById(R.id.vendorIDSpinner);
+        serviceTypeSpinner = view.findViewById(R.id.serviceTypeSpinner);
+        contactNumberTxt = view.findViewById(R.id.contactNumberTxt);
+        fullNameET = view.findViewById(R.id.fullNameET);
         String apiKey = getString(R.string.google_maps_key);
         if (apiKey.isEmpty()) {
             Toast.makeText(getActivity(), "Api key is invalid!", Toast.LENGTH_SHORT).show();
@@ -142,7 +150,9 @@ public class RequestServiceFragment extends Fragment {
                 showContactDialog();
             }
         });
-        contactNumberTxt.setText("+" + sharedPreferenceMethod.getCustomerContact());
+        if(!sharedPreferenceMethod.getCustomerContact().equals("")){
+            contactNumberTxt.setText("+" + sharedPreferenceMethod.getCustomerContact());
+        }
         number = sharedPreferenceMethod.getCustomerContact();
         serviceTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -150,7 +160,6 @@ public class RequestServiceFragment extends Fragment {
                 if (i > 0) {
                     amount_quoted.setText(serviceList.get((i - 1)).getServiceCost());
                 }
-
             }
 
             @Override
@@ -176,8 +185,8 @@ public class RequestServiceFragment extends Fragment {
                 if (getLocationET.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Please enter contact number", Toast.LENGTH_SHORT).show();
                     return;
-                } else {
 
+                } else {
                     createRequest(fullNameET.getText().toString(), customerEmailET.getText().toString(), countryCode + number,
                             getLocationET.getText().toString(), getDropOffLocation.getText().toString());
                 }
@@ -191,7 +200,7 @@ public class RequestServiceFragment extends Fragment {
         customProgressBar.showProgress();
         apiService.createJobRequest(sharedPreferenceMethod.getJWTToken(), sharedPreferenceMethod.getCustomerID(),
                 fullName, contactNumber, customerPickup, customerDropOff, email,
-                serviceList.get(serviceTypeSpinner.getSelectedItemPosition()).getServiceId(),
+                serviceList.get(serviceTypeSpinner.getSelectedItemPosition()).getId(),
                 notesET.getText().toString(),
                 amount_quoted.getText().toString()).enqueue(new Callback<AdminRegisterModel>() {
             @Override
@@ -230,6 +239,7 @@ public class RequestServiceFragment extends Fragment {
 
             }
         });
+        isSent = false;
         countryCode = countryCodePicker.getDefaultCountryCode();
         countryCodePicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override

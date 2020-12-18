@@ -26,28 +26,6 @@
                 android:src="@drawable/ic_baseline_edit_road_24"
                 android:visibility="gone" />
 
-            <LinearLayout
-                android:id="@+id/showBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:orientation="vertical"
-                android:layout_marginVertical="10dp"
-                android:visibility="visible">
-
-
-                <Button
-                    android:id="@+id/assignButton"
-                    android:background="@drawable/button_bg_black_brdr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#000"
-                    android:fontFamily="@font/poppins_regular"
-                    android:layout_margin="10dp"
-                    android:textAllCaps="true"
-                    android:text="Assign"
-                    android:src="@drawable/ic_baseline_assignment_24" />
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/main"
@@ -180,9 +158,9 @@
                         android:layout_weight="1.3"
                         android:fontFamily="@font/poppins_regular"
                         android:maxLines="1"
-                        android:textColor="@color/quantum_googred"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/quantum_googred" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -247,11 +225,11 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginBottom="10dp"
+                    android:visibility="gone"
                     android:weightSum="2">
 
                     <TextView

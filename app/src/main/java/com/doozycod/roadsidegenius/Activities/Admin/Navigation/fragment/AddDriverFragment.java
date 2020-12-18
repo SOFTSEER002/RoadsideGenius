@@ -241,7 +241,7 @@ public class AddDriverFragment extends Fragment {
                     companyList = response.body().getResponse().getCompanies();
                     for (int i = 0; i < response.body().getResponse().getCompanies().size(); i++) {
                         companyIdList.add(response.body().getResponse().getCompanies().get(i).getId());
-                        vendorIdList.add(response.body().getResponse().getCompanies().get(i).getVendorId());
+                        vendorIdList.add(response.body().getResponse().getCompanies().get(i).getCompanyName());
                     }
 
                     aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, vendorIdList);

@@ -82,7 +82,7 @@ public class SplashActivity extends AppCompatActivity {
 //
 //            startForeground(1, notification);
 //        } else {
-            startService(new Intent(this, MyFirebaseMessagingService.class));
+//            startService(new Intent(this, MyFirebaseMessagingService.class));
 //        }
         android_id = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
@@ -110,6 +110,7 @@ public class SplashActivity extends AppCompatActivity {
                         // Log and toast
 //                        String msg = getString(R.string.msg_token_fmt, token);
                         Log.e("TAG", token);
+                        sharedPreferenceMethod.saveToken(token);
 //                        Toast.makeText(SplashActivity.this, token, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -124,7 +125,7 @@ public class SplashActivity extends AppCompatActivity {
 //                        }
 //                        // Get new Instance ID token
 //                        token = task.getResult().getToken();
-//
+
 //                    }
 //                });
         return token;

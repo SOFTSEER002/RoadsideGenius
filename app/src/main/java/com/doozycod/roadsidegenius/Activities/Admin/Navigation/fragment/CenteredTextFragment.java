@@ -38,11 +38,12 @@ public class CenteredTextFragment extends Fragment {
     CustomViewPager viewPager;
     TabLayout tabLayout;
 
+    boolean allowRefresh = false;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_text, container, false);
+        View view = inflater.inflate(R.layout.fragment_text, container, false);
         pagerAdapter = new AdminPagerAdapter(getFragmentManager());
         viewPager = view.findViewById(R.id.pager);
         tabLayout = view.findViewById(R.id.tab_layout_main);
@@ -53,6 +54,27 @@ public class CenteredTextFragment extends Fragment {
         viewPager.setAdapter(pagerAdapter);
         return view;
     }
+
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        //Initialize();
+//        if (allowRefresh) {
+//            allowRefresh = false;
+//            tabLayout.setupWithViewPager(viewPager);
+//            viewPager.setAdapter(pagerAdapter);
+//
+//
+//            //call your initialization code here
+//        }
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        if (!allowRefresh)
+//            allowRefresh = true;
+//    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

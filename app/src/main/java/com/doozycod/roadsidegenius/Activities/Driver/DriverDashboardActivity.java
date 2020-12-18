@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerAdapter;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerItem;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.SimpleItem;
+import com.doozycod.roadsidegenius.Activities.Customer.CustomerNavigation.Fragments.RequestServiceFragment;
 import com.doozycod.roadsidegenius.Activities.Driver.Fragments.AnalyticsFragment;
 import com.doozycod.roadsidegenius.Activities.Driver.Fragments.ChatFragment;
 import com.doozycod.roadsidegenius.Activities.Driver.Fragments.SettingsFragment;
@@ -33,13 +34,15 @@ import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 import java.util.Arrays;
 
 public class DriverDashboardActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
+
     private static final int POS_TASK_LIST = 0;
     private static final int POS_TASK_HISTORY = 1;
-    private static final int POS_ANALYTICS = 2;
-    private static final int POS_CHAT = 3;
-    private static final int POS_SETTINGS = 4;
-    private static final int POS_SUPPORT = 5;
-    private static final int POS_LOGOUT = 6;
+    private static final int POS_CREATE_JOB = 2;
+    private static final int POS_ANALYTICS = 3;
+    private static final int POS_CHAT = 4;
+    private static final int POS_SETTINGS = 5;
+    private static final int POS_SUPPORT = 6;
+    private static final int POS_LOGOUT = 7;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
@@ -74,6 +77,7 @@ public class DriverDashboardActivity extends AppCompatActivity implements Drawer
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_TASK_LIST).setChecked(true),
                 createItemFor(POS_TASK_HISTORY),
+                createItemFor(POS_CREATE_JOB),
                 createItemFor(POS_ANALYTICS),
                 createItemFor(POS_CHAT),
                 createItemFor(POS_SETTINGS),
@@ -99,26 +103,31 @@ public class DriverDashboardActivity extends AppCompatActivity implements Drawer
                 showFragment(selectedScreen);
                 break;
             case 2:
+                toolbar_title.setText("Create Job");
+                selectedScreen = new RequestServiceFragment();
+                showFragment(selectedScreen);
+                break;
+            case 3:
                 toolbar_title.setText("Analytics");
                 selectedScreen = AnalyticsFragment.newInstance(screenTitles[position]);
                 showFragment(selectedScreen);
                 break;
-            case 3:
+            case 4:
                 toolbar_title.setText("Chat");
                 selectedScreen = ChatFragment.newInstance(screenTitles[position]);
                 showFragment(selectedScreen);
                 break;
-            case 4:
+            case 5:
                 toolbar_title.setText("Settings");
                 selectedScreen = SettingsFragment.newInstance(screenTitles[position]);
                 showFragment(selectedScreen);
                 break;
-            case 5:
+            case 6:
                 toolbar_title.setText("Support");
                 selectedScreen = SupportFragment.newInstance(screenTitles[position], "None");
                 showFragment(selectedScreen);
                 break;
-            case 6:
+            case 7:
                 sharedPreferenceMethod.removeLogin();
                 startActivity(new Intent(DriverDashboardActivity.this, LoginTypeActvvity.class));
                 finishAffinity();

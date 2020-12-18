@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.doozycod.roadsidegenius.Activities.Admin.Navigation.DashboardAdminActivity;
 import com.doozycod.roadsidegenius.Model.AdminRegisterModel;
 import com.doozycod.roadsidegenius.Model.DriverList.Driver;
 import com.doozycod.roadsidegenius.Model.DriverList.DriversListModel;
@@ -138,18 +140,62 @@ public class AssignJobActivity extends AppCompatActivity {
         assignButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                assignJob(dispatchDateTxt.getText().toString(),siteET.getText().toString(),etaET.getText().toString(),
-//                        );
+                if (driverSpinner.getSelectedItemPosition() == 0) {
+                    Toast.makeText(AssignJobActivity.this, "Please select driver", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (siteET.getText().equals("")) {
+                    Toast.makeText(AssignJobActivity.this, "Please enter site", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (etaET.getText().equals("")) {
+                    Toast.makeText(AssignJobActivity.this, "Please enter eta", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (vehicleMakeEt.getText().equals("")) {
+                    Toast.makeText(AssignJobActivity.this, "Please enter vehicle Make", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (vehicleModelEt.getText().equals("")) {
+                    Toast.makeText(AssignJobActivity.this, "Please enter vehicle Model", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (vehicleColor.getText().equals("")) {
+                    Toast.makeText(AssignJobActivity.this, "Please enter vehicle color", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (total_job_time.getText().equals("")) {
+                    Toast.makeText(AssignJobActivity.this, "Please enter total job time", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (total_milesET.getText().equals("")) {
+                    Toast.makeText(AssignJobActivity.this, "Please enter total miles", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (invoiceTotal.getText().equals("")) {
+                    Toast.makeText(AssignJobActivity.this, "Please enter invoice total", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (truckET.getText().equals("")) {
+                    Toast.makeText(AssignJobActivity.this, "Please enter truck details", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+
+                    assignJob(dispatchDateTxt.getText().toString(), siteET.getText().toString(), etaET.getText().toString(),
+                            "Assigned", vehicleMakeEt.getText().toString(), vehicleModelEt.getText().toString(),
+                            vehicleColor.getText().toString(), dispatchedTime.getText().toString(), total_job_time.getText().toString(),
+                            total_milesET.getText().toString(), invoiceTotal.getText().toString(), descriptionET.getText().toString(), truckET.getText().toString());
+                }
             }
         });
     }
-
 
     void assignJob(String dispatchDate, String site, String eta, String status, String make, String model, String color,
                    String dispatchedTime, String totalJobTime, String totalMiles, String invoiceTotal, String comment,
                    String truck) {
         customProgressBar.showProgress();
-        apiService.assignJob(sharedPreferenceMethod.getJWTToken(), job.getId(), driverIdList.get(driverSpinner.getSelectedItemPosition()),
+        apiService.assignJob(sharedPreferenceMethod.getJWTToken(), job.getId(),
+                driverIdList.get(driverSpinner.getSelectedItemPosition()),
                 dispatchDate, site, eta, status, make, model, color, dispatchedTime, totalJobTime, totalMiles, invoiceTotal,
                 comment, truck).enqueue(new Callback<AdminRegisterModel>() {
             @Override
@@ -157,6 +203,8 @@ public class AssignJobActivity extends AppCompatActivity {
                 customProgressBar.hideProgress();
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     Toast.makeText(AssignJobActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+//                    startActivity(new Intent(AssignJobActivity.this,DashboardAdminActivity.class));
+                    finish();
                 } else {
                     Toast.makeText(AssignJobActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
 
@@ -184,7 +232,6 @@ public class AssignJobActivity extends AppCompatActivity {
                 onBackPressed();
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -193,17 +240,18 @@ public class AssignJobActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<DriversListModel> call, Response<DriversListModel> response) {
                 if (response.body().getResponse().getStatus().equals("Success")) {
+                    driverIdList.add("Select");
+                    driverNameList.add("Select Driver");
                     if (response.body().getResponse().getDrivers().size() > 0) {
                         driverList = response.body().getResponse().getDrivers();
                         for (int i = 0; i < driverList.size(); i++) {
-                            driverIdList.add(driverList.get(i).getDriverId());
+                            driverIdList.add(driverList.get(i).getId());
                             driverNameList.add(driverList.get(i).getDriverName());
                         }
                         aa = new ArrayAdapter(AssignJobActivity.this,
                                 android.R.layout.simple_spinner_item, driverNameList);
                         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         driverSpinner.setAdapter(aa);
-
 
                     }
                 }

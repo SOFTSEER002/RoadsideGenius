@@ -74,7 +74,7 @@ public interface ApiService {
 
 
     //    Service Add
-    @POST("customer/create-job.php")
+    @POST("job/create.php")
     @FormUrlEncoded
     Call<AdminRegisterModel> createJobRequest(
             @Field("jwt") String jwt,
