@@ -3,12 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Driver.Fragments.TaskListFragment">
+    tools:context=".Fragments.TaskListFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <Button
+            android:id="@+id/assignJobButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_bg_blue"
+            android:text="Create &amp; Assign Job"
+            android:textColor="#fff" />
 
         <com.doozycod.roadsidegenius.Utils.CustomViewPager
             android:id="@+id/pager"

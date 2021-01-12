@@ -10,10 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
+import com.doozycod.roadsidegenius.Activities.Admin.ForgetAdminActivity;
 import com.doozycod.roadsidegenius.Activities.MainActivity;
+import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
 import com.doozycod.roadsidegenius.Model.Company.Company;
 import com.doozycod.roadsidegenius.Model.Company.CompanyModel;
 import com.doozycod.roadsidegenius.Model.DriverLogin.DriverLoginModel;
@@ -41,7 +43,7 @@ public class DriverLoginActvity extends AppCompatActivity {
     EditText emailET, passwordET;
     ArrayAdapter aa;
     CustomProgressBar customProgressBar;
-
+    TextView forgetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,7 @@ public class DriverLoginActvity extends AppCompatActivity {
         spinner = findViewById(R.id.vendorIdSpinner);
         emailET = findViewById(R.id.emailET);
         passwordET = findViewById(R.id.passwordET);
+        forgetButton = findViewById(R.id.forgetButton);
 
         apiService = ApiUtils.getAPIService();
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
@@ -64,6 +67,15 @@ public class DriverLoginActvity extends AppCompatActivity {
             }
         });
 
+        forgetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent =new Intent(DriverLoginActvity.this, ForgetAdminActivity.class);
+                intent.putExtra("type","driver");
+                startActivity(intent);
+            }
+        });
 //        getCompanyList();
 
         //Creating the ArrayAdapter instance having the country list
@@ -113,13 +125,13 @@ public class DriverLoginActvity extends AppCompatActivity {
 
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     sharedPreferenceMethod.saveUserType("driver");
+                    sharedPreferenceMethod.saveDriverId(response.body().getResponse().getUserData().getId());
                     sharedPreferenceMethod.saveCustomerJWT(response.body().getResponse().getJwt());
                     Toast.makeText(DriverLoginActvity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(DriverLoginActvity.this, DriverDashboardActivity.class));
                     finishAffinity();
                 } else {
                     Toast.makeText(DriverLoginActvity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
-
                 }
             }
 

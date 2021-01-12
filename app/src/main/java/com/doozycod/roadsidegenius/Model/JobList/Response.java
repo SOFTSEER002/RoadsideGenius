@@ -7,12 +7,25 @@ import com.google.gson.annotations.SerializedName;
 
 public class Response {
 
+
+    @SerializedName("active")
+    @Expose
+    private List<Active> active = null;
     @SerializedName("status")
     @Expose
     private String status;
     @SerializedName("jobs")
     @Expose
     private List<Job> jobs = null;
+
+    public List<Active> getActive() {
+        return active;
+    }
+
+    public void setActive(List<Active> active) {
+        this.active = active;
+    }
+
 
     public String getStatus() {
         return status;

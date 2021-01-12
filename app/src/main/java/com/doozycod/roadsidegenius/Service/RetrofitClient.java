@@ -18,8 +18,8 @@ public class RetrofitClient {
     private static Retrofit.Builder retrofitBuilder = null;
     static HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
 
-    static OkHttpClient.Builder httpClient = new OkHttpClient.Builder().connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS);
+    static OkHttpClient.Builder httpClient = new OkHttpClient.Builder().connectTimeout(120, TimeUnit.SECONDS)
+            .readTimeout(120, TimeUnit.SECONDS);
 
     public static Retrofit getClient(String baseUrl) {
         Retrofit retrofit = null;

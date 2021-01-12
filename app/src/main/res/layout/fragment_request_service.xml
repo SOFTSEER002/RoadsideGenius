@@ -227,6 +227,38 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Payment Method"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:visibility="gone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                          <Spinner
+                        android:id="@+id/paymentMethodSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:background="@drawable/et_bg_blue"
+                        android:paddingHorizontal="20dp" />
+                    <ImageView
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:text="Notes"
                     android:textStyle="bold" />

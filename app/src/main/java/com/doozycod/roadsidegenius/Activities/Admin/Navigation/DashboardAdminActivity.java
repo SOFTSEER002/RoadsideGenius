@@ -3,6 +3,7 @@ package com.doozycod.roadsidegenius.Activities.Admin.Navigation;
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -18,11 +19,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.doozycod.roadsidegenius.Activities.Admin.AddServiceActivity;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.fragment.AddCompanyFragment;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.fragment.AddDriverFragment;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.fragment.CenteredTextFragment;
+import com.doozycod.roadsidegenius.Activities.Admin.Navigation.fragment.CompaniesListFragment;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.fragment.DriversListFragment;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.fragment.ServiceFragment;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerAdapter;
@@ -30,21 +33,30 @@ import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerItem;
 import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.SimpleItem;
 import com.doozycod.roadsidegenius.Activities.Customer.CustomerNavigation.Fragments.RequestServiceFragment;
 import com.doozycod.roadsidegenius.Activities.LoginTypeActvvity;
+import com.doozycod.roadsidegenius.Model.Customer.CustomerLoginModel;
 import com.doozycod.roadsidegenius.R;
+import com.doozycod.roadsidegenius.Service.ApiService;
+import com.doozycod.roadsidegenius.Service.ApiUtils;
+import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DashboardAdminActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener, ServiceFragment.OnFragmentChangeListener {
     private static final int POS_DASHBOARD = 0;
     private static final int POS_ADD_DRIVER = 1;
     private static final int POS_ADD_COMPANY = 2;
-    private static final int POS_CREATE_JOB = 3;
-    private static final int POS_DRIVER_LIST = 4;
-    private static final int POS_SERVICES = 5;
-    private static final int POS_LOGOUT = 6;
+    private static final int POS_COMPANY_LIST = 3;
+    private static final int POS_CREATE_JOB = 4;
+    private static final int POS_DRIVER_LIST = 5;
+    private static final int POS_SERVICES = 6;
+    private static final int POS_LOGOUT = 7;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
@@ -55,6 +67,8 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
     TextView toolbar_title;
     ImageButton addServiceButton;
     ServiceFragment serviceFragment;
+    ApiService apiService;
+    CustomProgressBar customProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +81,8 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
 //        toolbar.setTitle("Dashboard");
 
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
-
+        customProgressBar = new CustomProgressBar(this);
+        apiService = ApiUtils.getAPIService();
         slidingRootNav = new SlidingRootNavBuilder(this)
                 .withToolbarMenuToggle(toolbar)
                 .withMenuOpened(false)
@@ -87,6 +102,7 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
                 createItemFor(POS_DASHBOARD).setChecked(true),
                 createItemFor(POS_ADD_DRIVER),
                 createItemFor(POS_ADD_COMPANY),
+                createItemFor(POS_COMPANY_LIST),
                 createItemFor(POS_CREATE_JOB),
                 createItemFor(POS_DRIVER_LIST),
                 createItemFor(POS_SERVICES),
@@ -110,10 +126,7 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
     @Override
     public void onItemSelected(int position) {
         if (position == POS_LOGOUT) {
-            sharedPreferenceMethod.removeLogin();
-            startActivity(new Intent(DashboardAdminActivity.this, LoginTypeActvvity.class));
-            finishAffinity();
-
+            logoutAPI();
         }
         if (position == POS_ADD_COMPANY) {
             toolbar_title.setText("Add Company");
@@ -128,6 +141,11 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
         if (position == POS_DASHBOARD) {
             toolbar_title.setText("Dashboard");
             Fragment selectedScreen = CenteredTextFragment.createFor(screenTitles[position]);
+            showFragment(selectedScreen);
+        }
+        if (position == POS_COMPANY_LIST) {
+            toolbar_title.setText("Company List");
+            Fragment selectedScreen = new CompaniesListFragment();
             showFragment(selectedScreen);
         }
         if (position == POS_CREATE_JOB) {
@@ -156,6 +174,30 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
+    }
+
+    void logoutAPI() {
+        customProgressBar.showProgress();
+        apiService.adminLogout(sharedPreferenceMethod.getJWTToken(), sharedPreferenceMethod.getDeviceId()).enqueue(new Callback<CustomerLoginModel>() {
+            @Override
+            public void onResponse(Call<CustomerLoginModel> call, Response<CustomerLoginModel> response) {
+                customProgressBar.hideProgress();
+                if (response.body().getResponse().getStatus().equals("Success")) {
+                    sharedPreferenceMethod.removeLogin();
+                    startActivity(new Intent(DashboardAdminActivity.this, LoginTypeActvvity.class));
+                    finishAffinity();
+                    Toast.makeText(DashboardAdminActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(DashboardAdminActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CustomerLoginModel> call, Throwable t) {
+                customProgressBar.hideProgress();
+            }
+        });
     }
 
     @SuppressWarnings("rawtypes")
@@ -198,6 +240,14 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
             this.assignNewPropertyFragment = (AssignNewPropertyFragment) fragment;
 
         }*/
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment f : getSupportFragmentManager().getFragments()) {
+            f.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override

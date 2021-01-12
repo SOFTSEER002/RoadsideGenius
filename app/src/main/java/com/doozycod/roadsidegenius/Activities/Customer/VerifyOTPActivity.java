@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
@@ -43,13 +44,15 @@ public class VerifyOTPActivity extends AppCompatActivity {
     CustomProgressBar customProgressBar;
     LinearLayout resendOTPView;
     Timer timer;
+    TextView resendButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verify_o_t_p);
         otpView = findViewById(R.id.otp_view);
-
+        resendButton = findViewById(R.id.resendButton);
+        resendOTPView = findViewById(R.id.resendOTPView);
 
         apiService = ApiUtils.getAPIService();
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
@@ -58,16 +61,29 @@ public class VerifyOTPActivity extends AppCompatActivity {
             @Override
             public void onSmsCatch(String message) {
                 String code = parseCode(message);//Parse verification code
-//                etCode.setText(code);//set code in edit text
-                //then you can send verification code to server
                 otpView.setText(code);
+            }
+        });
+        resendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                resendOTPView.setVisibility(View.VISIBLE);
+                runOnUiThread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        resendOTPView.setVisibility(View.VISIBLE);
+
+                        // Stuff that updates the UI
+
+                    }
+                });
             }
         }, 30 * 1000);
         Dexter.withContext(this)
@@ -110,7 +126,8 @@ public class VerifyOTPActivity extends AppCompatActivity {
                 timer.cancel();
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     sharedPreferenceMethod.saveUserType("customer");
-                    sharedPreferenceMethod.saveCustomerId(response.body().getResponse().getUserData().getCustomerId());
+                    sharedPreferenceMethod.saveCustomerContact(response.body().getResponse().getUserData().getCustomerContact());
+                    sharedPreferenceMethod.saveCustomerId(response.body().getResponse().getUserData().getId());
                     Toast.makeText(VerifyOTPActivity.this, "Verified!", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(VerifyOTPActivity.this, DashboardCustomerActivity.class));
                     finishAffinity();

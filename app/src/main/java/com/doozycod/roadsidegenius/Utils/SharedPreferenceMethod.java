@@ -55,6 +55,13 @@ public class SharedPreferenceMethod {
         return sp.getString("fcm", "");
     }
 
+    public void saveDriverId(String saveDriverId) {
+        sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editior = sp.edit();
+        sp_editior.putString("saveDriverId", saveDriverId);
+        sp_editior.apply();
+
+    }
     public void saveCustomerId(String saveCustomerId) {
         sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editior = sp.edit();
@@ -91,6 +98,11 @@ public class SharedPreferenceMethod {
         sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editior = sp.edit();
         return sp.getString("saveCustomerId", "");
+    }
+    public String getsaveDriverId() {
+        sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editior = sp.edit();
+        return sp.getString("saveDriverId", "");
     }
     public String getDeviceId() {
         sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);

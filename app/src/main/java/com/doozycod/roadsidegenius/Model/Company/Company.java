@@ -4,7 +4,9 @@ package com.doozycod.roadsidegenius.Model.Company;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Company {
+import java.io.Serializable;
+
+public class Company implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -21,12 +23,36 @@ public class Company {
     @SerializedName("company_email")
     @Expose
     private String companyEmail;
-    @SerializedName("l_9_forms")
+    @SerializedName("company_address")
     @Expose
-    private String l9Forms;
+    private String companyAddress;
+    @SerializedName("company_city")
+    @Expose
+    private String companyCity;
+    @SerializedName("company_state")
+    @Expose
+    private String companyState;
+    @SerializedName("company_zipcode")
+    @Expose
+    private String companyZipcode;
+    @SerializedName("primary_phone")
+    @Expose
+    private String primaryPhone;
+    @SerializedName("secondary_phone")
+    @Expose
+    private String secondaryPhone;
+    @SerializedName("primary_service_area")
+    @Expose
+    private String primaryServiceArea;
+    @SerializedName("i_9_forms")
+    @Expose
+    private String i9Forms;
     @SerializedName("w_9_forms")
     @Expose
     private String w9Forms;
+    @SerializedName("coi")
+    @Expose
+    private String coi;
     @SerializedName("admin_id")
     @Expose
     private String adminId;
@@ -74,12 +100,68 @@ public class Company {
         this.companyEmail = companyEmail;
     }
 
-    public String getL9Forms() {
-        return l9Forms;
+    public String getCompanyAddress() {
+        return companyAddress;
     }
 
-    public void setL9Forms(String l9Forms) {
-        this.l9Forms = l9Forms;
+    public void setCompanyAddress(String companyAddress) {
+        this.companyAddress = companyAddress;
+    }
+
+    public String getCompanyCity() {
+        return companyCity;
+    }
+
+    public void setCompanyCity(String companyCity) {
+        this.companyCity = companyCity;
+    }
+
+    public String getCompanyState() {
+        return companyState;
+    }
+
+    public void setCompanyState(String companyState) {
+        this.companyState = companyState;
+    }
+
+    public String getCompanyZipcode() {
+        return companyZipcode;
+    }
+
+    public void setCompanyZipcode(String companyZipcode) {
+        this.companyZipcode = companyZipcode;
+    }
+
+    public String getPrimaryPhone() {
+        return primaryPhone;
+    }
+
+    public void setPrimaryPhone(String primaryPhone) {
+        this.primaryPhone = primaryPhone;
+    }
+
+    public String getSecondaryPhone() {
+        return secondaryPhone;
+    }
+
+    public void setSecondaryPhone(String secondaryPhone) {
+        this.secondaryPhone = secondaryPhone;
+    }
+
+    public String getPrimaryServiceArea() {
+        return primaryServiceArea;
+    }
+
+    public void setPrimaryServiceArea(String primaryServiceArea) {
+        this.primaryServiceArea = primaryServiceArea;
+    }
+
+    public String getI9Forms() {
+        return i9Forms;
+    }
+
+    public void setI9Forms(String i9Forms) {
+        this.i9Forms = i9Forms;
     }
 
     public String getW9Forms() {
@@ -88,6 +170,14 @@ public class Company {
 
     public void setW9Forms(String w9Forms) {
         this.w9Forms = w9Forms;
+    }
+
+    public String getCoi() {
+        return coi;
+    }
+
+    public void setCoi(String coi) {
+        this.coi = coi;
     }
 
     public String getAdminId() {

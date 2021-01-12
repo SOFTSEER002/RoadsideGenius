@@ -9,6 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -150,7 +152,7 @@ public class RequestServiceFragment extends Fragment {
                 showContactDialog();
             }
         });
-        if(!sharedPreferenceMethod.getCustomerContact().equals("")){
+        if (!sharedPreferenceMethod.getCustomerContact().equals("")) {
             contactNumberTxt.setText("+" + sharedPreferenceMethod.getCustomerContact());
         }
         number = sharedPreferenceMethod.getCustomerContact();
@@ -178,6 +180,11 @@ public class RequestServiceFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please enter email", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                if (!isValidEmail(customerEmailET.getText().toString())) {
+                    Toast.makeText(getActivity(), "Please enter valid email", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (contactNumberTxt.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Please enter contact number", Toast.LENGTH_SHORT).show();
                     return;
@@ -186,9 +193,23 @@ public class RequestServiceFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please enter contact number", Toast.LENGTH_SHORT).show();
                     return;
 
+                }
+                if (serviceTypeSpinner.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getActivity(), "Please select a service", Toast.LENGTH_SHORT).show();
+                    return;
+
                 } else {
-                    createRequest(fullNameET.getText().toString(), customerEmailET.getText().toString(), countryCode + number,
-                            getLocationET.getText().toString(), getDropOffLocation.getText().toString());
+                    if (sharedPreferenceMethod.getLogin().equals("customer")) {
+                        createRequestCustomer(fullNameET.getText().toString(), customerEmailET.getText().toString(),
+                                contactNumberTxt.getText().toString().replaceAll("\\+", ""),
+                                getLocationET.getText().toString(), getDropOffLocation.getText().toString());
+                        return;
+                    } else {
+                        createRequest(fullNameET.getText().toString(), customerEmailET.getText().toString(),
+                                contactNumberTxt.getText().toString().replaceAll("\\+", ""),
+                                getLocationET.getText().toString(), getDropOffLocation.getText().toString());
+
+                    }
                 }
             }
         });
@@ -198,9 +219,36 @@ public class RequestServiceFragment extends Fragment {
     void createRequest(String fullName, String email, String contactNumber, String customerPickup,
                        String customerDropOff) {
         customProgressBar.showProgress();
+        apiService.createJob(sharedPreferenceMethod.getJWTToken(),
+                fullName, contactNumber, customerPickup, customerDropOff, email,
+                serviceList.get(serviceTypeSpinner.getSelectedItemPosition() - 1).getId(),
+                notesET.getText().toString(),
+                amount_quoted.getText().toString()).enqueue(new Callback<AdminRegisterModel>() {
+            @Override
+            public void onResponse(Call<AdminRegisterModel> call, Response<AdminRegisterModel> response) {
+                customProgressBar.hideProgress();
+
+                if (response.body().getResponse().getStatus().equals("Success")) {
+                    Toast.makeText(getActivity(), response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AdminRegisterModel> call, Throwable t) {
+                customProgressBar.hideProgress();
+
+            }
+        });
+    }
+
+    void createRequestCustomer(String fullName, String email, String contactNumber, String customerPickup,
+                               String customerDropOff) {
+        customProgressBar.showProgress();
         apiService.createJobRequest(sharedPreferenceMethod.getJWTToken(), sharedPreferenceMethod.getCustomerID(),
                 fullName, contactNumber, customerPickup, customerDropOff, email,
-                serviceList.get(serviceTypeSpinner.getSelectedItemPosition()).getId(),
+                serviceList.get(serviceTypeSpinner.getSelectedItemPosition() - 1).getId(),
                 notesET.getText().toString(),
                 amount_quoted.getText().toString()).enqueue(new Callback<AdminRegisterModel>() {
             @Override
@@ -250,16 +298,20 @@ public class RequestServiceFragment extends Fragment {
         sendOtpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (!isSent) {
-                    getOTP(countryCode + contactNumber.getText().toString(), sendOtpButton);
-                    showOTP.setVisibility(View.VISIBLE);
-                } else {
-                    if (enteredOtp[0].equals(otpString)) {
-                        Toast.makeText(getActivity(), "Phone number verified!", Toast.LENGTH_SHORT).show();
-                        contactNumberTxt.setText("+" + countryCode + contactNumber.getText().toString());
-                        dialog.dismiss();
+                if (contactNumber.getText().toString().length() > 8) {
+
+                    if (!isSent) {
+                        getOTP(countryCode + contactNumber.getText().toString(), sendOtpButton);
+                        showOTP.setVisibility(View.VISIBLE);
+                    } else {
+                        if (enteredOtp[0].equals(otpString)) {
+                            Toast.makeText(getActivity(), "Phone number verified!", Toast.LENGTH_SHORT).show();
+                            contactNumberTxt.setText("+" + countryCode + contactNumber.getText().toString());
+                            dialog.dismiss();
+                        }
                     }
-                }
+                } else
+                    Toast.makeText(getActivity(), "Enter Valid Number", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -365,4 +417,7 @@ public class RequestServiceFragment extends Fragment {
         }
     };
 
+    public static boolean isValidEmail(CharSequence target) {
+        return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());
+    }
 }

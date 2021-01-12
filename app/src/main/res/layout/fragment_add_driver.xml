@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activities.Admin.Navigation.fragment.AddCompanyFragment">
+    tools:context=".Fragments.AddCompanyFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -211,59 +211,90 @@
                 android:inputType="textPostalAddress"
                 android:paddingHorizontal="15dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Service Vehicle Model"
-                android:textColor="@color/black" />
-
-            <EditText
-                android:id="@+id/serviceModelET"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="10dp"
-                android:background="@drawable/et_bg_blue"
-                android:inputType="textPersonName"
-                android:paddingHorizontal="15dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Service Vehicle Year"
-                android:textColor="@color/black" />
+                android:orientation="horizontal"
+                android:weightSum="3">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/serviceYearET"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="10dp"
-                android:background="@drawable/et_bg_blue"
-                android:inputType="number"
-                android:paddingHorizontal="15dp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Vehicle Make"
+                        android:textColor="@color/black" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Service Vehicle Make"
-                android:textColor="@color/black" />
+                    <EditText
+                        android:id="@+id/serviceMakeET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/et_bg_blue"
+                        android:inputType="textPersonName"
+                        android:paddingHorizontal="15dp" />
+                </LinearLayout>
 
-            <EditText
-                android:id="@+id/serviceMakeET"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="10dp"
-                android:background="@drawable/et_bg_blue"
-                android:inputType="textPersonName"
-                android:paddingHorizontal="15dp" />
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Vehicle Model"
+                        android:textColor="@color/black" />
+
+                    <EditText
+                        android:id="@+id/serviceModelET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/et_bg_blue"
+                        android:inputType="textPersonName"
+                        android:paddingHorizontal="15dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginHorizontal="20dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Vehicle Year"
+                        android:textColor="@color/black" />
+
+                    <EditText
+                        android:id="@+id/serviceYearET"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:background="@drawable/et_bg_blue"
+                        android:inputType="number"
+                        android:paddingHorizontal="15dp" />
+                </LinearLayout>
+
+            </LinearLayout>
 
 
             <Button

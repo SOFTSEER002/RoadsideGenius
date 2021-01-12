@@ -14,20 +14,28 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerAdapter;
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerItem;
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.SimpleItem;
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.SpaceItem;
-import com.doozycod.roadsidegenius.Activities.Customer.CustomerNavigation.Fragments.CustomerRequestTabsFragment;
-import com.doozycod.roadsidegenius.Activities.Customer.CustomerNavigation.Fragments.RequestServiceFragment;
+import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.DrawerAdapter;
+import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.DrawerItem;
+import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.SimpleItem;
+import com.doozycod.roadsidegenius.Fragments.CustomerRequestTabsFragment;
+import com.doozycod.roadsidegenius.Fragments.RequestServiceFragment;
 import com.doozycod.roadsidegenius.Activities.LoginTypeActvvity;
+import com.doozycod.roadsidegenius.Model.Customer.CustomerLoginModel;
 import com.doozycod.roadsidegenius.R;
+import com.doozycod.roadsidegenius.Service.ApiService;
+import com.doozycod.roadsidegenius.Service.ApiUtils;
+import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DashboardCustomerActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
     private static final int POS_REQUEST = 1;
@@ -41,6 +49,8 @@ public class DashboardCustomerActivity extends AppCompatActivity implements Draw
     SharedPreferenceMethod sharedPreferenceMethod;
     Toolbar toolbar;
     TextView toolbar_title;
+    ApiService apiService;
+    CustomProgressBar customProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +63,10 @@ public class DashboardCustomerActivity extends AppCompatActivity implements Draw
         setSupportActionBar(toolbar);
 //        toolbar.setTitle("Dashboard");
 
+
+        customProgressBar = new CustomProgressBar(this);
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
+        apiService = ApiUtils.getAPIService();
         slidingRootNav = new SlidingRootNavBuilder(this)
                 .withToolbarMenuToggle(toolbar)
                 .withMenuOpened(false)
@@ -93,15 +106,37 @@ public class DashboardCustomerActivity extends AppCompatActivity implements Draw
                 showFragment(selectedScreen);
                 break;
             case 2:
-                sharedPreferenceMethod.removeLogin();
-                startActivity(new Intent(DashboardCustomerActivity.this, LoginTypeActvvity.class));
-                finishAffinity();
+                logoutAPI();
                 break;
 
 
         }
         slidingRootNav.closeMenu();
 
+    }
+
+    void logoutAPI() {
+        customProgressBar.showProgress();
+        apiService.customerLogout(sharedPreferenceMethod.getJWTToken(), sharedPreferenceMethod.getDeviceId()).enqueue(new Callback<CustomerLoginModel>() {
+            @Override
+            public void onResponse(Call<CustomerLoginModel> call, Response<CustomerLoginModel> response) {
+                customProgressBar.hideProgress();
+                if (response.body().getResponse().getStatus().equals("Success")) {
+                    sharedPreferenceMethod.removeLogin();
+                    startActivity(new Intent(DashboardCustomerActivity.this, LoginTypeActvvity.class));
+                    finishAffinity();
+                    Toast.makeText(DashboardCustomerActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(DashboardCustomerActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CustomerLoginModel> call, Throwable t) {
+                customProgressBar.hideProgress();
+            }
+        });
     }
 
     private void showFragment(Fragment fragment) {

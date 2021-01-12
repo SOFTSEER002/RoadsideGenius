@@ -8,8 +8,13 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="circle_color">#1162DA</color>
+    <color name="startedText">#FBC02D</color>
+    <color name="inprogress">#388E3C</color>
 
-
+    <array name="sample_progress_gradient">
+        <item>#121212</item>
+        <item>#757575</item>
+    </array>
     <color name="textColorPrimary">#212121</color>
     <color name="textColorSecondary">#757575</color>
 </resources>

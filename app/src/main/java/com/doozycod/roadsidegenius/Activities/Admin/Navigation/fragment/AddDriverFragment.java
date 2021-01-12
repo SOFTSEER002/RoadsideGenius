@@ -163,44 +163,6 @@ public class AddDriverFragment extends Fragment {
         });
     }
 
-    void addDriverAPI(String email, String number, String name, String driverId, String driverAddress,
-                      String driverZipCode, String serviceArea, String payPerJob, String serviceVehicleType,
-                      String serviceVehicleModel, String serviceVehicleYear, String serviceVehicleMake) {
-
-        customProgressBar.showProgress();
-        apiService.registerDriver(sharedPreferenceMethod.getJWTToken(), email, number, name,
-                companyIdList.get(vendorIDSpinner.getSelectedItemPosition()), driverAddress, driverZipCode, serviceArea,
-                payPerJob, serviceVehicleType, serviceVehicleModel, serviceVehicleYear, serviceVehicleMake).enqueue(new Callback<AdminRegisterModel>() {
-            @Override
-            public void onResponse(Call<AdminRegisterModel> call, Response<AdminRegisterModel> response) {
-                customProgressBar.hideProgress();
-                if (response.body().getResponse().getStatus().equals("Success")) {
-                    Toast.makeText(getActivity(), response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
-                    emailET.setText("");
-                    nameET.setText("");
-                    numberET.setText("");
-                    driverET.setText("");
-                    driverAddressET.setText("");
-                    driverZipcodeET.setText("");
-                    serviceAreaET.setText("");
-                    serviceTypeET.setText("");
-                    serviceMakeET.setText("");
-                    serviceYearET.setText("");
-                    serviceModelET.setText("");
-                    payperJobET.setText("");
-                } else {
-                    Toast.makeText(getActivity(), response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<AdminRegisterModel> call, Throwable t) {
-                customProgressBar.hideProgress();
-                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
 
     public static AddDriverFragment createFor(String text) {
         AddDriverFragment fragment = new AddDriverFragment();
@@ -266,6 +228,44 @@ public class AddDriverFragment extends Fragment {
         });
     }
 
+    void addDriverAPI(String email, String number, String name, String driverId, String driverAddress,
+                      String driverZipCode, String serviceArea, String payPerJob, String serviceVehicleType,
+                      String serviceVehicleModel, String serviceVehicleYear, String serviceVehicleMake) {
+
+        customProgressBar.showProgress();
+        apiService.registerDriver(sharedPreferenceMethod.getJWTToken(), email, number, name,
+                companyIdList.get(vendorIDSpinner.getSelectedItemPosition()), driverAddress, driverZipCode, serviceArea,
+                payPerJob, serviceVehicleType, serviceVehicleModel, serviceVehicleYear, serviceVehicleMake).enqueue(new Callback<AdminRegisterModel>() {
+            @Override
+            public void onResponse(Call<AdminRegisterModel> call, Response<AdminRegisterModel> response) {
+                customProgressBar.hideProgress();
+                if (response.body().getResponse().getStatus().equals("Success")) {
+                    Toast.makeText(getActivity(), response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+                    emailET.setText("");
+                    nameET.setText("");
+                    numberET.setText("");
+                    driverET.setText("");
+                    driverAddressET.setText("");
+                    driverZipcodeET.setText("");
+                    serviceAreaET.setText("");
+                    serviceTypeET.setText("");
+                    serviceMakeET.setText("");
+                    serviceYearET.setText("");
+                    serviceModelET.setText("");
+                    payperJobET.setText("");
+                } else {
+                    Toast.makeText(getActivity(), response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AdminRegisterModel> call, Throwable t) {
+                customProgressBar.hideProgress();
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {

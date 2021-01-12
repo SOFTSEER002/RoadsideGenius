@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.doozycod.roadsidegenius.Activities.EditActivity;
+import com.doozycod.roadsidegenius.Activities.Driver.EditActivity;
 import com.doozycod.roadsidegenius.Model.AdminRegisterModel;
 import com.doozycod.roadsidegenius.Model.DriverList.Driver;
 import com.doozycod.roadsidegenius.R;

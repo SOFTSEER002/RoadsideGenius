@@ -2,23 +2,17 @@ package com.doozycod.roadsidegenius;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 
 import com.doozycod.roadsidegenius.Activities.Customer.DashboardCustomerActivity;
 import com.doozycod.roadsidegenius.Activities.Driver.DriverDashboardActivity;
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.DashboardAdminActivity;
+import com.doozycod.roadsidegenius.Activities.Admin.DashboardAdminActivity;
 import com.doozycod.roadsidegenius.Activities.LoginTypeActvvity;
-import com.doozycod.roadsidegenius.PushNotification.MyFirebaseMessagingService;
+import com.doozycod.roadsidegenius.Activities.CustomerDetailsActivity;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -33,13 +27,32 @@ public class SplashActivity extends AppCompatActivity {
     private String android_id = "";
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (getIntent().hasExtra("jsonObject")) {
+            Intent intent1 = new Intent(this, CustomerDetailsActivity.class);
+            intent1.putExtra("jsonObject", intent.getStringExtra("jsonObject"));
+            startActivity(intent1);
+            finish();
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
+
+        if (getIntent().getExtras() != null) {
+            for (String key : getIntent().getExtras().keySet()) {
+                Object value = getIntent().getExtras().get(key);
+                Log.e("MainActivity: ", "Key: " + key + " Value: " + value);
+            }
+        }
         Log.e("TAG", "onCreate: " + sharedPreferenceMethod.getLogin());
         if (sharedPreferenceMethod.getFCMToken().equals("")) {
             generatePushToken();
+//            registerReceiver(new FirebaseBroadcastReceiver(),new IntentFilter("android.intent.category.LAUNCHER"));
         }
         new Timer().schedule(new TimerTask() {
             @Override

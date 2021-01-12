@@ -2,6 +2,7 @@ package com.doozycod.roadsidegenius.Activities.Driver;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
@@ -14,35 +15,49 @@ import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerAdapter;
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.DrawerItem;
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.menu.SimpleItem;
-import com.doozycod.roadsidegenius.Activities.Customer.CustomerNavigation.Fragments.RequestServiceFragment;
-import com.doozycod.roadsidegenius.Activities.Driver.Fragments.AnalyticsFragment;
-import com.doozycod.roadsidegenius.Activities.Driver.Fragments.ChatFragment;
-import com.doozycod.roadsidegenius.Activities.Driver.Fragments.SettingsFragment;
-import com.doozycod.roadsidegenius.Activities.Driver.Fragments.SupportFragment;
-import com.doozycod.roadsidegenius.Activities.Driver.Fragments.TaskHistoryFragment;
-import com.doozycod.roadsidegenius.Activities.Driver.Fragments.TaskListFragment;
 import com.doozycod.roadsidegenius.Activities.LoginTypeActvvity;
+import com.doozycod.roadsidegenius.Fragments.AdminDriverCreateJobFragment;
+import com.doozycod.roadsidegenius.Fragments.PaymentsWithdrawFragment;
+import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.DrawerAdapter;
+import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.DrawerItem;
+import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.SimpleItem;
+import com.doozycod.roadsidegenius.Fragments.RequestServiceFragment;
+import com.doozycod.roadsidegenius.Fragments.AnalyticsFragment;
+import com.doozycod.roadsidegenius.Fragments.ChatFragment;
+import com.doozycod.roadsidegenius.Fragments.SettingsFragment;
+import com.doozycod.roadsidegenius.Fragments.SupportFragment;
+import com.doozycod.roadsidegenius.Fragments.TaskHistoryFragment;
+import com.doozycod.roadsidegenius.Fragments.TaskListFragment;
+import com.doozycod.roadsidegenius.Fragments.UploadDriverFragment;
+import com.doozycod.roadsidegenius.Model.Customer.CustomerLoginModel;
 import com.doozycod.roadsidegenius.R;
+import com.doozycod.roadsidegenius.Service.ApiService;
+import com.doozycod.roadsidegenius.Service.ApiUtils;
+import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 import com.yarolegovich.slidingrootnav.SlidingRootNav;
 import com.yarolegovich.slidingrootnav.SlidingRootNavBuilder;
 
 import java.util.Arrays;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class DriverDashboardActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
 
     private static final int POS_TASK_LIST = 0;
     private static final int POS_TASK_HISTORY = 1;
-    private static final int POS_CREATE_JOB = 2;
-    private static final int POS_ANALYTICS = 3;
-    private static final int POS_CHAT = 4;
-    private static final int POS_SETTINGS = 5;
-    private static final int POS_SUPPORT = 6;
-    private static final int POS_LOGOUT = 7;
+    private static final int POS_PAYMENTS = 2;
+    private static final int POS_CREATE_JOB = 3;
+    private static final int POS_UPLOAD_FILES = 4;
+    private static final int POS_ANALYTICS = 5;
+    private static final int POS_CHAT = 6;
+    private static final int POS_SETTINGS = 7;
+    private static final int POS_SUPPORT = 8;
+    private static final int POS_LOGOUT = 9;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
@@ -51,6 +66,9 @@ public class DriverDashboardActivity extends AppCompatActivity implements Drawer
     SharedPreferenceMethod sharedPreferenceMethod;
     Toolbar toolbar;
     TextView toolbar_title;
+
+    ApiService apiService;
+    CustomProgressBar customProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +81,8 @@ public class DriverDashboardActivity extends AppCompatActivity implements Drawer
 //        toolbar.setTitle("Dashboard");
 
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
+        customProgressBar = new CustomProgressBar(this);
+        apiService = ApiUtils.getAPIService();
         slidingRootNav = new SlidingRootNavBuilder(this)
                 .withToolbarMenuToggle(toolbar)
                 .withMenuOpened(false)
@@ -77,6 +97,8 @@ public class DriverDashboardActivity extends AppCompatActivity implements Drawer
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_TASK_LIST).setChecked(true),
                 createItemFor(POS_TASK_HISTORY),
+                createItemFor(POS_PAYMENTS),
+                createItemFor(POS_UPLOAD_FILES),
                 createItemFor(POS_CREATE_JOB),
                 createItemFor(POS_ANALYTICS),
                 createItemFor(POS_CHAT),
@@ -97,40 +119,50 @@ public class DriverDashboardActivity extends AppCompatActivity implements Drawer
     public void onItemSelected(int position) {
         Fragment selectedScreen;
         switch (position) {
-            case 1:
+            case POS_TASK_HISTORY:
                 toolbar_title.setText("Task History");
                 selectedScreen = TaskHistoryFragment.newInstance(screenTitles[position]);
                 showFragment(selectedScreen);
                 break;
-            case 2:
-                toolbar_title.setText("Create Job");
-                selectedScreen = new RequestServiceFragment();
+            case POS_PAYMENTS:
+
+                toolbar_title.setText("Payments");
+                selectedScreen = new PaymentsWithdrawFragment();
                 showFragment(selectedScreen);
                 break;
-            case 3:
+            case POS_CREATE_JOB:
+                toolbar_title.setText("Roadside Genius");
+                selectedScreen = new UploadDriverFragment();
+                showFragment(selectedScreen);
+                break;
+            case POS_UPLOAD_FILES:
+                toolbar_title.setText("Create Job");
+                selectedScreen = new AdminDriverCreateJobFragment();
+                showFragment(selectedScreen);
+
+                break;
+            case POS_ANALYTICS:
                 toolbar_title.setText("Analytics");
                 selectedScreen = AnalyticsFragment.newInstance(screenTitles[position]);
                 showFragment(selectedScreen);
                 break;
-            case 4:
+            case POS_CHAT:
                 toolbar_title.setText("Chat");
                 selectedScreen = ChatFragment.newInstance(screenTitles[position]);
                 showFragment(selectedScreen);
                 break;
-            case 5:
+            case POS_SETTINGS:
                 toolbar_title.setText("Settings");
                 selectedScreen = SettingsFragment.newInstance(screenTitles[position]);
                 showFragment(selectedScreen);
                 break;
-            case 6:
+            case POS_SUPPORT:
                 toolbar_title.setText("Support");
                 selectedScreen = SupportFragment.newInstance(screenTitles[position], "None");
                 showFragment(selectedScreen);
                 break;
-            case 7:
-                sharedPreferenceMethod.removeLogin();
-                startActivity(new Intent(DriverDashboardActivity.this, LoginTypeActvvity.class));
-                finishAffinity();
+            case POS_LOGOUT:
+                logoutAPI();
                 break;
             default:
                 toolbar_title.setText("Task List");
@@ -143,6 +175,37 @@ public class DriverDashboardActivity extends AppCompatActivity implements Drawer
 
     }
 
+    void logoutAPI() {
+        customProgressBar.showProgress();
+        apiService.driverLogout(sharedPreferenceMethod.getJWTToken(), sharedPreferenceMethod.getDeviceId()).enqueue(new Callback<CustomerLoginModel>() {
+            @Override
+            public void onResponse(Call<CustomerLoginModel> call, Response<CustomerLoginModel> response) {
+                customProgressBar.hideProgress();
+                if (response.body().getResponse().getStatus().equals("Success")) {
+                    sharedPreferenceMethod.removeLogin();
+                    startActivity(new Intent(DriverDashboardActivity.this, LoginTypeActvvity.class));
+                    finishAffinity();
+                    Toast.makeText(DriverDashboardActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+
+                } else {
+                    Toast.makeText(DriverDashboardActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<CustomerLoginModel> call, Throwable t) {
+                customProgressBar.hideProgress();
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        for (Fragment f : getSupportFragmentManager().getFragments()) {
+            f.onActivityResult(requestCode, resultCode, data);
+        }
+    }
     private void showFragment(Fragment fragment) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)

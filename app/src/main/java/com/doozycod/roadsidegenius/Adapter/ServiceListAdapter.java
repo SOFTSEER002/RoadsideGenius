@@ -2,8 +2,6 @@ package com.doozycod.roadsidegenius.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,16 +13,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.doozycod.roadsidegenius.Activities.EditActivity;
 import com.doozycod.roadsidegenius.Model.AdminRegisterModel;
-import com.doozycod.roadsidegenius.Model.DriverList.Driver;
 import com.doozycod.roadsidegenius.Model.ServiceList.Service;
 import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Service.ApiService;
 import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

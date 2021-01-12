@@ -13,12 +13,14 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.DashboardAdminActivity;
+import com.doozycod.roadsidegenius.Activities.CustomerDetailsActivity;
 import com.doozycod.roadsidegenius.R;
-import com.doozycod.roadsidegenius.SplashActivity;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.Random;
@@ -44,9 +46,38 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             // Since the notification is received directly from
             // FCM, the title and the body can be fetched
             // directly as below.
+            Log.e(TAG, "onMessageReceived: "+remoteMessage.getNotification().getClickAction() );
+            JSONObject jsonObj = new JSONObject();
+
+            try {
+                jsonObj.put("customer_name", remoteMessage.getData().get("customer_name"));
+                jsonObj.put("dispatch_date", remoteMessage.getData().get("dispatch_date"));
+                jsonObj.put("customer_email", remoteMessage.getData().get("customer_email"));
+                jsonObj.put("vehicle_make", remoteMessage.getData().get("vehicle_make"));
+                jsonObj.put("job_id", remoteMessage.getData().get("job_id"));
+                jsonObj.put("status", remoteMessage.getData().get("status"));
+                jsonObj.put("comments", remoteMessage.getData().get("comments"));
+                jsonObj.put("site", remoteMessage.getData().get("site"));
+                jsonObj.put("total_miles", remoteMessage.getData().get("total_miles"));
+                jsonObj.put("customer_dropoff", remoteMessage.getData().get("customer_dropoff"));
+                jsonObj.put("eta", remoteMessage.getData().get("eta"));
+                jsonObj.put("truck", remoteMessage.getData().get("truck"));
+                jsonObj.put("invoice_total", remoteMessage.getData().get("invoice_total"));
+                jsonObj.put("driver_name", remoteMessage.getData().get("driver_name"));
+                jsonObj.put("customer_number", remoteMessage.getData().get("customer_number"));
+                jsonObj.put("customer_pickup", remoteMessage.getData().get("customer_pickup"));
+                jsonObj.put("vehicle_color", remoteMessage.getData().get("vehicle_color"));
+                jsonObj.put("vehicle_model", remoteMessage.getData().get("vehicle_model"));
+                jsonObj.put("total_job_time", remoteMessage.getData().get("total_job_time"));
+                jsonObj.put("dipatch", remoteMessage.getData().get("dipatch"));
+
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
             showNotification(
                     remoteMessage.getNotification().getTitle(),
-                    remoteMessage.getNotification().getBody());
+                    remoteMessage.getNotification().getBody(), jsonObj);
         }
         Log.e(TAG, "onMessageReceived: Data " + remoteMessage.getData());
 //        Log.e(TAG, "onMessageReceived: " + remoteMessage.getNotification().getTitle());
@@ -92,10 +123,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     // Method to display the notifications
     public void showNotification(String title,
-                                 String message) {
+                                 String message, JSONObject jsonObject) {
         // Pass the intent to switch to the MainActivity
         Intent intent
-                = new Intent(this, DashboardAdminActivity.class);
+                = new Intent(getApplicationContext(), CustomerDetailsActivity.class);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+//        intent.setAction(Intent.ACTION_MAIN);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.putExtra("jsonObject", jsonObject.toString());
+//        startActivity(intent);
+
         // Assign channel ID
         String channel_id = "Default channel";
         int m = (int) ((new Date().getTime() / 1000L) % Integer.MAX_VALUE);
@@ -109,7 +149,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent pendingIntent
                 = PendingIntent.getActivity(
                 this, 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
         // Create a Builder object using NotificationCompat
         // class. This will allow control over all the flags
@@ -122,6 +162,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setVibrate(new long[]{1000, 1000, 1000,
                         1000, 1000})
                 .setOnlyAlertOnce(true)
+
                 .setContentIntent(pendingIntent);
 
         // A customized design for the notification can be
@@ -137,7 +178,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //        else {
         builder = builder.setContentTitle(title)
                 .setContentText(message)
-                .setSmallIcon(R.drawable.ic_launcher_foreground);
+                .setSmallIcon(R.mipmap.ic_launcher);
 //        }
         // Create an object of NotificationManager class to
         // notify the

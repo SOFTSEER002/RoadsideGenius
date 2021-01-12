@@ -8,11 +8,11 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
 import com.doozycod.roadsidegenius.Model.AdminRegisterModel;
-import com.doozycod.roadsidegenius.Activities.Admin.Navigation.DashboardAdminActivity;
 import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Service.ApiService;
 import com.doozycod.roadsidegenius.Service.ApiUtils;
@@ -29,11 +29,13 @@ public class AdminLoginActivity extends AppCompatActivity {
     String android_id;
     CustomProgressBar customProgressBar;
     SharedPreferenceMethod sharedPreferenceMethod;
+    TextView forgetButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_login);
+        forgetButton = findViewById(R.id.forgetButton);
         adminLoginEmailET = findViewById(R.id.adminLoginEmailET);
         adminLoginpass = findViewById(R.id.adminLoginpass);
         adminSigninButton = findViewById(R.id.adminSigninButton);
@@ -48,6 +50,14 @@ public class AdminLoginActivity extends AppCompatActivity {
     }
 
     private void onClickEvents() {
+        forgetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent =new Intent(AdminLoginActivity.this, ForgetAdminActivity.class);
+                intent.putExtra("type","admin");
+                startActivity(intent);
+            }
+        });
         adminSigninButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

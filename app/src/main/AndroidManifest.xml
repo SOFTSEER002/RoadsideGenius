@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.doozycod.roadsidegenius">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -12,36 +13,120 @@
     <uses-permission android:name="android.permission.READ_SMS" />
 
     <application
+
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RoadsideGenius"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Activities.Admin.CreateJobAssignActivity"
+            android:label="@string/titleDashboard"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".Activities.JobDetailsDriverActivity"
+            android:label="@string/titleDashboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.CompanyDetailsActvity"
+            android:label="@string/titleDashboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Customer.CustomerCompleteJobActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Driver.WithdrawDriverActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SplashActivity"
+            android:launchMode="singleTop"
+
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.PaymentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.CustomerDetailsActivity"
+            android:label="@string/titleDashboard"
+
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="OPEN_ACTIVITY_1" />
+                <action android:name=".PushNotification.CustomerDetailsActivity" />
+                <action android:name="android.intent.action.MAIN" />
+                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".Activities.Admin.ForgetAdminActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".Activities.Admin.AssignJobActivity"
-            android:label="@string/titleDashboard"/>
+            android:label="@string/titleDashboard"
+
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Admin.AddServiceActivity"
-            android:label="@string/titleDashboard" />
+            android:label="@string/titleDashboard"
+
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.EditActivity"
-            android:label="@string/titleDashboard" />
+            android:name=".Activities.Driver.EditActivity"
+            android:label="@string/titleDashboard"
+
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Customer.DashboardCustomerActivity"
-            android:label="@string/titleDashboard" />
-        <activity android:name=".Activities.Customer.CustomerNavigation.Activity.VerifyOTPActivity" />
+            android:label="@string/titleDashboard"
+
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Customer.VerifyOTPActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activities.Driver.DriverDashboardActivity"
-            android:label="@string/titleDashboard" />
+            android:label="@string/titleDashboard"
+
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".Activities.Admin.Navigation.DashboardAdminActivity"
-            android:label="@string/titleDashboard" />
-        <activity android:name=".Activities.Admin.AdminLoginActivity" />
-        <activity android:name=".Activities.Customer.CustomerNavigation.Activity.CustomerLoginActivity" />
-        <activity android:name=".Activities.Driver.DriverLoginActvity" />
-        <activity android:name=".Activities.LoginTypeActvvity" />
+            android:name=".Activities.Admin.DashboardAdminActivity"
+            android:label="@string/titleDashboard"
+
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Admin.AdminLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.Customer.CustomerLoginActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".Activities.Driver.DriverLoginActvity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activities.LoginTypeActvvity"
+            android:screenOrientation="portrait" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.doozycod.roadsidegenius"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/paths"
+                tools:replace="android:resource" />
+        </provider>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -56,15 +141,10 @@
 
         <activity
             android:name=".Activities.MapsActivity"
-            android:label="@string/title_activity_maps" />
-        <activity android:name=".Activities.RequestActivity" />
-        <activity android:name=".SplashActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:label="@string/title_activity_maps"
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".Activities.RequestActivity" />
 
         <service
             android:name=".PushNotification.MyFirebaseMessagingService"
@@ -74,16 +154,21 @@
                 <action android:name="android.intent.action.RESPOND_VIA_MESSAGE" />
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-
             </intent-filter>
         </service>
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="Default channel" />
+
         <activity
             android:name=".Activities.SignupActivity"
+            android:screenOrientation="portrait"
+
             android:windowSoftInputMode="adjustNothing" />
-        <activity android:name=".Activities.MainActivity" />
+        <activity
+            android:name=".Activities.MainActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
