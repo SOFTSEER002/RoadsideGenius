@@ -1,8 +1,10 @@
 package com.doozycod.roadsidegenius.Fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.doozycod.roadsidegenius.Activities.MainActivity;
 import com.doozycod.roadsidegenius.Adapter.ServiceListAdapter;
 import com.doozycod.roadsidegenius.Model.ServiceList.ServiceListModel;
 import com.doozycod.roadsidegenius.R;
@@ -79,10 +83,30 @@ public class ServiceFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_service, container, false);
+        View view = localInflater.inflate(R.layout.fragment_service, container, false);
         initUI(view);
         apiService = ApiUtils.getAPIService();
         customProgressBar = new CustomProgressBar(getActivity());
@@ -114,6 +138,7 @@ public class ServiceFragment extends Fragment {
     }
 
     void getServiceList() {
+        Log.e("TAG", "getServiceList: " );
         customProgressBar.showProgress();
         apiService.serviceList(sharedPreferenceMethod.getJWTToken()).enqueue(new Callback<ServiceListModel>() {
             @Override
@@ -122,10 +147,16 @@ public class ServiceFragment extends Fragment {
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     onFragmentChangeListener.onServiceListListener(response.body().getResponse().getServices().size());
                     if (response.body().getResponse().getServices().size() > 0) {
-
+//                        new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Glide.get(getActivity()).clearDiskCache();
+//                            }
+//                        }).start();
                         serviceListAdapter = new ServiceListAdapter(getActivity(), response.body().getResponse().getServices(),
                                 apiService);
                         recyclerView.setAdapter(serviceListAdapter);
+                        serviceListAdapter.notifyDataSetChanged();
                         addServiceButton.setVisibility(View.GONE);
 
                     } else {

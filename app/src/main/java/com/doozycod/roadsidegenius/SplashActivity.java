@@ -13,6 +13,7 @@ import com.doozycod.roadsidegenius.Activities.Driver.DriverDashboardActivity;
 import com.doozycod.roadsidegenius.Activities.Admin.DashboardAdminActivity;
 import com.doozycod.roadsidegenius.Activities.LoginTypeActvvity;
 import com.doozycod.roadsidegenius.Activities.CustomerDetailsActivity;
+import com.doozycod.roadsidegenius.Utils.LocationService;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -63,8 +64,12 @@ public class SplashActivity extends AppCompatActivity {
                     return;
                 }
                 if (sharedPreferenceMethod.getLogin().equals("driver")) {
+                    stopService(new Intent(getApplicationContext(), LocationService.class));
+                    startService(new Intent(getApplicationContext(), LocationService.class));
                     startActivity(new Intent(SplashActivity.this, DriverDashboardActivity.class));
+
                     finish();
+
                     return;
 
                 }

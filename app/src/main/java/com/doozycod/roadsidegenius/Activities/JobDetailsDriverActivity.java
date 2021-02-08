@@ -36,11 +36,17 @@ import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 import com.github.dhaval2404.imagepicker.ImagePicker;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -68,7 +74,8 @@ public class JobDetailsDriverActivity extends AppCompatActivity {
     private List<String> paymentType = new ArrayList<>();
     ArrayAdapter arrayAdapter;
     File file;
-    EditText hoursET, minutesET, notesET;
+    EditText hoursET, notesET;
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     private void initUI() {
         toolbar = findViewById(R.id.toolbar);
@@ -76,8 +83,8 @@ public class JobDetailsDriverActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        minutesET = findViewById(R.id.minutesET);
-        hoursET = findViewById(R.id.hoursET);
+//        minutesET = findViewById(R.id.minutesET);
+        hoursET = findViewById(R.id.hoursMinutesET);
         paymentMethodSpinner = findViewById(R.id.paymentMethodSpinner);
         contactDialogButton = findViewById(R.id.contactDialogButton);
         completeButton = findViewById(R.id.completeButton);
@@ -133,15 +140,23 @@ public class JobDetailsDriverActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
+
         setContentView(R.layout.activity_job_details_driver);
         initUI();
         customProgressBar = new CustomProgressBar(this);
-        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod = new SharedPreferenceMethod(this);
         apiService = ApiUtils.getAPIService();
 
 
-        paymentType.add("Select Payment Method");
-        paymentType.add("Cash");
+//        paymentType.add("Select Payment Method");
+//        paymentType.add("Cash");
         paymentType.add("Online");
 
         arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, paymentType);
@@ -149,33 +164,10 @@ public class JobDetailsDriverActivity extends AppCompatActivity {
         paymentMethodSpinner.setAdapter(arrayAdapter);
 //          completed Date
 
-//        Date today = new Date();
-//        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-//        String dateToStr = format.format(today);
+        Date today = new Date();
+        String dateToStr = format.format(today);
+        completeTimeTxt.setText(dateToStr);
 
-
-//        if (getIntent().getExtras().getSerializable("driver") != null) {
-//            activeJob = (Job) getIntent().getExtras().getSerializable("driver");
-//            etaET.setText(activeJob.getEta());
-//            fullNameET.setText(activeJob.getCustomerName());
-////            dispatchDateTxt.setText(activeJob.getDispatchDate());
-//            customerEmailET.setText(activeJob.getCustomerEmail());
-////            vehicleMakeEt.setText(activeJob.getVehicleMake());
-//            notesET.setText(activeJob.getComments());
-//            total_milesET.setText(activeJob.getTotalMiles());
-//            getDropOffLocation.setText(activeJob.getCustomerDropoff());
-//            siteET.setText(activeJob.getSite());
-//            truckET.setText(activeJob.getTruck());
-//            invoiceTotal.setText(activeJob.getInvoiceTotal());
-//            driverName.setText(activeJob.getDriver());
-//            contactNumberTxt.setText("+" + activeJob.getCustomerNumber());
-//            getLocationET.setText(activeJob.getCustomerPickup());
-////            vehicleColor.setText(activeJob.getVehicleColor());
-////            vehicleModelEt.setText(activeJob.getVehicleModel());
-////            total_job_time.setText(activeJob.getTotalJobTime());
-////            dispatchedTime.setText(activeJob.getDispatched());
-//
-//        }
 
         getLocationET.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -234,14 +226,6 @@ public class JobDetailsDriverActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (minutesET.getText().toString().equals("")) {
-                    Toast.makeText(JobDetailsDriverActivity.this, "Please enter Taken time", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (minutesET.getText().toString().length() == 0) {
-                    Toast.makeText(JobDetailsDriverActivity.this, "Please enter Taken time", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (paymentMethodSpinner.getSelectedItemPosition() == 0) {
                     Toast.makeText(JobDetailsDriverActivity.this, "Please select payment method type", Toast.LENGTH_SHORT).show();
                     return;
@@ -250,11 +234,11 @@ public class JobDetailsDriverActivity extends AppCompatActivity {
                     if (file == null) {
                         completedJobApi(activeJob.getJobId(), notesET.getText().toString(), activeJob.getInvoiceTotal(),
                                 paymentType.get(paymentMethodSpinner.getSelectedItemPosition()), completeTimeTxt.getText().toString(),
-                                hoursET.getText().toString() + ":" + minutesET.getText().toString());
+                                hoursET.getText().toString());
                     } else {
                         completedJobApiImage(activeJob.getJobId(), notesET.getText().toString(), activeJob.getInvoiceTotal(),
                                 paymentType.get(paymentMethodSpinner.getSelectedItemPosition()), completeTimeTxt.getText().toString(),
-                                hoursET.getText().toString() + ":" + minutesET.getText().toString(), file);
+                                hoursET.getText().toString(), file);
 
                     }
                 }
@@ -291,8 +275,42 @@ public class JobDetailsDriverActivity extends AppCompatActivity {
 //                    vehicleModelEt.setText(activeJob.getVehicleModel());
 //                    total_job_time.setText(activeJob.getTotalJobTime());
 //                    dispatchedTime.setText(activeJob.getDispatched());
+//                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+//                    String simpleDate= simpleDateFormat.format(activeJob.getStartTimestamps());
+                    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    String dateToStr = format.format(new Date().getTime());
+//                    String dateToStr2 = simpleDateFormat.format(dateToStr);
+                    Log.e(TAG, "onResponse: " + activeJob.getStartTimestamps());
+                    Log.e(TAG, "onResponse: " + dateToStr);
 
+                    Date d1 = null;
+                    Date d2 = null;
 
+                    try {
+                        d1 = format.parse(activeJob.getStartTimestamps());
+                        d2 = format.parse(dateToStr);
+
+                        //in milliseconds
+//                        long diff = d2.getTime() - d1.getTime();
+//
+//                        long diffSeconds = diff / 1000 % 60;
+//                        long diffMinutes = diff / (60 * 1000) % 60;
+//                        long diffHours = diff / (60 * 60 * 1000) % 24;
+//                        long diffDays = diff / (24 * 60 * 60 * 1000);
+
+                        long difference = d2.getTime() - d1.getTime();
+                        int days = (int) (difference / (1000 * 60 * 60 * 24));
+                        int hours = (int) ((difference - (1000 * 60 * 60 * 24 * days)) / (1000 * 60 * 60));
+                        int min = (int) (difference - (1000 * 60 * 60 * 24 * days) - (1000 * 60 * 60 * hours)) / (1000 * 60);
+                        hours = (hours < 0 ? -hours : hours);
+                        min = (min < 0 ? -min : min);
+                        Log.e("======= Hours", " :: " + hours);
+                        Log.e("======= Minutes", " :: " + min);
+                        hoursET.setText(hours + ":" + min);
+//                        Log.e(TAG, "onResponse: "+diffDays+"  "+diffHours+"  "+diffMinutes );
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
 
@@ -357,7 +375,7 @@ public class JobDetailsDriverActivity extends AppCompatActivity {
                     Toast.makeText(JobDetailsDriverActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(JobDetailsDriverActivity.this, DriverDashboardActivity.class));
                     finishAffinity();
-                }else{
+                } else {
                     Toast.makeText(JobDetailsDriverActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
 
                 }
@@ -422,7 +440,7 @@ public class JobDetailsDriverActivity extends AppCompatActivity {
                     Toast.makeText(JobDetailsDriverActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(JobDetailsDriverActivity.this, DriverDashboardActivity.class));
                     finishAffinity();
-                }else{
+                } else {
                     Toast.makeText(JobDetailsDriverActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
 
                 }

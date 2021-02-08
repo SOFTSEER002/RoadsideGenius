@@ -33,6 +33,13 @@ public class CustomerLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_customer_loigin);
         customerNumberET = findViewById(R.id.customerNumberET);
         countryCodePicker = findViewById(R.id.countryCodeLogin);
@@ -40,7 +47,10 @@ public class CustomerLoginActivity extends AppCompatActivity {
         apiService = ApiUtils.getAPIService();
         customProgressBar = new CustomProgressBar(this);
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
-        countryCode = countryCodePicker.getDefaultCountryCode();
+        countryCodePicker.setAutoDetectedCountry(true);
+        countryCodePicker.setCountryForNameCode("US");
+
+        countryCode = countryCodePicker.getSelectedCountryCode();
         countryCodePicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
             public void onCountrySelected() {

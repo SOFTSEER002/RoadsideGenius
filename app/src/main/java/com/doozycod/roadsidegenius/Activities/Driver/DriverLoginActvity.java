@@ -2,12 +2,14 @@ package com.doozycod.roadsidegenius.Activities.Driver;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,6 +25,11 @@ import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Service.ApiService;
 import com.doozycod.roadsidegenius.Service.ApiUtils;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.MultiplePermissionsReport;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +51,20 @@ public class DriverLoginActvity extends AppCompatActivity {
     ArrayAdapter aa;
     CustomProgressBar customProgressBar;
     TextView forgetButton;
+    CheckBox rememberMeCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_driver_login_actvity);
+        rememberMeCheckBox = findViewById(R.id.checkBox);
         signinButton = findViewById(R.id.signinButton);
         spinner = findViewById(R.id.vendorIdSpinner);
         emailET = findViewById(R.id.emailET);
@@ -60,6 +76,27 @@ public class DriverLoginActvity extends AppCompatActivity {
         customProgressBar = new CustomProgressBar(this);
         vendors.add("Select Company");
 
+        if (sharedPreferenceMethod.getDriverEmail() != null) {
+            rememberMeCheckBox.setChecked(true);
+            if (sharedPreferenceMethod.getLogin().equals("driver")) {
+
+                emailET.setText(sharedPreferenceMethod.getDriverEmail());
+                passwordET.setText(sharedPreferenceMethod.getDriverPassword());
+            }
+        }
+
+        Dexter.withContext(this).withPermissions(Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION).withListener(new MultiplePermissionsListener() {
+            @Override
+            public void onPermissionsChecked(MultiplePermissionsReport multiplePermissionsReport) {
+
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(List<PermissionRequest> list, PermissionToken permissionToken) {
+
+            }
+        }).check();
         signinButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,8 +108,8 @@ public class DriverLoginActvity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent =new Intent(DriverLoginActvity.this, ForgetAdminActivity.class);
-                intent.putExtra("type","driver");
+                Intent intent = new Intent(DriverLoginActvity.this, ForgetAdminActivity.class);
+                intent.putExtra("type", "driver");
                 startActivity(intent);
             }
         });
@@ -125,6 +162,12 @@ public class DriverLoginActvity extends AppCompatActivity {
 
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     sharedPreferenceMethod.saveUserType("driver");
+
+                    if (rememberMeCheckBox.isChecked()) {
+                        sharedPreferenceMethod.saveDriverLoginPassword(email, password);
+                    } else {
+                        sharedPreferenceMethod.saveDriverLoginPassword("", "");
+                    }
                     sharedPreferenceMethod.saveDriverId(response.body().getResponse().getUserData().getId());
                     sharedPreferenceMethod.saveCustomerJWT(response.body().getResponse().getJwt());
                     Toast.makeText(DriverLoginActvity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();

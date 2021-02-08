@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Fragments.AddCompanyFragment">
 
     <ScrollView
@@ -22,7 +23,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Driver Name"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/nameET"
@@ -40,7 +41,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Driver Email"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/emailET"
@@ -58,7 +59,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Driver Number"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/numberET"
@@ -76,7 +77,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Vendor ID"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -107,7 +108,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Driver ID"
-                android:textColor="@color/black"
+                android:textColor="?attr/textColor"
                 android:visibility="gone" />
 
             <EditText
@@ -127,7 +128,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Driver Address"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/driverAddressET"
@@ -145,7 +146,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Driver Zipcode"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/driverZipcodeET"
@@ -164,7 +165,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Pay Per Job"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/payperJobET"
@@ -182,7 +183,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Service Area"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/serviceAreaET"
@@ -200,7 +201,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Service Vehicle Type"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/serviceTypeET"
@@ -216,6 +217,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:weightSum="3">
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -230,7 +232,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Vehicle Make"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <EditText
                         android:id="@+id/serviceMakeET"
@@ -256,7 +258,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Vehicle Model"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <EditText
                         android:id="@+id/serviceModelET"
@@ -282,9 +284,9 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Vehicle Year"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
-                    <EditText
+                    <Spinner
                         android:id="@+id/serviceYearET"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"

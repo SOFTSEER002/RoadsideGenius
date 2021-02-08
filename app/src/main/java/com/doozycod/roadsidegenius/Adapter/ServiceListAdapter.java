@@ -2,6 +2,10 @@ package com.doozycod.roadsidegenius.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +15,34 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Priority;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.signature.MediaStoreSignature;
+import com.doozycod.roadsidegenius.Activities.Admin.EditServiceActivity;
 import com.doozycod.roadsidegenius.Model.AdminRegisterModel;
 import com.doozycod.roadsidegenius.Model.ServiceList.Service;
 import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Service.ApiService;
+import com.doozycod.roadsidegenius.Utils.Constants;
 import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,14 +73,45 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
     @Override
     public void onBindViewHolder(@NonNull ServiceListAdapter.RecyclerHolder holder, int position) {
         Service service = services.get(position);
-        holder.serviceCost.setText(service.getServiceCost());
+
+        boolean isExpanded = service.isExpanded();
+        holder.expandableLayout.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+
+        holder.serviceCost.setText("$" + service.getServiceCost());
         holder.serviceTypeTXT.setText(service.getServiceType());
-        holder.serviceID.setText(service.getServiceId());
+//        holder.serviceID.setText(service.getServiceId());
         holder.descriptionTxt.setText(service.getServiceDescription());
+//        if (!service.getServiceImage().equals("")) {
+        Glide.with(context)
+                .load(Constants.FILES_BASE_URL + service.getServiceImage())
+                .placeholder(R.drawable.plac)
+//                .dontAnimate()
+//                .dontTransform()
+//                .priority(Priority.IMMEDIATE)
+//                .encodeFormat(Bitmap.CompressFormat.PNG)
+//                .signature(new MediaStoreSignature(service.getServiceImage(), System.currentTimeMillis(), 1))
+                .into(holder.serviceImage);
+//        Picasso.get()
+//                .load(Constants.FILES_BASE_URL + service.getServiceImage())
+//                .placeholder(R.drawable.plac)
+//                .memoryPolicy(MemoryPolicy.NO_CACHE)
+//                .networkPolicy(NetworkPolicy.NO_CACHE)
+//                .into(holder.serviceImage);
+//        }
         holder.deleteDriverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 deleteDriverDialog(position, service.getId());
+            }
+        });
+        holder.editServiceButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, EditServiceActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("service", service);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
             }
         });
     }
@@ -114,22 +165,48 @@ public class ServiceListAdapter extends RecyclerView.Adapter<ServiceListAdapter.
     }
 
     @Override
+    public int getItemViewType(int position) {
+        return super.getItemViewType(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return super.getItemId(position);
+    }
+
+    @Override
     public int getItemCount() {
         return services.size();
     }
 
     class RecyclerHolder extends RecyclerView.ViewHolder {
         TextView serviceID, serviceTypeTXT, serviceCost, descriptionTxt;
-        ImageView editDriverButton, deleteDriverButton;
+        ImageView editServiceButton, serviceDetails, deleteDriverButton;
+        ConstraintLayout expandableLayout;
+        CircleImageView serviceImage;
 
         public RecyclerHolder(@NonNull View itemView) {
             super(itemView);
+            editServiceButton = itemView.findViewById(R.id.editServiceButton);
+            serviceDetails = itemView.findViewById(R.id.serviceDetails);
+            serviceImage = itemView.findViewById(R.id.serviceImage);
+            expandableLayout = itemView.findViewById(R.id.expandableLayout);
             descriptionTxt = itemView.findViewById(R.id.descriptionTxt);
             serviceCost = itemView.findViewById(R.id.serviceCost);
             serviceTypeTXT = itemView.findViewById(R.id.serviceTypeTXT);
-            serviceID = itemView.findViewById(R.id.serviceID);
+//            serviceID = itemView.findViewById(R.id.serviceID);
             deleteDriverButton = itemView.findViewById(R.id.deleteDriverButton);
+            serviceDetails.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Service service = services.get(getAdapterPosition());
+                    service.setExpanded(!service.isExpanded());
+                    notifyItemChanged(getAdapterPosition());
 
+
+                }
+            });
         }
+
     }
 }

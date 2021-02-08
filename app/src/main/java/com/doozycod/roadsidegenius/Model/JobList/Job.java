@@ -7,7 +7,6 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Job implements Serializable {
-
     @SerializedName("id")
     @Expose
     private String id;
@@ -35,6 +34,18 @@ public class Job implements Serializable {
     @SerializedName("service_needed")
     @Expose
     private String serviceNeeded;
+    @SerializedName("cust_vehicle_model")
+    @Expose
+    private String custVehicleModel;
+    @SerializedName("cust_vehicle_make")
+    @Expose
+    private String custVehicleMake;
+    @SerializedName("cust_vehicle_year")
+    @Expose
+    private String custVehicleYear;
+    @SerializedName("cust_vehicle_color")
+    @Expose
+    private String custVehicleColor;
     @SerializedName("customer_notes")
     @Expose
     private String customerNotes;
@@ -44,6 +55,9 @@ public class Job implements Serializable {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("status_timestamps")
+    @Expose
+    private String statusTimestamps;
     @SerializedName("timestamps")
     @Expose
     private String timestamps;
@@ -120,6 +134,38 @@ public class Job implements Serializable {
         this.serviceNeeded = serviceNeeded;
     }
 
+    public String getCustVehicleModel() {
+        return custVehicleModel;
+    }
+
+    public void setCustVehicleModel(String custVehicleModel) {
+        this.custVehicleModel = custVehicleModel;
+    }
+
+    public String getCustVehicleMake() {
+        return custVehicleMake;
+    }
+
+    public void setCustVehicleMake(String custVehicleMake) {
+        this.custVehicleMake = custVehicleMake;
+    }
+
+    public String getCustVehicleYear() {
+        return custVehicleYear;
+    }
+
+    public void setCustVehicleYear(String custVehicleYear) {
+        this.custVehicleYear = custVehicleYear;
+    }
+
+    public String getCustVehicleColor() {
+        return custVehicleColor;
+    }
+
+    public void setCustVehicleColor(String custVehicleColor) {
+        this.custVehicleColor = custVehicleColor;
+    }
+
     public String getCustomerNotes() {
         return customerNotes;
     }
@@ -142,6 +188,14 @@ public class Job implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getStatusTimestamps() {
+        return statusTimestamps;
+    }
+
+    public void setStatusTimestamps(String statusTimestamps) {
+        this.statusTimestamps = statusTimestamps;
     }
 
     public String getTimestamps() {

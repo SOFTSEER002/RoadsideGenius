@@ -13,9 +13,16 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.doozycod.roadsidegenius.Activities.Driver.DriverDashboardActivity;
+import com.doozycod.roadsidegenius.Activities.NotificationActivity;
+import com.doozycod.roadsidegenius.Fragments.CustomerServiceListFragment;
+import com.doozycod.roadsidegenius.Fragments.ServiceFragment;
+import com.doozycod.roadsidegenius.Fragments.SettingsFragment;
 import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.DrawerAdapter;
 import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.DrawerItem;
 import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.SimpleItem;
@@ -40,7 +47,8 @@ import retrofit2.Response;
 public class DashboardCustomerActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener {
     private static final int POS_REQUEST = 1;
     private static final int POS_DASHBOARD = 0;
-    private static final int POS_LOGOUT = 2;
+    private static final int POS_SETTINGS = 2;
+    private static final int POS_LOGOUT = 3;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
@@ -51,12 +59,21 @@ public class DashboardCustomerActivity extends AppCompatActivity implements Draw
     TextView toolbar_title;
     ApiService apiService;
     CustomProgressBar customProgressBar;
+    ImageButton notificationButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_dashboard_customer);
 
+        notificationButton = findViewById(R.id.notificationButton);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar_title = findViewById(R.id.toolbar_title);
@@ -79,7 +96,8 @@ public class DashboardCustomerActivity extends AppCompatActivity implements Draw
         screenTitles = loadScreenTitles();
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_DASHBOARD).setChecked(true),
-                createItemFor(POS_REQUEST).setChecked(true),
+                createItemFor(POS_REQUEST),
+                createItemFor(POS_SETTINGS),
                 createItemFor(POS_LOGOUT)));
         adapter.setListener(this);
 
@@ -89,23 +107,35 @@ public class DashboardCustomerActivity extends AppCompatActivity implements Draw
         list.setAdapter(adapter);
 
         adapter.setSelected(POS_DASHBOARD);
+
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DashboardCustomerActivity.this, NotificationActivity.class));
+            }
+        });
     }
 
     @Override
     public void onItemSelected(int position) {
         Fragment selectedScreen;
         switch (position) {
-            case 0:
+            case POS_DASHBOARD:
                 toolbar_title.setText("Dashboard");
                 selectedScreen = new CustomerRequestTabsFragment();
                 showFragment(selectedScreen);
                 break;
-            case 1:
+            case POS_REQUEST:
                 toolbar_title.setText("Request a service");
-                selectedScreen = new RequestServiceFragment();
+                selectedScreen = new CustomerServiceListFragment();
                 showFragment(selectedScreen);
                 break;
-            case 2:
+            case POS_SETTINGS:
+                toolbar_title.setText("Settings");
+                selectedScreen = new SettingsFragment();
+                showFragment(selectedScreen);
+                break;
+            case POS_LOGOUT:
                 logoutAPI();
                 break;
 
@@ -166,9 +196,11 @@ public class DashboardCustomerActivity extends AppCompatActivity implements Draw
     private DrawerItem createItemFor(int position) {
         return new SimpleItem(screenIcons[position], screenTitles[position])
                 .withIconTint(color(R.color.textColorSecondary))
-                .withTextTint(color(R.color.textColorPrimary))
+                .withTextTint(sharedPreferenceMethod.getTheme()
+                        .equals("dark") ? color(R.color.white) : color(R.color.textColorPrimary))
                 .withSelectedIconTint(color(R.color.teal_200))
-                .withSelectedTextTint(color(R.color.teal_200));
+                .withSelectedTextTint(sharedPreferenceMethod.getTheme()
+                        .equals("dark") ? color(R.color.quantum_grey300) : color(R.color.teal_200));
     }
 
     @ColorInt

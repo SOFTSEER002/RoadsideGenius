@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Fragments.UploadDriverFragment">
 
     <ScrollView
@@ -23,11 +24,13 @@
                 android:fontFamily="@font/poppins_regular"
                 android:text="Upload files"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="?attr/textColor"
                 android:textSize="35dp" />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="?attr/recyclerViewBGColor"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
@@ -58,7 +61,8 @@
                             android:layout_gravity="center_horizontal"
                             android:fontFamily="@font/poppins_regular"
                             android:text="Select your SCA file"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/textColor" />
 
                     </LinearLayout>
 
@@ -93,6 +97,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="?attr/recyclerViewBGColor"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
@@ -123,7 +128,8 @@
                             android:layout_gravity="center_horizontal"
                             android:fontFamily="@font/poppins_regular"
                             android:text="Select your COI file"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/textColor" />
                     </LinearLayout>
 
                     <TextView
@@ -157,6 +163,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="?attr/recyclerViewBGColor"
                 app:cardCornerRadius="20dp"
                 app:cardElevation="5dp"
                 app:cardUseCompatPadding="true">
@@ -186,7 +193,8 @@
                             android:layout_gravity="center_horizontal"
                             android:fontFamily="@font/poppins_regular"
                             android:text="Select your W9 form file"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/textColor" />
                     </LinearLayout>
 
                     <TextView

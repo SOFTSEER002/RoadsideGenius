@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Activities.SignupActivity">
 
     <ScrollView
@@ -52,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:text="Customer Name"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <EditText
@@ -68,6 +70,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Customer Email"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <EditText
@@ -84,6 +87,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Contact Number"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -124,6 +128,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Pickup Location"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <AutoCompleteTextView
@@ -134,12 +139,29 @@
                     android:inputType="text"
                     android:paddingHorizontal="20dp" />
 
+                <androidx.cardview.widget.CardView
+                    android:layout_marginTop="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
+
+                    <fragment
+                        android:id="@+id/map1"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="2dp"
+                        tools:context=".MapsActivity" />
+                </androidx.cardview.widget.CardView>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Drop-off Location"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <AutoCompleteTextView
@@ -149,6 +171,22 @@
                     android:background="@drawable/et_bg_blue"
                     android:inputType="text"
                     android:paddingHorizontal="20dp" />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_marginTop="2dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
+
+                    <fragment
+                        android:id="@+id/map2"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:layout_marginTop="2dp"
+                        tools:context=".MapsActivity" />
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -174,6 +212,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Service Type"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -184,39 +223,124 @@
                     android:background="@drawable/et_bg_blue"
                     android:paddingHorizontal="20dp" />
 
-                <!--                <TextView-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginHorizontal="10dp"-->
-                <!--                    android:layout_marginTop="10dp"-->
-                <!--                    android:text="Vehicle Type"-->
-                <!--                    android:textStyle="bold" />-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <!--                <Spinner-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="45dp"-->
-                <!--                    android:background="@drawable/et_bg_blue"-->
-                <!--                    android:paddingHorizontal="20dp" />-->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Vehicle Make"
+                        android:textColor="?attr/textColor" />
 
-                <!--                <TextView-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginHorizontal="10dp"-->
-                <!--                    android:layout_marginTop="10dp"-->
-                <!--                    android:text="Payment Method"-->
-                <!--                    android:textStyle="bold" />-->
+                    <Spinner
+                        android:id="@+id/vehicleMakeEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/et_bg_blue"
+                        android:gravity="center_vertical"
+                        android:inputType="text"
+                        android:paddingHorizontal="15dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
 
-                <!--                <Spinner-->
-                <!--                    android:layout_width="match_parent"-->
-                <!--                    android:layout_height="45dp"-->
-                <!--                    android:background="@drawable/et_bg_blue"-->
-                <!--                    android:paddingHorizontal="20dp" />-->
-                <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginHorizontal="10dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:text="Vehicle Model"
+                        android:textColor="?attr/textColor" />
+
+                    <Spinner
+                        android:id="@+id/vehicleModelEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:background="@drawable/et_bg_blue"
+                        android:gravity="center_vertical"
+                        android:inputType="text"
+                        android:paddingHorizontal="15dp"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Vehicle Year"
+                            android:textColor="?attr/textColor" />
+
+                        <Spinner
+                            android:id="@+id/vehicleYearEt"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@drawable/et_bg_blue"
+                            android:gravity="center_vertical"
+                            android:inputType="text"
+                            android:paddingHorizontal="15dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="20dp"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Vehicle Color"
+                            android:textColor="?attr/textColor" />
+
+                        <Spinner
+                            android:id="@+id/vehicleColor"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginStart="10dp"
+                            android:background="@drawable/et_bg_blue"
+                            android:gravity="center_vertical"
+                            android:inputType="text"
+                            android:paddingHorizontal="15dp"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    </LinearLayout>
+                </LinearLayout>
+
+           <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="Amount Quoted"
+                    android:text="Amount"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <EditText
@@ -224,6 +348,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:background="@drawable/et_bg_blue"
+                    android:enabled="false"
                     android:inputType="textEmailAddress"
                     android:paddingHorizontal="20dp" />
 
@@ -234,6 +359,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:text="Notes"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <EditText
@@ -242,6 +368,8 @@
                     android:layout_height="150dp"
                     android:background="@drawable/note_et"
                     android:gravity="top"
+                    android:maxLines="10"
+                    android:inputType="textMultiLine"
                     android:hint="Write instruction here..."
                     android:padding="10dp" />
 

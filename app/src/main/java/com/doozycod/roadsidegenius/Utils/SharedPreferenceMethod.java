@@ -24,6 +24,18 @@ public class SharedPreferenceMethod {
         sp_editior.apply();
 
     }
+    public void setTheme(String themeType) {
+        sp = context.getSharedPreferences("roadsideGeniusTHEME", Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editior = sp.edit();
+        sp_editior.putString("themeType", themeType);
+        sp_editior.apply();
+
+    }
+    public String getTheme() {
+        sp = context.getSharedPreferences("roadsideGeniusTHEME", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor sp_editior = sp.edit();
+        return sp.getString("themeType", "");
+    }
 
     public void saveUserType(String userIdLogin) {
         sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
@@ -31,12 +43,54 @@ public class SharedPreferenceMethod {
         sp_editior.putString("userType", userIdLogin);
         sp_editior.apply();
     }
+
+    public void saveLoginPassword(String userEmail, String userPassword) {
+        sp = context.getSharedPreferences("roadsideGeniusLOGIN", Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editior = sp.edit();
+        sp_editior.putString("userEmail", userEmail);
+        sp_editior.putString("userPassword", userPassword);
+        sp_editior.apply();
+    }
+    public void saveDriverLoginPassword(String userEmail, String userPassword) {
+        sp = context.getSharedPreferences("roadsideGeniusDriverLOGIN", Context.MODE_PRIVATE);
+        SharedPreferences.Editor sp_editior = sp.edit();
+        sp_editior.putString("userEmail", userEmail);
+        sp_editior.putString("userPassword", userPassword);
+        sp_editior.apply();
+    }
+
+    public String getDriverPassword() {
+        sp = context.getSharedPreferences("roadsideGeniusDriverLOGIN", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor sp_editior = sp.edit();
+        return sp.getString("userPassword", "");
+    }
+
+
+    public String getDriverEmail() {
+        sp = context.getSharedPreferences("roadsideGeniusDriverLOGIN", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor sp_editior = sp.edit();
+        return sp.getString("userEmail", "");
+    }
+
+    public String getLoginPassword() {
+        sp = context.getSharedPreferences("roadsideGeniusLOGIN", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor sp_editior = sp.edit();
+        return sp.getString("userPassword", "");
+    }
+
+    public String getLoginEmail() {
+        sp = context.getSharedPreferences("roadsideGeniusLOGIN", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor sp_editior = sp.edit();
+        return sp.getString("userEmail", "");
+    }
+
     public void saveCustomerContact(String CustomerContact) {
         sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editior = sp.edit();
         sp_editior.putString("CustomerContact", CustomerContact);
         sp_editior.apply();
     }
+
     public String getCustomerContact() {
         sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
 //        SharedPreferences.Editor sp_editior = sp.edit();
@@ -62,6 +116,7 @@ public class SharedPreferenceMethod {
         sp_editior.apply();
 
     }
+
     public void saveCustomerId(String saveCustomerId) {
         sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editior = sp.edit();
@@ -99,11 +154,13 @@ public class SharedPreferenceMethod {
         SharedPreferences.Editor sp_editior = sp.edit();
         return sp.getString("saveCustomerId", "");
     }
+
     public String getsaveDriverId() {
         sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editior = sp.edit();
         return sp.getString("saveDriverId", "");
     }
+
     public String getDeviceId() {
         sp = context.getSharedPreferences("roadsideGenius", Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editior = sp.edit();

@@ -7,7 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.doozycod.roadsidegenius.Tabs.DriverNavigation.AllTaskFragment;
-import com.doozycod.roadsidegenius.Tabs.DriverNavigation.UnassignedFragment;
+import com.doozycod.roadsidegenius.Tabs.DriverNavigation.CompletedDriverJobsFragment;
+import com.doozycod.roadsidegenius.Tabs.DriverNavigation.CurrentTaskFragment;
 
 public class TabLayoutPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -20,14 +21,14 @@ public class TabLayoutPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         Fragment fragment;
         switch (position) {
-//            case 0:
-//                fragment = new TodayFragment();
-//                break;
             case 0:
-                fragment = new AllTaskFragment();
+                fragment = new CurrentTaskFragment();
                 break;
             case 1:
-                fragment = new UnassignedFragment();
+                fragment = new AllTaskFragment();
+                break;
+            case 2:
+                fragment = new CompletedDriverJobsFragment();
                 break;
             default:
                 fragment = new AllTaskFragment();
@@ -37,7 +38,7 @@ public class TabLayoutPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Nullable
@@ -45,15 +46,16 @@ public class TabLayoutPagerAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         String title;
         switch (position) {
+
             case 0:
-                title = "Assigned jobs";
+                title = "Current Job";
                 break;
             case 1:
+                title = "Assigned jobs";
+                break;
+            case 2:
                 title = "Completed jobs";
                 break;
-//            case 2:
-//                title = "Unassigned";
-//                break;
             default:
                 title = "Today";
         }

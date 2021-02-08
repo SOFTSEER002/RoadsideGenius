@@ -1,12 +1,15 @@
 package com.doozycod.roadsidegenius.Tabs.CustomerNavigation;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,17 +46,31 @@ public class ActiveFragment extends Fragment {
     RecyclerView recyclerView;
     TextView text;
 
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
 
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_active, container, false);
+        View view = localInflater.inflate(R.layout.fragment_active, container, false);
 
         text = view.findViewById(R.id.text);
         recyclerView = view.findViewById(R.id.recyclerView);
@@ -71,18 +88,17 @@ public class ActiveFragment extends Fragment {
     }
 
     void getActiveJobsAPI() {
-        customProgressBar.showProgress();
+//        customProgressBar.showProgress();
         apiService.getJobsList(sharedPreferenceMethod.getJWTToken()).enqueue(new Callback<JobsListModel>() {
             @Override
             public void onResponse(Call<JobsListModel> call, Response<JobsListModel> response) {
-                customProgressBar.hideProgress();
+//                customProgressBar.hideProgress();
 
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     actives = response.body().getResponse().getActive();
                     if (actives.size() > 0) {
                         text.setVisibility(View.GONE);
                         recyclerView.setAdapter(new ActiveJobsCustomerAdapter(getActivity(), actives));
-
                     } else {
                         text.setVisibility(View.VISIBLE);
                     }
@@ -91,8 +107,8 @@ public class ActiveFragment extends Fragment {
 
             @Override
             public void onFailure(Call<JobsListModel> call, Throwable t) {
-                customProgressBar.hideProgress();
-
+//                customProgressBar.hideProgress();
+                Log.e("TAG", "onFailure: " + t.getMessage());
             }
         });
     }

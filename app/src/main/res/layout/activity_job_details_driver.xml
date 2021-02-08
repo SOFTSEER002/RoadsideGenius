@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/bgColor"
     tools:context=".Activities.Driver.EditActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -61,7 +62,7 @@
                         android:layout_marginHorizontal="20dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Customer Name"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/fullNameET"
@@ -81,7 +82,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Customer Email"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textStyle="normal" />
 
                     <TextView
@@ -103,7 +104,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Contact Number"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textStyle="normal" />
 
                     <LinearLayout
@@ -142,7 +143,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Pickup Location"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textStyle="normal" />
 
                     <TextView
@@ -163,7 +164,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Drop-off Location"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:textStyle="normal" />
 
                     <TextView
@@ -204,7 +205,7 @@
                     <!--                        android:fontFamily="@font/poppins_regular"-->
 
                     <!--                        android:text="Amount Quoted"-->
-                    <!--                        android:textColor="@color/black"-->
+                    <!--                        android:textColor="?attr/textColor"-->
                     <!--                        android:textStyle="normal" />-->
 
                     <!--                    <TextView-->
@@ -226,7 +227,7 @@
                         android:fontFamily="@font/poppins_regular"
 
                         android:text="Driver Name"
-                        android:textColor="@color/black"
+                        android:textColor="?attr/textColor"
                         android:visibility="gone" />
 
                     <RelativeLayout
@@ -253,7 +254,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="ETA"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/etaET"
@@ -273,7 +274,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Site"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/siteET"
@@ -294,7 +295,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Complete Time"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -343,7 +344,7 @@
                     <!--                                android:layout_marginTop="10dp"-->
                     <!--                                android:fontFamily="@font/poppins_regular"-->
                     <!--                                android:text="Vehicle Make"-->
-                    <!--                                android:textColor="@color/black" />-->
+                    <!--                                android:textColor="?attr/textColor" />-->
 
                     <!--                            <TextView-->
                     <!--                                android:id="@+id/vehicleMakeEt"-->
@@ -371,7 +372,7 @@
                     <!--                                android:layout_marginTop="10dp"-->
                     <!--                                android:fontFamily="@font/poppins_regular"-->
                     <!--                                android:text="Vehicle Model"-->
-                    <!--                                android:textColor="@color/black" />-->
+                    <!--                                android:textColor="?attr/textColor" />-->
 
                     <!--                            <TextView-->
                     <!--                                android:id="@+id/vehicleModelEt"-->
@@ -399,7 +400,7 @@
                     <!--                                android:layout_marginTop="10dp"-->
                     <!--                                android:fontFamily="@font/poppins_regular"-->
                     <!--                                android:text="Vehicle Color"-->
-                    <!--                                android:textColor="@color/black" />-->
+                    <!--                                android:textColor="?attr/textColor" />-->
 
                     <!--                            <TextView-->
                     <!--                                android:id="@+id/vehicleColor"-->
@@ -422,7 +423,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Time Taken"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -431,38 +432,38 @@
                         android:orientation="horizontal">
 
                         <EditText
-                            android:id="@+id/hoursET"
-                            android:layout_width="70dp"
+                            android:id="@+id/hoursMinutesET"
+                            android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:layout_marginHorizontal="10dp"
                             android:background="@drawable/et_bg_blue"
                             android:gravity="center_vertical"
-                            android:hint="hh"
+                            android:hint="hh:mm"
+                            android:enabled="false"
                             android:inputType="number"
-                            android:maxLength="2"
                             android:paddingHorizontal="20dp"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="3dp"
-                            android:text=":"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                            android:textColor="@color/black" />
+<!--                        <TextView-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginHorizontal="3dp"-->
+<!--                            android:text=":"-->
+<!--                            android:textAppearance="@style/TextAppearance.AppCompat.Large"-->
+<!--                            android:textColor="?attr/textColor" />-->
 
-                        <EditText
-                            android:id="@+id/minutesET"
-                            android:layout_width="70dp"
-                            android:layout_height="50dp"
-                            android:layout_marginHorizontal="10dp"
-                            android:background="@drawable/et_bg_blue"
-                            android:gravity="center_vertical"
-                            android:hint="mm"
-                            android:inputType="number"
-                            android:maxLength="2"
-                            android:paddingHorizontal="10dp"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+<!--                        <EditText-->
+<!--                            android:id="@+id/minutesET"-->
+<!--                            android:layout_width="70dp"-->
+<!--                            android:layout_height="50dp"-->
+<!--                            android:layout_marginHorizontal="10dp"-->
+<!--                            android:background="@drawable/et_bg_blue"-->
+<!--                            android:gravity="center_vertical"-->
+<!--                            android:hint="mm"-->
+<!--                            android:inputType="number"-->
+<!--                            android:maxLength="2"-->
+<!--                            android:paddingHorizontal="10dp"-->
+<!--                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />-->
 
                     </LinearLayout>
 
@@ -473,7 +474,7 @@
                     <!--                        android:layout_marginTop="10dp"-->
                     <!--                        android:fontFamily="@font/poppins_regular"-->
                     <!--                        android:text="Total Job Time"-->
-                    <!--                        android:textColor="@color/black" />-->
+                    <!--                        android:textColor="?attr/textColor" />-->
 
                     <!--                    <TextView-->
                     <!--                        android:id="@+id/total_job_time"-->
@@ -493,7 +494,7 @@
                                             android:layout_marginTop="10dp"
                                             android:fontFamily="@font/poppins_regular"
                                             android:text="Total Miles"
-                                            android:textColor="@color/black" />
+                                            android:textColor="?attr/textColor" />
 
                                         <TextView
 
@@ -514,7 +515,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Invoice Total"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/invoiceTotal"
@@ -534,7 +535,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Truck"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/truckET"
@@ -553,8 +554,8 @@
                         android:layout_marginHorizontal="20dp"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
-                        android:text="Select Image"
-                        android:textColor="@color/black" />
+                        android:text="Upload an image"
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/imageET"
@@ -576,7 +577,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Description"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <EditText
                         android:id="@+id/notesET"
@@ -606,7 +607,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:text="Payment Method"
-                            android:textColor="@color/black" />
+                            android:textColor="?attr/textColor" />
 
                         <Spinner
                             android:id="@+id/paymentMethodSpinner"

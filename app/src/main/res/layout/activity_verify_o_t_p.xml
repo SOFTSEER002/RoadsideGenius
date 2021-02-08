@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Activities.Customer.VerifyOTPActivity">
 
     <TextView
@@ -14,7 +15,7 @@
         android:fontFamily="@font/poppins_regular"
         android:text="Verification Code"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="#000" />
+        android:textColor="?attr/textColor" />
 
     <com.mukesh.OtpView
         android:id="@+id/otp_view"
@@ -49,7 +50,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_regular"
             android:text="Resend"
-            android:textColor="@color/black"
+            android:textColor="?attr/textColor"
             android:textStyle="bold" />
     </LinearLayout>
 </RelativeLayout>

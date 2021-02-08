@@ -13,6 +13,7 @@ import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Service.ApiService;
 import com.doozycod.roadsidegenius.Service.ApiUtils;
 import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
+import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,10 +24,17 @@ public class ForgetAdminActivity extends AppCompatActivity {
     ApiService apiService;
     EditText emailET;
     Button forgotPasswordButton;
-
+    SharedPreferenceMethod sharedPreferenceMethod;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_forget_admin);
         emailET = findViewById(R.id.emailET);
         forgotPasswordButton = findViewById(R.id.forgotPasswordButton);

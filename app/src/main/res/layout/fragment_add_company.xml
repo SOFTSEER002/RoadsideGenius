@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Fragments.AddCompanyFragment">
 
     <ScrollView
@@ -23,7 +24,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Company Name"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/nameET"
@@ -41,7 +42,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Company Email"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/emailET"
@@ -59,7 +60,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Company Number"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/numberET"
@@ -77,33 +78,39 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Primary Number"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <LinearLayout
-                android:layout_marginHorizontal="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/et_bg_blue"
-                android:weightSum="1">
+                android:layout_height="55dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/et_bg_blue">
 
-                <TextView
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/countryCodep"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:visibility="visible"
+                    app:ccpDialog_showNameCode="true"
+
+                    app:ccp_areaCodeDetectedCountry="true"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_showFlag="false"
+                    app:ccp_showFullName="false"
+                    app:ccp_showPhoneCode="true" />
+
+                <EditText
                     android:id="@+id/primaryNumberET"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight=".9"
-                    android:paddingHorizontal="20dp"
-                    android:text="Primary Number"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                <ImageView
-                    android:id="@+id/contactDialogButton"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight=".1"
-                    android:src="@drawable/ic_baseline_edit_road_24" />
+                    android:layout_marginRight="10dp"
+                    android:background="@color/white"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:paddingHorizontal="20dp" />
 
             </LinearLayout>
 
@@ -113,34 +120,40 @@
                 android:layout_marginHorizontal="20dp"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
-                android:text="Primary Number"
-                android:textColor="@color/black" />
+                android:text="Secondary Number"
+                android:textColor="?attr/textColor" />
 
             <LinearLayout
-                android:layout_marginHorizontal="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/et_bg_blue"
-                android:weightSum="1">
+                android:layout_height="55dp"
+                android:layout_marginHorizontal="10dp"
+                android:background="@drawable/et_bg_blue">
 
-                <TextView
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/countryCodesecond"
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:visibility="visible"
+                    app:ccpDialog_showNameCode="true"
+
+                    app:ccp_areaCodeDetectedCountry="true"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_showFlag="false"
+                    app:ccp_showFullName="false"
+                    app:ccp_showPhoneCode="true" />
+
+                <EditText
                     android:id="@+id/secondaryNumberET"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
                     android:layout_gravity="center_vertical"
-                    android:layout_weight=".9"
-                    android:paddingHorizontal="20dp"
-                    android:text="Secondary Number"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-                <ImageView
-                    android:id="@+id/contactDialogButton2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight=".1"
-                    android:src="@drawable/ic_baseline_edit_road_24" />
+                    android:layout_marginRight="10dp"
+                    android:background="@color/white"
+                    android:inputType="phone"
+                    android:maxLength="10"
+                    android:paddingHorizontal="20dp" />
 
             </LinearLayout>
 
@@ -152,7 +165,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Vendor ID"
-                android:textColor="@color/black"
+                android:textColor="?attr/textColor"
                 android:visibility="gone" />
 
             <EditText
@@ -172,7 +185,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Company Address"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/driverAddressET"
@@ -190,7 +203,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Company City"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/companyCityET"
@@ -208,7 +221,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Company State"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/stateET"
@@ -226,7 +239,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Company Zipcode"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/zipcodeET"
@@ -244,7 +257,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Primary Service Area"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/primaryServiceET"
@@ -262,7 +275,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="I 9 Forms"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -296,7 +309,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="W 9 Forms"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -330,7 +343,7 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="COI (certificate of insurance)"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <LinearLayout
                 android:layout_width="match_parent"

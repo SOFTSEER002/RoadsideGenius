@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Tabs.CustomerNavigation.OpenRequestFragment">
 
     <RelativeLayout
@@ -22,6 +23,7 @@
             android:fontFamily="@font/poppins_regular"
             android:text="No Open Request!"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="?attr/textColor"
             android:visibility="visible" />
     </RelativeLayout>
 

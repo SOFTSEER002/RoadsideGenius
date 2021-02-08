@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,21 +31,37 @@ public class AdminLoginActivity extends AppCompatActivity {
     CustomProgressBar customProgressBar;
     SharedPreferenceMethod sharedPreferenceMethod;
     TextView forgetButton;
+    CheckBox rememberMeCheckBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        }
         setContentView(R.layout.activity_admin_login);
+        rememberMeCheckBox = findViewById(R.id.checkBox);
         forgetButton = findViewById(R.id.forgetButton);
         adminLoginEmailET = findViewById(R.id.adminLoginEmailET);
         adminLoginpass = findViewById(R.id.adminLoginpass);
         adminSigninButton = findViewById(R.id.adminSigninButton);
         apiService = ApiUtils.getAPIService();
         customProgressBar = new CustomProgressBar(this);
-        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod = new SharedPreferenceMethod(this);
         android_id = Settings.Secure.getString(this.getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         sharedPreferenceMethod.saveDeviceID(android_id);
+
+        if (sharedPreferenceMethod.getLoginEmail() != null) {
+            rememberMeCheckBox.setChecked(true);
+            if (sharedPreferenceMethod.getLogin().equals("admin")) {
+
+                adminLoginEmailET.setText(sharedPreferenceMethod.getLoginEmail());
+                adminLoginpass.setText(sharedPreferenceMethod.getLoginPassword());
+            }
+        }
         onClickEvents();
 
     }
@@ -53,8 +70,8 @@ public class AdminLoginActivity extends AppCompatActivity {
         forgetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent =new Intent(AdminLoginActivity.this, ForgetAdminActivity.class);
-                intent.putExtra("type","admin");
+                Intent intent = new Intent(AdminLoginActivity.this, ForgetAdminActivity.class);
+                intent.putExtra("type", "admin");
                 startActivity(intent);
             }
         });
@@ -82,6 +99,13 @@ public class AdminLoginActivity extends AppCompatActivity {
             public void onResponse(Call<AdminRegisterModel> call, Response<AdminRegisterModel> response) {
                 customProgressBar.hideProgress();
                 if (response.body().getResponse().getStatus().equals("Success")) {
+
+                    if (rememberMeCheckBox.isChecked()) {
+                        sharedPreferenceMethod.saveLoginPassword(email, password);
+                    } else {
+                        sharedPreferenceMethod.saveLoginPassword("", "");
+
+                    }
                     sharedPreferenceMethod.saveUser(response.body().getResponse().getUserData().getId(),
                             response.body().getResponse().getUserData().getAdminName(),
                             response.body().getResponse().getUserData().getAdminEmail(),

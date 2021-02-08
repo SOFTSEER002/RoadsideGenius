@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -75,6 +76,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            Intent svc=new Intent(this, BackgroundSoundService.class);
+            startService(svc);
             showNotification(
                     remoteMessage.getNotification().getTitle(),
                     remoteMessage.getNotification().getBody(), jsonObj);
@@ -150,7 +153,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 = PendingIntent.getActivity(
                 this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-
+        final String packageName = this.getPackageName();
         // Create a Builder object using NotificationCompat
         // class. This will allow control over all the flags
         NotificationCompat.Builder builder
@@ -161,8 +164,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAutoCancel(true)
                 .setVibrate(new long[]{1000, 1000, 1000,
                         1000, 1000})
+                .setSound(Uri.parse("android.resource://" + packageName + "R.raw.swiftly"))
                 .setOnlyAlertOnce(true)
-
                 .setContentIntent(pendingIntent);
 
         // A customized design for the notification can be
@@ -192,7 +195,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             NotificationChannel notificationChannel
                     = new NotificationChannel(
                     channel_id, "Default channel",
-                    NotificationManager.IMPORTANCE_HIGH);
+                    NotificationManager.IMPORTANCE_MAX);
             notificationManager.createNotificationChannel(
                     notificationChannel);
         }

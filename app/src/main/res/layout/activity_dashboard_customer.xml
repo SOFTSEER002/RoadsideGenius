@@ -4,7 +4,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="?attr/bgColor"
     android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -12,23 +12,59 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark"
         android:layout_height="wrap_content">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            app:titleTextColor="@color/white"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/purple_700" >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Toolbar Title"
-                android:textStyle="bold"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:layout_gravity="center"
-                android:textColor="#fff"
-                android:id="@+id/toolbar_title" />
+            android:layout_height="wrap_content">
 
-        </androidx.appcompat.widget.Toolbar>
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/purple_700"
+                app:titleTextColor="@color/white">
+
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true">
+
+                <TextView
+                    android:id="@+id/toolbar_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_gravity="center"
+                    android:text="Toolbar Title"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="#fff"
+                    android:textStyle="bold" />
+
+
+                <ImageButton
+                    android:id="@+id/addServiceButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/notificationButton"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/ic_baseline_add_circle_24"
+                    android:visibility="gone" />
+
+                <ImageButton
+                    android:id="@+id/notificationButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/ic_baseline_notifications_24"
+                    android:visibility="visible" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout

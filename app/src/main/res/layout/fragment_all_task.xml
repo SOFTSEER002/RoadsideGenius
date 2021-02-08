@@ -21,7 +21,8 @@
             android:layout_centerInParent="true"
             android:fontFamily="@font/poppins_regular"
             android:text="No Task assigned!"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="?attr/textColor" />
 
     </RelativeLayout>
     <!-- TODO: Update blank fragment layout -->

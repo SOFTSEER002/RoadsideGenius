@@ -7,11 +7,29 @@
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondaryVariant">@color/textColorSecondary</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="otpViewStyle">@style/OtpWidget.OtpView</item>
+    </style>
+
+    <style name="LightTheme" parent="Theme.RoadsideGenius">
+        <item name="textColor">#000000</item>
+        <item name="btnTextColor">#000000</item>
+        <item name="metaTextColor">#606060</item>
+        <item name="bgColor">#ffffff</item>
+        <item name="recyclerViewBGColor">#ffffff</item>
+        <item name="withDrawText">#292649</item>
+    </style>
+
+    <style name="DarkTheme" parent="Theme.RoadsideGenius">
+        <item name="textColor">#ffffff</item>
+        <item name="recyclerViewBGColor">#353535</item>
+        <item name="btnTextColor">#000000</item>
+        <item name="metaTextColor">#aeaeae</item>
+        <item name="withDrawText">#ffffff</item>
+        <item name="bgColor">#2E2E2E</item>
     </style>
 </resources>

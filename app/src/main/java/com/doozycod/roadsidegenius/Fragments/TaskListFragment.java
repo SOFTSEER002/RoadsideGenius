@@ -1,8 +1,10 @@
 package com.doozycod.roadsidegenius.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -58,6 +60,7 @@ public class TaskListFragment extends Fragment {
     LinearLayout visibleDetails;
     private int FLAG = 0;
     ImageView show_activeJobDetails;
+//    SharedPreferenceMethod sharedPreferenceMethod;
 
     public TaskListFragment() {
         // Required empty public constructor
@@ -79,6 +82,8 @@ public class TaskListFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
+
     }
 
     int i = 0;
@@ -86,8 +91,20 @@ public class TaskListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
+        View view = localInflater.inflate(R.layout.fragment_task_list, container, false);
         pagerAdapter = new TabLayoutPagerAdapter(getFragmentManager());
         text = view.findViewById(R.id.text);
         pickupTxt = view.findViewById(R.id.pickupTxt);
@@ -99,14 +116,13 @@ public class TaskListFragment extends Fragment {
         tabLayout = view.findViewById(R.id.tab_layout_main);
 
 //        setup view pager for tabs
-        viewPager.setSwipeable(false);
+        viewPager.setSwipeable(true);
         tabLayout.setupWithViewPager(viewPager);
         viewPager.setAdapter(pagerAdapter);
 
 //        api service init
         apiService = ApiUtils.getAPIService();
 
-        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
         customProgressBar = new CustomProgressBar(getActivity());
 
         show_activeJobDetails.setOnClickListener(new View.OnClickListener() {
@@ -135,13 +151,13 @@ public class TaskListFragment extends Fragment {
             FLAG = 1;
             return;
         }
-        getActiveJobAPI();
+//        getActiveJobAPI();
     }
 
     private void getActiveJobAPI() {
-        Log.e("LogGeneratorHelper", "reloading " + i);
+//        Log.e("LogGeneratorHelper", "reloading " + i);
 
-        customProgressBar.showProgress();
+//        customProgressBar.showProgress();
         apiService.activeJobForDriver(sharedPreferenceMethod.getJWTToken()).enqueue(new Callback<DriverActiveJobModel>() {
             @Override
             public void onResponse(Call<DriverActiveJobModel> call, Response<DriverActiveJobModel> response) {
@@ -150,15 +166,17 @@ public class TaskListFragment extends Fragment {
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     if (response.body().getResponse().getActiveJob() == null) {
 
-                        text.setVisibility(View.VISIBLE);
-                        visibleDetails.setVisibility(GONE);
+//                        text.setVisibility(View.VISIBLE);
+//                        visibleDetails.setVisibility(GONE);
 
                     } else {
-                        visibleDetails.setVisibility(View.VISIBLE);
+
                         customerNameTxt.setText(response.body().getResponse().getActiveJob().getCustomerName());
                         serviceTypeTxt.setText(response.body().getResponse().getActiveJob().getService());
                         pickupTxt.setText(response.body().getResponse().getActiveJob().getCustomerPickup());
-                        text.setVisibility(GONE);
+
+//                        text.setVisibility(GONE);
+
                     }
                 }
             }
@@ -166,7 +184,8 @@ public class TaskListFragment extends Fragment {
             @Override
             public void onFailure(Call<DriverActiveJobModel> call, Throwable t) {
                 Log.e("TAG", "onFailure: " + t.getMessage());
-                customProgressBar.hideProgress();
+
+//                customProgressBar.hideProgress();
 
             }
         });

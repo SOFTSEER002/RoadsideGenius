@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="?attr/bgColor"
     tools:context=".Activities.PaymentActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -54,7 +55,7 @@
                 android:fontFamily="@font/poppins_regular"
                 android:text="Total Payment  "
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -62,7 +63,7 @@
                 android:fontFamily="@font/poppins_regular"
                 android:text="-"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <TextView
                 android:id="@+id/priceTXT"
@@ -73,7 +74,7 @@
                 android:text="$100"
                 android:textAlignment="textEnd"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
@@ -81,13 +82,14 @@
             android:layout_marginHorizontal="20dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
-            android:text="Appreciate by giving bonus"
-            android:textColor="@color/black" />
+            android:text="Thank your service provider by leaving a tip"
+            android:textColor="?attr/textColor" />
 
         <EditText
             android:id="@+id/bonusAmountTxt"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:text="0"
             android:layout_marginHorizontal="10dp"
             android:background="@drawable/et_bg_blue"
             android:inputType="numberDecimal"
@@ -98,9 +100,9 @@
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
-            android:text="Shipping Details"
+            android:text="Billing Details"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="@color/black" />
+            android:textColor="?attr/textColor" />
 
         <View
             android:layout_width="match_parent"
@@ -124,7 +126,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
             android:text="Name"
-            android:textColor="@color/black" />
+            android:textColor="?attr/textColor" />
 
         <EditText
             android:id="@+id/nameET"
@@ -143,7 +145,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
             android:text="Address"
-            android:textColor="@color/black" />
+            android:textColor="?attr/textColor" />
 
         <EditText
             android:id="@+id/addressET"
@@ -162,7 +164,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
             android:text="City"
-            android:textColor="@color/black" />
+            android:textColor="?attr/textColor" />
 
         <EditText
             android:id="@+id/cityET"
@@ -180,7 +182,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
             android:text="Postal Code"
-            android:textColor="@color/black" />
+            android:textColor="?attr/textColor" />
 
         <EditText
             android:id="@+id/postalCodeET"
@@ -198,7 +200,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
             android:text="Country"
-            android:textColor="@color/black" />
+            android:textColor="?attr/textColor" />
 
         <EditText
             android:id="@+id/countryET"

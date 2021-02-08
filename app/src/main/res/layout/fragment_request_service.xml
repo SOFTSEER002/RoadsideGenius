@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Activities.SignupActivity">
 
     <ScrollView
@@ -52,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:text="Customer Name"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <EditText
@@ -68,6 +70,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Customer Email"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <EditText
@@ -84,6 +87,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Contact Number"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -119,6 +123,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Pickup Location"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <AutoCompleteTextView
@@ -135,6 +140,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Drop-off Location"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <AutoCompleteTextView
@@ -169,6 +175,7 @@
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
                     android:text="Service Type"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <Spinner
@@ -211,7 +218,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
-                    android:text="Amount Quoted"
+                    android:text="Amount"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <EditText
@@ -227,28 +235,29 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="10dp"
                     android:layout_marginTop="10dp"
-                    android:visibility="gone"
                     android:fontFamily="@font/poppins_regular"
                     android:text="Payment Method"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <RelativeLayout
-                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
-                          <Spinner
+                    <Spinner
                         android:id="@+id/paymentMethodSpinner"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
                         android:background="@drawable/et_bg_blue"
                         android:paddingHorizontal="20dp" />
+
                     <ImageView
-                        android:layout_marginHorizontal="10dp"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginHorizontal="10dp"
                         android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
 
 
@@ -261,6 +270,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
                     android:text="Notes"
+                    android:textColor="?attr/textColor"
                     android:textStyle="bold" />
 
                 <EditText

@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.doozycod.roadsidegenius.Model.JobList.Active;
 import com.doozycod.roadsidegenius.Activities.PaymentActivity;
 import com.doozycod.roadsidegenius.R;
+import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class CustomerCompleteJobActivity extends AppCompatActivity {
     TextView fullNameET, customerEmailET, contactNumberTxt, getPickupLocationET, getDropOffLocationET,
             driverName, invoiceTotalTxt;
     Button payButton;
+    SharedPreferenceMethod sharedPreferenceMethod;
 
     void initUI() {
         payButton = findViewById(R.id.payButton);
@@ -43,6 +45,14 @@ public class CustomerCompleteJobActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_customer_complete_job);
 
         initUI();
@@ -68,12 +78,12 @@ public class CustomerCompleteJobActivity extends AppCompatActivity {
         payButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(paymentMethodSpinner.getSelectedItemPosition()==0){
+                if (paymentMethodSpinner.getSelectedItemPosition() == 0) {
 
                     Toast.makeText(CustomerCompleteJobActivity.this,
                             "Select Payment Method", Toast.LENGTH_SHORT).show();
                     return;
-                }else{
+                } else {
 
                     Intent intent = new Intent(CustomerCompleteJobActivity.this, PaymentActivity.class);
                     intent.putExtra("amount", activeJob.getInvoiceTotal());

@@ -1,6 +1,8 @@
 package com.doozycod.roadsidegenius.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.doozycod.roadsidegenius.Activities.PaymentDetailsActivity;
 import com.doozycod.roadsidegenius.Model.PaymentList.Payment;
 import com.doozycod.roadsidegenius.R;
 
@@ -46,6 +49,17 @@ public class AdminPaymentsAdapter extends RecyclerView.Adapter<AdminPaymentsAdap
         holder.paymentMethodTxt.setText(payment.getPaymentMethod());
         holder.amountTxt.setText(payment.getAmount());
         holder.bonusAmountTxt.setText(payment.getBonusAmount());
+
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PaymentDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("payment", payment);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

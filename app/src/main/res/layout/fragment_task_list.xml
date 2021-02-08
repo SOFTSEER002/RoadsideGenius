@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Fragments.TaskListFragment">
 
     <LinearLayout
@@ -11,6 +13,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="40dp"
@@ -40,7 +43,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@color/black" />
+                android:background="?attr/bgColor" />
 
             <LinearLayout
                 android:id="@+id/visibleDetails"
@@ -93,7 +96,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:text="Customer Name"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#000" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/customerNameTxt"
@@ -104,7 +107,8 @@
                         android:fontFamily="@font/poppins_regular"
                         android:maxLines="1"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/textColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -120,7 +124,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:text="Service"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#000" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/serviceTypeTxt"
@@ -131,7 +135,8 @@
                         android:fontFamily="@font/poppins_regular"
                         android:maxLines="1"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/textColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -147,7 +152,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:text="Pick-up Location"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#000" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/pickupTxt"
@@ -158,7 +163,8 @@
                         android:fontFamily="@font/poppins_regular"
                         android:maxLines="1"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/textColor" />
                 </LinearLayout>
 
                 <!--                <View-->
@@ -167,7 +173,7 @@
                 <!--                    android:background="@color/black" />-->
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="10dp"
+                    android:layout_height="5dp"
                     android:layout_marginTop="8dp"
                     android:background="#D8D8D8" />
 
@@ -181,9 +187,11 @@
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tab_layout_main"
-
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                app:tabIndicatorHeight="3dp"
+                app:tabIndicatorColor="?attr/metaTextColor"
+                app:tabTextColor="?attr/textColor" />
         </com.doozycod.roadsidegenius.Utils.CustomViewPager>
     </LinearLayout>
 

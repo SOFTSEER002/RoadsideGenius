@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
+    android:background="?attr/bgColor"
 
     tools:context=".Activities.Driver.DriverLoginActvity">
 
@@ -31,7 +31,7 @@
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:layout_centerHorizontal="true"
-                    android:src="@drawable/brain">
+                    android:src="@drawable/transparent">
 
                 </ImageView>
             </RelativeLayout>
@@ -58,17 +58,19 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Admin Email"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/adminLoginEmailET"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="artfulvinod@gmail.com"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/et_bg_blue"
                 android:inputType="textEmailAddress"
                 android:paddingHorizontal="15dp" />
+
+            <!--            android:text="artfulvinod@gmail.com"-->
+
 
             <TextView
                 android:layout_width="wrap_content"
@@ -77,42 +79,51 @@
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Admin Password"
-                android:textColor="@color/black" />
+                android:textColor="?attr/textColor" />
 
             <EditText
                 android:id="@+id/adminLoginpass"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:text="94327443"
                 android:layout_marginHorizontal="10dp"
                 android:background="@drawable/et_bg_blue"
                 android:inputType="textPassword"
                 android:paddingHorizontal="15dp" />
+            <!--            android:text="94327443"-->
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Remember me"
+                android:buttonTint="?attr/textColor"
+                android:textColor="?attr/textColor" />
 
             <Button
                 android:id="@+id/adminSigninButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="20dp"
+                android:layout_marginVertical="15dp"
                 android:background="@drawable/button_bg_blue"
                 android:text="Login"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="#fff" />
 
             <RelativeLayout
-                android:layout_marginHorizontal="20dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="20dp">
 
                 <TextView
                     android:id="@+id/forgetButton"
-                    android:textColor="@color/black"
-                    android:fontFamily="@font/poppins_regular"
-                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Forgot Password?" />
+                    android:layout_alignParentRight="true"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Forgot Password?"
+                    android:textColor="?attr/textColor" />
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

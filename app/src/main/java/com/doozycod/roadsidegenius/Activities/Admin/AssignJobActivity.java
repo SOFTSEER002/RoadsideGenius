@@ -6,10 +6,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -55,20 +57,24 @@ public class AssignJobActivity extends AppCompatActivity {
     DatePickerDialog datePickerDialog;
     ImageView datePickerDialogButton;
     final Calendar myCalendar = Calendar.getInstance();
-    TextView dispatchDateTxt, dispatchedTime;
+    TextView dispatchDateTxt, dispatchedTime, customerNameTxt, serviceNeededTxt;
     String myFormat = "MM-dd-yyyy"; //In which you need put here
     SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
     TimePickerDialog timePickerDialog;
     Button assignButton;
-    EditText etaET, siteET, vehicleMakeEt, vehicleModelEt, vehicleColor, total_job_time, total_milesET, invoiceTotal,
+    Spinner etaET;
+    EditText siteET, vehicleMakeEt, vehicleModelEt, vehicleColor, total_job_time, total_milesET, invoiceTotal,
             truckET, descriptionET;
+    private List<String> etaList = new ArrayList();
 
     private void initUI() {
+        serviceNeededTxt = findViewById(R.id.serviceNeededTxt);
+        customerNameTxt = findViewById(R.id.customerNameTxt);
         vehicleModelEt = findViewById(R.id.vehicleModelEt);
         descriptionET = findViewById(R.id.descriptionET);
         truckET = findViewById(R.id.truckET);
         invoiceTotal = findViewById(R.id.invoiceTotal);
-        total_milesET = findViewById(R.id.total_milesET);
+//        total_milesET = findViewById(R.id.total_milesET);
         total_job_time = findViewById(R.id.total_job_time);
         vehicleColor = findViewById(R.id.vehicleColor);
         vehicleMakeEt = findViewById(R.id.vehicleMakeEt);
@@ -86,8 +92,15 @@ public class AssignJobActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_assign_job);
         sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
+        setContentView(R.layout.activity_assign_job);
+//        sharedPreferenceMethod = new SharedPreferenceMethod(this);
         customProgressBar = new CustomProgressBar(this);
         apiService = ApiUtils.getAPIService();
         initUI();
@@ -110,8 +123,36 @@ public class AssignJobActivity extends AppCompatActivity {
         dispatchDateTxt.setText(sdf.format(new Date()));
         int hour = myCalendar.get(Calendar.HOUR_OF_DAY);
         int minute = myCalendar.get(Calendar.MINUTE);
-        dispatchedTime.setText(hour + ":" + minute);
 
+        customerNameTxt.setText(job.getCustomerName());
+        serviceNeededTxt.setText(job.getServiceNeeded());
+        dispatchedTime.setText(hour + ":" + minute);
+        etaList.add("select Estimated ETA");
+        etaList.add("15");
+        etaList.add("30");
+        etaList.add("45");
+        etaList.add("60");
+
+        ArrayAdapter aa = new ArrayAdapter(this,
+                android.R.layout.simple_spinner_item, etaList);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        etaET.setAdapter(aa);
+
+        driverSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == 0) {
+
+                } else {
+                    invoiceTotal.setText(job.getAmountQuoted());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         dispatchedTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,30 +187,30 @@ public class AssignJobActivity extends AppCompatActivity {
                     Toast.makeText(AssignJobActivity.this, "Please enter site", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (etaET.getText().equals("")) {
-                    Toast.makeText(AssignJobActivity.this, "Please enter eta", Toast.LENGTH_SHORT).show();
+                if (etaET.getSelectedItemPosition() == 0) {
+                    Toast.makeText(AssignJobActivity.this, "Please Select eta", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (vehicleMakeEt.getText().equals("")) {
-                    Toast.makeText(AssignJobActivity.this, "Please enter vehicle Make", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (vehicleModelEt.getText().equals("")) {
-                    Toast.makeText(AssignJobActivity.this, "Please enter vehicle Model", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (vehicleColor.getText().equals("")) {
-                    Toast.makeText(AssignJobActivity.this, "Please enter vehicle color", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (total_job_time.getText().equals("")) {
-                    Toast.makeText(AssignJobActivity.this, "Please enter total job time", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (total_milesET.getText().equals("")) {
-                    Toast.makeText(AssignJobActivity.this, "Please enter total miles", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+//                if (vehicleMakeEt.getText().equals("")) {
+//                    Toast.makeText(AssignJobActivity.this, "Please enter vehicle Make", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if (vehicleModelEt.getText().equals("")) {
+//                    Toast.makeText(AssignJobActivity.this, "Please enter vehicle Model", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if (vehicleColor.getText().equals("")) {
+//                    Toast.makeText(AssignJobActivity.this, "Please enter vehicle color", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if (total_job_time.getText().equals("")) {
+//                    Toast.makeText(AssignJobActivity.this, "Please enter total job time", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//                if (total_milesET.getText().equals("")) {
+//                    Toast.makeText(AssignJobActivity.this, "Please enter total miles", Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
                 if (invoiceTotal.getText().equals("")) {
                     Toast.makeText(AssignJobActivity.this, "Please enter invoice total", Toast.LENGTH_SHORT).show();
                     return;
@@ -179,10 +220,11 @@ public class AssignJobActivity extends AppCompatActivity {
                     return;
                 } else {
 
-                    assignJob(dispatchDateTxt.getText().toString(), siteET.getText().toString(), etaET.getText().toString(),
+                    assignJob(dispatchDateTxt.getText().toString(), siteET.getText().toString(),
+                            etaList.get(etaET.getSelectedItemPosition()),
                             "Assigned", vehicleMakeEt.getText().toString(), vehicleModelEt.getText().toString(),
-                            vehicleColor.getText().toString(), dispatchedTime.getText().toString(), total_job_time.getText().toString(),
-                            total_milesET.getText().toString(), invoiceTotal.getText().toString(), descriptionET.getText().toString(), truckET.getText().toString());
+                            vehicleColor.getText().toString(), dispatchedTime.getText().toString(), "",
+                            "", invoiceTotal.getText().toString(), descriptionET.getText().toString(), truckET.getText().toString());
                 }
             }
         });
@@ -201,8 +243,9 @@ public class AssignJobActivity extends AppCompatActivity {
                 customProgressBar.hideProgress();
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     Toast.makeText(AssignJobActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
-//                    startActivity(new Intent(AssignJobActivity.this,DashboardAdminActivity.class));
-                    finish();
+                    startActivity(new Intent(AssignJobActivity.this, DashboardAdminActivity.class));
+                    finishAffinity();
+
                 } else {
                     Toast.makeText(AssignJobActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
 

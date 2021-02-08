@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Fragments.PaymentsWithdrawFragment">
 
     <RelativeLayout
@@ -30,7 +31,7 @@
                 android:layout_marginHorizontal="20dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="Withdraw\nTo Account"
-                android:textColor="#292649"
+                android:textColor="?attr/withDrawText"
                 android:textSize="35dp" />
 
             <androidx.cardview.widget.CardView
@@ -68,6 +69,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
+                    android:id="@+id/totalWalletTXT"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -75,7 +77,7 @@
                     android:layout_marginHorizontal="20dp"
                     android:fontFamily="@font/poppins_regular"
                     android:paddingTop="15dp"
-                    android:text="$499.99"
+                    android:text="$0.00"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/black" />
             </RelativeLayout>

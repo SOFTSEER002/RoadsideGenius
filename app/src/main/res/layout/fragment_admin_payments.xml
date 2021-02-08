@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Fragments.AdminPaymentsFragment">
 
     <LinearLayout
@@ -10,29 +11,38 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="10dp">
+            android:layout_marginVertical="10dp"
+            android:background="@color/wallet_holo_blue_light">
 
-            <TextView
+            <LinearLayout
+                android:padding="10dp"
+                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_regular"
-                android:text="Total Amount -"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black" />
+                android:layout_gravity="center_horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:fontFamily="@font/poppins_regular"
-                android:text="0.00"
-                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="@color/black" />
-        </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="Total Amount -"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="?attr/textColor" />
+
+                <TextView
+                    android:id="@+id/paymentTotalTxt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:fontFamily="@font/poppins_regular"
+                    android:text="0.00"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="?attr/textColor" />
+            </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,7 +51,7 @@
 
             android:fontFamily="@font/poppins_regular"
             android:text="Select All or by Driver payment "
-            android:textColor="@color/black" />
+            android:textColor="?attr/textColor" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -128,7 +138,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
             android:text="Previous Payments"
-            android:textColor="#000"
+            android:textColor="?attr/textColor"
             android:textStyle="bold" />
 
         <View
@@ -147,13 +157,14 @@
 
             <TextView
                 android:id="@+id/text"
-                android:layout_marginTop="50dp"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:fontFamily="@font/poppins_regular"
-                android:text="No Payment done yet!"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:layout_marginTop="50dp"
+                android:fontFamily="@font/poppins_regular"
+                android:text="No Payment done yet!"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="?attr/textColor" />
         </RelativeLayout>
 
     </LinearLayout>

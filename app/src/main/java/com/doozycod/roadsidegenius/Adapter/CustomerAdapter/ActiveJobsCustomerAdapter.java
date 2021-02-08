@@ -46,6 +46,7 @@ public class ActiveJobsCustomerAdapter extends RecyclerView.Adapter<ActiveJobsCu
         holder.serviceTypeTxt.setText(activejob.getService());
         holder.pickupTxt.setText(activejob.getCustomerPickup());
         holder.dropoffTxt.setText(activejob.getCustomerDropoff());
+        holder.amountTxt.setText("$"+activejob.getInvoiceTotal());
         if (activejob.getStatus().toLowerCase().equals("started")) {
             holder.statusTxt.setTextColor(context.getResources().getColor(R.color.startedText));
         }
@@ -72,11 +73,12 @@ public class ActiveJobsCustomerAdapter extends RecyclerView.Adapter<ActiveJobsCu
     }
 
     class RecyclerHolder extends RecyclerView.ViewHolder {
-        TextView customerNameTxt, phoneTxt, emailTxt, statusTxt, driverNameTxt, serviceTypeTxt, pickupTxt, dropoffTxt;
+        TextView customerNameTxt,amountTxt, phoneTxt, emailTxt, statusTxt, driverNameTxt, serviceTypeTxt, pickupTxt, dropoffTxt;
         Button payButton;
 
         public RecyclerHolder(@NonNull View itemView) {
             super(itemView);
+            amountTxt = itemView.findViewById(R.id.amountTxt);
             payButton = itemView.findViewById(R.id.payButton);
             dropoffTxt = itemView.findViewById(R.id.dropoffTxt);
             pickupTxt = itemView.findViewById(R.id.pickupTxt);

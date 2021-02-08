@@ -21,6 +21,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.doozycod.roadsidegenius.Activities.NotificationActivity;
 import com.doozycod.roadsidegenius.Fragments.AddCompanyFragment;
 import com.doozycod.roadsidegenius.Fragments.AddDriverFragment;
 import com.doozycod.roadsidegenius.Fragments.AdminCreateJobFragment;
@@ -30,6 +31,9 @@ import com.doozycod.roadsidegenius.Fragments.CenteredTextFragment;
 import com.doozycod.roadsidegenius.Fragments.CompaniesListFragment;
 import com.doozycod.roadsidegenius.Fragments.DriversListFragment;
 import com.doozycod.roadsidegenius.Fragments.ServiceFragment;
+import com.doozycod.roadsidegenius.Fragments.SettingsFragment;
+import com.doozycod.roadsidegenius.Fragments.TaskHistoryFragment;
+import com.doozycod.roadsidegenius.Fragments.WithdrawListFragment;
 import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.DrawerAdapter;
 import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.DrawerItem;
 import com.doozycod.roadsidegenius.Tabs.AdminNavigation.menu.SimpleItem;
@@ -50,17 +54,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DashboardAdminActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener, ServiceFragment.OnFragmentChangeListener {
+public class DashboardAdminActivity extends AppCompatActivity implements DrawerAdapter.OnItemSelectedListener,
+        ServiceFragment.OnFragmentChangeListener {
     private static final int POS_DASHBOARD = 0;
-    private static final int POS_ADD_DRIVER = 4;
-    private static final int POS_ADD_COMPANY = 3;
-    private static final int POS_PAYMENTS = 2;
-    private static final int POS_COMPANY_LIST = 5;
     private static final int POS_CREATE_JOB_ASSIGN = 1;
-    private static final int POS_CREATE_JOB = 7;
-    private static final int POS_DRIVER_LIST = 6;
-    private static final int POS_SERVICES = 8;
-    private static final int POS_LOGOUT = 9;
+    private static final int POS_JOB_HISTORY = 2;
+    private static final int POS_PAYMENTS = 3;
+    private static final int POS_WITHDRAW_REQUEST = 4;
+    private static final int POS_ADD_COMPANY = 5;
+    private static final int POS_ADD_DRIVER = 6;
+    private static final int POS_COMPANY_LIST = 7;
+    private static final int POS_DRIVER_LIST = 8;
+    private static final int POS_SERVICES = 9;
+    private static final int POS_SETTINGS = 10;
+    private static final int POS_LOGOUT = 11;
 
     private String[] screenTitles;
     private Drawable[] screenIcons;
@@ -69,7 +76,7 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
     SharedPreferenceMethod sharedPreferenceMethod;
     Toolbar toolbar;
     TextView toolbar_title;
-    ImageButton addServiceButton;
+    ImageButton addServiceButton, notificationButton;
     ServiceFragment serviceFragment;
     ApiService apiService;
     CustomProgressBar customProgressBar;
@@ -77,7 +84,15 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_dashboard_admin);
+        notificationButton = findViewById(R.id.notificationButton);
         addServiceButton = findViewById(R.id.addServiceButton);
         toolbar = findViewById(R.id.toolbar);
         toolbar_title = findViewById(R.id.toolbar_title);
@@ -105,13 +120,15 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
         DrawerAdapter adapter = new DrawerAdapter(Arrays.asList(
                 createItemFor(POS_DASHBOARD).setChecked(true),
                 createItemFor(POS_CREATE_JOB_ASSIGN),
+                createItemFor(POS_JOB_HISTORY),
                 createItemFor(POS_PAYMENTS),
+                createItemFor(POS_WITHDRAW_REQUEST),
                 createItemFor(POS_ADD_COMPANY),
                 createItemFor(POS_ADD_DRIVER),
                 createItemFor(POS_COMPANY_LIST),
                 createItemFor(POS_DRIVER_LIST),
-                createItemFor(POS_CREATE_JOB),
                 createItemFor(POS_SERVICES),
+                createItemFor(POS_SETTINGS),
                 createItemFor(POS_LOGOUT)));
         adapter.setListener(this);
 
@@ -125,6 +142,12 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(DashboardAdminActivity.this, AddServiceActivity.class));
+            }
+        });
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(DashboardAdminActivity.this, NotificationActivity.class));
             }
         });
     }
@@ -142,6 +165,16 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
         if (position == POS_ADD_DRIVER) {
             toolbar_title.setText("Add Driver");
             Fragment selectedScreen = AddDriverFragment.createFor(screenTitles[position]);
+            showFragment(selectedScreen);
+        }
+        if (position == POS_JOB_HISTORY) {
+            toolbar_title.setText("Job History");
+            Fragment selectedScreen = new TaskHistoryFragment();
+            showFragment(selectedScreen);
+        }
+        if (position == POS_WITHDRAW_REQUEST) {
+            toolbar_title.setText("Withdraw Request");
+            Fragment selectedScreen = new WithdrawListFragment();
             showFragment(selectedScreen);
         }
         if (position == POS_PAYMENTS) {
@@ -164,11 +197,16 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
             Fragment selectedScreen = new CompaniesListFragment();
             showFragment(selectedScreen);
         }
-        if (position == POS_CREATE_JOB) {
-            toolbar_title.setText("Create Job");
-            Fragment selectedScreen = new AdminDriverCreateJobFragment();
+        if (position == POS_SETTINGS) {
+            toolbar_title.setText("Settings");
+            Fragment selectedScreen = new SettingsFragment();
             showFragment(selectedScreen);
         }
+//        if (position == POS_CREATE_JOB) {
+//            toolbar_title.setText("Create Job");
+//            Fragment selectedScreen = new AdminDriverCreateJobFragment();
+//            showFragment(selectedScreen);
+//        }
         if (position == POS_DRIVER_LIST) {
             toolbar_title.setText("Drivers List");
             Fragment selectedScreen = DriversListFragment.createFor(screenTitles[position]);
@@ -200,6 +238,7 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
                 customProgressBar.hideProgress();
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     sharedPreferenceMethod.removeLogin();
+                    sharedPreferenceMethod.saveLoginPassword("", "");
                     startActivity(new Intent(DashboardAdminActivity.this, LoginTypeActvvity.class));
                     finishAffinity();
                     Toast.makeText(DashboardAdminActivity.this, response.body().getResponse().getMessage(), Toast.LENGTH_SHORT).show();
@@ -220,9 +259,11 @@ public class DashboardAdminActivity extends AppCompatActivity implements DrawerA
     private DrawerItem createItemFor(int position) {
         return new SimpleItem(screenIcons[position], screenTitles[position])
                 .withIconTint(color(R.color.textColorSecondary))
-                .withTextTint(color(R.color.textColorPrimary))
+                .withTextTint(sharedPreferenceMethod.getTheme()
+                        .equals("dark") ? color(R.color.white) : color(R.color.textColorPrimary))
                 .withSelectedIconTint(color(R.color.teal_200))
-                .withSelectedTextTint(color(R.color.teal_200));
+                .withSelectedTextTint(sharedPreferenceMethod.getTheme()
+                        .equals("dark") ? color(R.color.quantum_grey300) : color(R.color.teal_200));
     }
 
     private String[] loadScreenTitles() {

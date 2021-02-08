@@ -3,11 +3,13 @@ package com.doozycod.roadsidegenius.Fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
@@ -58,7 +60,8 @@ import retrofit2.Response;
 public class AddCompanyFragment extends Fragment {
     private static final String EXTRA_TEXT = "text";
 
-    EditText nameET, emailET, numberET, vendorIdET, driverAddressET, companyCityET, stateET, zipcodeET, primaryServiceET;
+    EditText nameET, emailET, numberET, vendorIdET, driverAddressET, companyCityET, stateET, zipcodeET,
+            primaryServiceET;
     Spinner w9FormSpinner, l9formSpinner;
     List<String> list = new ArrayList<>();
     Button addCompanyButton;
@@ -69,22 +72,26 @@ public class AddCompanyFragment extends Fragment {
     private List<Uri> docPaths;
     private List<Uri> docPaths2;
     private List<Uri> docPaths3;
-    TextView selectfile, selectfile2, selectfile3, primaryNumberET, secondaryNumberET;
-    String i9FormsPath = "", w9FormPath = "", coiPath = "";
+    TextView selectfile, selectfile2, selectfile3;
+    EditText primaryNumberET, secondaryNumberET;
+    File i9FormsPath, w9FormPath, coiPath;
     String countryCode = "";
+    String countryCode2 = "";
     String otpString = "";
     boolean isSent = false;
     ImageView contactDialogButton, contactDialogButton2;
     private String number = "";
+    CountryCodePicker countryCodePickerPrimary, countryCodePickerSecondary;
 
     public AddCompanyFragment() {
         // Required empty public constructor
     }
 
     void initUI(View view) {
-
-        contactDialogButton2 = view.findViewById(R.id.contactDialogButton2);
-        contactDialogButton = view.findViewById(R.id.contactDialogButton);
+        countryCodePickerPrimary = view.findViewById(R.id.countryCodep);
+        countryCodePickerSecondary = view.findViewById(R.id.countryCodesecond);
+//        contactDialogButton2 = view.findViewById(R.id.contactDialogButton2);
+//        contactDialogButton = view.findViewById(R.id.contactDialogButton);
         secondaryNumberET = view.findViewById(R.id.secondaryNumberET);
         primaryNumberET = view.findViewById(R.id.primaryNumberET);
         primaryServiceET = view.findViewById(R.id.primaryServiceET);
@@ -116,15 +123,58 @@ public class AddCompanyFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_company, container, false);
+        View view = localInflater.inflate(R.layout.fragment_add_company, container, false);
 
         sharedPreferenceMethod = new SharedPreferenceMethod(getContext());
         customProgressBar = new CustomProgressBar(getContext());
         apiService = ApiUtils.getAPIService();
         initUI(view);
+
+        countryCodePickerPrimary.setAutoDetectedCountry(true);
+        countryCodePickerPrimary.setCountryForNameCode("US");
+
+        countryCode = countryCodePickerPrimary.getSelectedCountryCode();
+        countryCodePickerPrimary.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
+            @Override
+            public void onCountrySelected() {
+                countryCode = countryCodePickerPrimary.getSelectedCountryCode();
+            }
+        });
+
+
+        countryCodePickerSecondary.setAutoDetectedCountry(true);
+        countryCodePickerSecondary.setCountryForNameCode("US");
+
+        countryCode2 = countryCodePickerSecondary.getSelectedCountryCode();
+        countryCodePickerSecondary.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
+            @Override
+            public void onCountrySelected() {
+                countryCode2 = countryCodePickerSecondary.getSelectedCountryCode();
+            }
+        });
+
 
         Dexter.withContext(getContext())
                 .withPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -156,7 +206,7 @@ public class AddCompanyFragment extends Fragment {
                     docPaths.addAll(data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_DOCS));
 //                    String file = ;
                     selectfile.setText(new File(FileUtils.getPath(getActivity(), docPaths.get(0))).getName() + "");
-                    i9FormsPath = "file://" + new File(FileUtils.getPath(getActivity(), docPaths.get(0))).getPath();
+                    i9FormsPath = new File(FileUtils.getPath(getActivity(), docPaths.get(0)));
                     Log.e("TAG", "onActivityResult: " + new File(FileUtils.getPath(getActivity(), docPaths.get(0))).getPath());
                 }
                 break;
@@ -166,7 +216,7 @@ public class AddCompanyFragment extends Fragment {
                     docPaths2.addAll(data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_DOCS));
                     selectfile2.setText(new File(FileUtils.getPath(getActivity(), docPaths2.get(0))).getName() + "");
                     Log.e("TAG", "onActivityResult: " + new File(FileUtils.getPath(getActivity(), docPaths.get(0))).getPath());
-                    w9FormPath = "file://" + new File(FileUtils.getPath(getActivity(), docPaths2.get(0))).getPath();
+                    w9FormPath = new File(FileUtils.getPath(getActivity(), docPaths2.get(0)));
                 }
                 break;
             case 103:
@@ -175,25 +225,25 @@ public class AddCompanyFragment extends Fragment {
                     docPaths3.addAll(data.getParcelableArrayListExtra(FilePickerConst.KEY_SELECTED_DOCS));
                     selectfile3.setText(new File(FileUtils.getPath(getActivity(), docPaths3.get(0))).getName() + "");
                     Log.e("TAG", "onActivityResult: " + new File(FileUtils.getPath(getActivity(), docPaths.get(0))).getPath());
-                    coiPath = "file://" + new File(FileUtils.getPath(getActivity(), docPaths3.get(0))).getPath();
+                    coiPath = new File(FileUtils.getPath(getActivity(), docPaths3.get(0)));
                 }
                 break;
         }
     }
 
     private void onClickEvents() {
-        contactDialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showContactDialog();
-            }
-        });
-        contactDialogButton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showContactDialog2();
-            }
-        });
+//        contactDialogButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showContactDialog();
+//            }
+//        });
+//        contactDialogButton2.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                showContactDialog2();
+//            }
+//        });
         selctPicker1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -263,25 +313,25 @@ public class AddCompanyFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please enter zipcode", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (w9FormPath.equals("")) {
+                if (w9FormPath == null) {
                     Toast.makeText(getActivity(), "Please upload w9 form!", Toast.LENGTH_SHORT).show();
                     return;
-
                 }
-                if (i9FormsPath.equals("")) {
+                if (i9FormsPath == null) {
+                    Toast.makeText(getActivity(), "Please upload i 9 form!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (coiPath == null) {
                     Toast.makeText(getActivity(), "Please upload i 9 form!", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    String secondaryNumber = "";
-                    if (secondaryNumberET.getText().toString().contains("+")) {
-                        secondaryNumber = secondaryNumberET.getText().toString().replaceAll("\\+", "");
-                    }
                     addCompanyAPI(emailET.getText().toString(),
                             numberET.getText().toString(),
-                            primaryNumberET.getText().toString().replaceAll("\\+", ""),
-                            secondaryNumber, nameET.getText().toString(), driverAddressET.getText().toString(),
-                            companyCityET.getText().toString(), stateET.getText().toString(), zipcodeET.getText().toString(),
-                            primaryServiceET.getText().toString());
+                            countryCode + primaryNumberET.getText().toString(),
+                            countryCode + secondaryNumberET.getText().toString(),
+                            nameET.getText().toString(), driverAddressET.getText().toString(),
+                            companyCityET.getText().toString(), stateET.getText().toString(),
+                            zipcodeET.getText().toString(), primaryServiceET.getText().toString());
                 }
             }
         });
@@ -305,14 +355,14 @@ public class AddCompanyFragment extends Fragment {
         RequestBody primaryServiceAreaBody = RequestBody.create(okhttp3.MultipartBody.FORM, primary_service_area);
 
         RequestBody fbody = RequestBody.create(MediaType.parse("multipart/form-data"),
-                new File(i9FormsPath));
-        MultipartBody.Part files = MultipartBody.Part.createFormData("i_9_forms", i9FormsPath, fbody);
+                i9FormsPath);
+        MultipartBody.Part files = MultipartBody.Part.createFormData("i_9_forms", i9FormsPath.getName(), fbody);
         RequestBody fbody2 = RequestBody.create(MediaType.parse("multipart/form-data"),
-                new File(w9FormPath));
-        MultipartBody.Part files2 = MultipartBody.Part.createFormData("w_9_forms", w9FormPath, fbody2);
+                w9FormPath);
+        MultipartBody.Part files2 = MultipartBody.Part.createFormData("w_9_forms", w9FormPath.getName(), fbody2);
         RequestBody fbody3 = RequestBody.create(MediaType.parse("multipart/form-data"),
-                new File(coiPath));
-        MultipartBody.Part files3 = MultipartBody.Part.createFormData("coi", coiPath, fbody3);
+                coiPath);
+        MultipartBody.Part files3 = MultipartBody.Part.createFormData("coi", coiPath.getName(), fbody3);
 
         apiService.registerCompany(token, emailBody, numberBody, nameBody, addressBody, cityBody, stateBody, zipcodeBody,
                 primaryNumberBody, secondaryNumberBody, primaryServiceAreaBody, files, files2, files3).enqueue(new Callback<AdminRegisterModel>() {

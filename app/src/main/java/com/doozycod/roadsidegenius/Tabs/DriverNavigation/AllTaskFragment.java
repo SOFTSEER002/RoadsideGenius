@@ -1,8 +1,10 @@
 package com.doozycod.roadsidegenius.Tabs.DriverNavigation;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -47,13 +49,28 @@ public class AllTaskFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_all_task, container, false);
+        View view = localInflater.inflate(R.layout.fragment_all_task, container, false);
         text = view.findViewById(R.id.text);
         recyclerView = view.findViewById(R.id.recyclerView);
         apiService = ApiUtils.getAPIService();
@@ -87,7 +104,7 @@ public class AllTaskFragment extends Fragment {
 //                    TaskListFragment taskListFragment= new TaskListFragment();
 //                    taskListFragment.refreshFragment();
                     text.setVisibility(View.GONE);
-                    recyclerView.setAdapter(new AssignJobDriverAdapter(getActivity(), jobs,apiService));
+                    recyclerView.setAdapter(new AssignJobDriverAdapter(getActivity(), jobs, apiService));
                 }
 
             }

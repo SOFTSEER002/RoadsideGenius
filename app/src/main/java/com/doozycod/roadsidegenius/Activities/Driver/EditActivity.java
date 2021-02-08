@@ -26,6 +26,7 @@ import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,9 +37,10 @@ import retrofit2.Response;
 public class EditActivity extends AppCompatActivity {
     Driver driver;
     Toolbar toolbar;
-    EditText nameET, emailET, numberET, driverET, driverAddressET, driverZipcodeET, payperJobET, serviceAreaET, serviceTypeET,
-            serviceModelET, serviceYearET, serviceMakeET;
-    Spinner vendorIDSpinner;
+    EditText nameET, emailET, numberET, driverET, driverAddressET, driverZipcodeET, payperJobET,
+            serviceAreaET, serviceTypeET,
+            serviceModelET, serviceMakeET;
+    Spinner vendorIDSpinner, serviceYearET;
     Button addDriverButton;
     ApiService apiService;
     SharedPreferenceMethod sharedPreferenceMethod;
@@ -49,6 +51,17 @@ public class EditActivity extends AppCompatActivity {
     CustomProgressBar customProgressBar;
     ArrayAdapter aa;
     Bundle bundle = new Bundle();
+    List<String> yearList = new ArrayList<>();
+
+    int year = Calendar.getInstance().get(Calendar.YEAR);
+
+    void getYears() {
+        yearList.add(year + "");
+        for (int i = 15; i > 0; i--) {
+            yearList.add((year - 1) + "");
+            year--;
+        }
+    }
 
     void initUI() {
         addDriverButton = findViewById(R.id.addDriverButton);
@@ -65,11 +78,22 @@ public class EditActivity extends AppCompatActivity {
         emailET = findViewById(R.id.emailET);
         numberET = findViewById(R.id.numberET);
         driverET = findViewById(R.id.driverET);
+        getYears();
+        ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_item, yearList);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        serviceYearET.setAdapter(aa);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_edit);
 
         toolbar = findViewById(R.id.toolbar);
@@ -121,10 +145,6 @@ public class EditActivity extends AppCompatActivity {
                     return;
                 }
 
-                if (emailET.getText().toString().equals("")) {
-                    Toast.makeText(EditActivity.this, "Please enter Driver Email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (!isValidEmail(emailET.getText().toString())) {
                     Toast.makeText(EditActivity.this, "Please enter a valid email address", Toast.LENGTH_SHORT).show();
                     return;
@@ -162,11 +182,6 @@ public class EditActivity extends AppCompatActivity {
                     Toast.makeText(EditActivity.this, "Please enter Service Vehicle Model", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (serviceYearET.getText().toString().equals("")) {
-
-                    Toast.makeText(EditActivity.this, "Please enter Service Vehicle Year", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (serviceMakeET.getText().toString().equals("")) {
                     Toast.makeText(EditActivity.this, "Please enter Service Vehicle Make", Toast.LENGTH_SHORT).show();
                     return;
@@ -174,7 +189,7 @@ public class EditActivity extends AppCompatActivity {
                     editDriverAPI(emailET.getText().toString(), numberET.getText().toString(), nameET.getText().toString(),
                             driver.getId(), driverAddressET.getText().toString(), driverZipcodeET.getText().toString(),
                             serviceAreaET.getText().toString(), payperJobET.getText().toString(), serviceTypeET.getText().toString(),
-                            serviceModelET.getText().toString(), serviceYearET.getText().toString(), serviceMakeET.getText().toString());
+                            serviceModelET.getText().toString(), yearList.get(serviceYearET.getSelectedItemPosition()), serviceMakeET.getText().toString());
                 }
             }
         });
@@ -186,7 +201,7 @@ public class EditActivity extends AppCompatActivity {
 
         customProgressBar.showProgress();
         apiService.editDriverDetails(sharedPreferenceMethod.getJWTToken(), driverId, email, number, name,
-                companyIdList.get(vendorIDSpinner.getSelectedItemPosition()), driverAddress, driverZipCode, serviceArea,
+                vendorIdList.get(vendorIDSpinner.getSelectedItemPosition()), driverAddress, driverZipCode, serviceArea,
                 payPerJob, serviceVehicleType, serviceVehicleModel, serviceVehicleYear, serviceVehicleMake).enqueue(new Callback<AdminRegisterModel>() {
             @Override
             public void onResponse(Call<AdminRegisterModel> call, Response<AdminRegisterModel> response) {
@@ -263,8 +278,14 @@ public class EditActivity extends AppCompatActivity {
                 break;
             }
         }
+        for (int i = 0; i < yearList.size(); i++) {
+            if (yearList.get(i).equals(driver.getServiceVehicleYear())) {
+                serviceYearET.setSelection(i);
+                break;
+            }
+        }
         serviceMakeET.setText(driver.getServiceVehicleMake());
-        serviceYearET.setText(driver.getServiceVehicleYear());
+//        serviceYearET.setText(driver.getServiceVehicleYear());
         serviceModelET.setText(driver.getServiceVehicleModel());
         serviceTypeET.setText(driver.getServiceVehicleType());
         serviceAreaET.setText(driver.getServiceArea());

@@ -2,14 +2,17 @@ package com.doozycod.roadsidegenius.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,8 +37,11 @@ import com.doozycod.roadsidegenius.Activities.PaymentActivity;
 import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Service.ApiService;
 import com.doozycod.roadsidegenius.Service.ApiUtils;
+import com.doozycod.roadsidegenius.Utils.Cars;
 import com.doozycod.roadsidegenius.Utils.CustomProgressBar;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -62,8 +68,12 @@ public class RequestServiceFragment extends Fragment {
     EditText fullNameET, customerEmailET, amount_quoted, notesET;
     AutoCompleteTextView getLocationET, getDropOffLocation;
     AutoCompleteAdapter adapter;
+    AutoCompleteAdapter adapter2;
     PlacesClient placesClient;
-    Spinner serviceTypeSpinner, vendorIDSpinner;
+    PlacesClient placesClient2;
+    Spinner serviceTypeSpinner, vendorIDSpinner, vehicleMakeEt, vehicleModelEt,
+            vehicleYearEt, vehicleColor;
+    ;
     ApiService apiService;
     SharedPreferenceMethod sharedPreferenceMethod;
     CustomProgressBar customProgressBar;
@@ -73,14 +83,19 @@ public class RequestServiceFragment extends Fragment {
     List<String> serviceTypeList = new ArrayList<>();
     Spinner paymentMethodSpinner;
     List<String> paymentType = new ArrayList<>();
-    ArrayAdapter arrayAdapter;
-    ArrayAdapter aa;
+    ArrayAdapter<String> arrayAdapter;
+    ArrayAdapter<String> aa;
     ImageView contactDialogButton;
     String countryCode = "";
     String otpString = "";
     boolean isSent = false;
-    String number = "";
+    String number = "",pickupLatLong="",dropOffLatLong="";
     Toolbar toolbar;
+
+    Cars cars;
+    List<String> selectedCarModels = new ArrayList<>();
+    List<String> carModelYearsList = new ArrayList<>();
+    List<String> carModelColorsList = new ArrayList<>();
 
     public RequestServiceFragment() {
         // Required empty public constructor
@@ -97,17 +112,16 @@ public class RequestServiceFragment extends Fragment {
         getLocationET.setAdapter(adapter);
 
         getDropOffLocation.setThreshold(1);
-        getDropOffLocation.setOnItemClickListener(autocompleteClickListener);
-        adapter = new AutoCompleteAdapter(getActivity(), placesClient);
-        getDropOffLocation.setAdapter(adapter);
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        getDropOffLocation.setOnItemClickListener(autocompleteClickListener2);
+        adapter2 = new AutoCompleteAdapter(getActivity(), placesClient2);
+        getDropOffLocation.setAdapter(adapter2);
     }
 
     void initUI(View view) {
+        vehicleColor = view.findViewById(R.id.vehicleColor);
+        vehicleMakeEt = view.findViewById(R.id.vehicleMakeEt);
+        vehicleYearEt = view.findViewById(R.id.vehicleYearEt);
+        vehicleModelEt = view.findViewById(R.id.vehicleModelEt);
         notesET = view.findViewById(R.id.notesET);
         amount_quoted = view.findViewById(R.id.amount_quoted);
         requestButton = view.findViewById(R.id.requestButton);
@@ -132,25 +146,45 @@ public class RequestServiceFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
 
-        View view = inflater.inflate(R.layout.fragment_request_service, container, false);
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
+        // Inflate the layout for this fragment
+        View view = localInflater.inflate(R.layout.fragment_request_service, container, false);
         initUI(view);
         apiService = ApiUtils.getAPIService();
         sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
         customProgressBar = new CustomProgressBar(getActivity());
 
-        serviceTypeList.add("Select Service");
+//        serviceTypeList.add("Select Service");
 
-        paymentType.add("Select Payment Method");
-        paymentType.add("Cash");
+
         paymentType.add("Credit Card");
 
-        arrayAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, paymentType);
+        arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, paymentType);
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         paymentMethodSpinner.setAdapter(arrayAdapter);
+
+        cars = new Cars();
 
         getServiceList();
         contactDialogButton.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +197,7 @@ public class RequestServiceFragment extends Fragment {
             contactNumberTxt.setText("+" + sharedPreferenceMethod.getCustomerContact());
         }
         number = sharedPreferenceMethod.getCustomerContact();
+
         serviceTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -210,14 +245,15 @@ public class RequestServiceFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please select payment type", Toast.LENGTH_SHORT).show();
                     return;
 
-                }*/ else {
+                }*/
+                else {
                     if (sharedPreferenceMethod.getLogin().equals("customer")) {
                         Intent intent = new Intent(getActivity(), PaymentActivity.class);
                         intent.putExtra("amount", amount_quoted.getText().toString());
-                        intent.putExtra("name",fullNameET.getText().toString());
-                        intent.putExtra("email",customerEmailET.getText().toString());
-                        intent.putExtra("notes",notesET.getText().toString());
-                        intent.putExtra("serviceId",serviceList.get(serviceTypeSpinner.getSelectedItemPosition() - 1).getId());
+                        intent.putExtra("name", fullNameET.getText().toString());
+                        intent.putExtra("email", customerEmailET.getText().toString());
+                        intent.putExtra("notes", notesET.getText().toString());
+                        intent.putExtra("serviceId", serviceList.get(serviceTypeSpinner.getSelectedItemPosition() - 1).getId());
                         intent.putExtra("number", contactNumberTxt.getText().toString().replaceAll("\\+", ""));
                         intent.putExtra("getLocationET", getLocationET.getText().toString());
                         intent.putExtra("getDropOffLocation", getDropOffLocation.getText().toString());
@@ -229,22 +265,42 @@ public class RequestServiceFragment extends Fragment {
 //                                getLocationET.getText().toString(), getDropOffLocation.getText().toString());
                         return;
                     } else {
-                        createRequest(fullNameET.getText().toString(), customerEmailET.getText().toString(),
-                                contactNumberTxt.getText().toString().replaceAll("\\+", ""),
-                                getLocationET.getText().toString(), getDropOffLocation.getText().toString());
+                        if (vehicleMakeEt.getSelectedItemPosition() == 0) {
+                            createRequest(fullNameET.getText().toString(), customerEmailET.getText().toString(),
+                                    countryCode + contactNumberTxt.getText().toString(),
+                                    pickupLatLong, dropOffLatLong,
+                                    "",
+                                    "",
+                                    "",
+                                    "");
 
+                        } else {
+
+                            createRequest(fullNameET.getText().toString(), customerEmailET.getText().toString(),
+                                    countryCode + contactNumberTxt.getText().toString(),
+                                    pickupLatLong, dropOffLatLong,
+                                    vehicleYearEt.getSelectedView().toString(),
+                                    vehicleColor.getSelectedView().toString(),
+                                    vehicleMakeEt.getSelectedView().toString(),
+                                    vehicleModelEt.getSelectedView().toString());
+
+                        }
                     }
                 }
             }
         });
+        getCarSelected();
         return view;
     }
 
     void createRequest(String fullName, String email, String contactNumber, String customerPickup,
-                       String customerDropOff) {
+                       String customerDropOff, String vehicle_year, String vehicle_color,
+                       String vehicle_make, String vehicle_model) {
         customProgressBar.showProgress();
         apiService.createJob(sharedPreferenceMethod.getJWTToken(),
-                fullName, contactNumber, customerPickup, customerDropOff, email,
+                fullName, contactNumber, customerPickup, customerDropOff,
+                vehicle_make, vehicle_model, vehicle_color,
+                vehicle_year, email,
                 serviceList.get(serviceTypeSpinner.getSelectedItemPosition() - 1).getId(),
                 notesET.getText().toString(),
                 amount_quoted.getText().toString()).enqueue(new Callback<JobRequestModel>() {
@@ -312,7 +368,11 @@ public class RequestServiceFragment extends Fragment {
             }
         });
         isSent = false;
-        countryCode = countryCodePicker.getDefaultCountryCode();
+        countryCodePicker.setAutoDetectedCountry(true);
+        countryCodePicker.setCountryForNameCode("US");
+
+        countryCode = countryCodePicker.getSelectedCountryCode();
+//        countryCode = countryCodePicker.getDefaultCountryCode();
         countryCodePicker.setOnCountryChangeListener(new CountryCodePicker.OnCountryChangeListener() {
             @Override
             public void onCountrySelected() {
@@ -381,7 +441,7 @@ public class RequestServiceFragment extends Fragment {
                         serviceTypeList.add(response.body().getResponse().getServices().get(i).getServiceType());
                     }
 
-                    aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, serviceTypeList);
+                    aa = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, serviceTypeList);
                     aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     serviceTypeSpinner.setAdapter(aa);
                 } else {
@@ -425,6 +485,7 @@ public class RequestServiceFragment extends Fragment {
                         @Override
                         public void onSuccess(FetchPlaceResponse task) {
                             getLocationET.setText(task.getPlace().getName() + "\n" + task.getPlace().getAddress());
+                            pickupLatLong= task.getPlace().getLatLng().latitude+task.getPlace().getLatLng().longitude+"";
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
@@ -440,6 +501,406 @@ public class RequestServiceFragment extends Fragment {
 
         }
     };
+    private AdapterView.OnItemClickListener autocompleteClickListener2 = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+            try {
+                final AutocompletePrediction item = adapter.getItem(i);
+                String placeID = null;
+                if (item != null) {
+                    placeID = item.getPlaceId();
+                }
+
+//                To specify which data types to return, pass an array of Place.Fields in your FetchPlaceRequest
+//                Use only those fields which are required.
+
+                List<Place.Field> placeFields = Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS
+                        , Place.Field.LAT_LNG);
+
+                FetchPlaceRequest request = null;
+                if (placeID != null) {
+                    request = FetchPlaceRequest.builder(placeID, placeFields)
+                            .build();
+                }
+
+                if (request != null) {
+                    placesClient.fetchPlace(request).addOnSuccessListener(new OnSuccessListener<FetchPlaceResponse>() {
+                        @SuppressLint("SetTextI18n")
+                        @Override
+                        public void onSuccess(FetchPlaceResponse task) {
+//                            mMap2.moveCamera(CameraUpdateFactory.newLatLng(task.getPlace().getLatLng()));
+//                            mMap2.animateCamera(CameraUpdateFactory.zoomTo(17));
+//                            mMap2.addMarker(new MarkerOptions().position(task.getPlace().getLatLng())
+//                                    .title(task.getPlace().getName()));
+                            Log.e("MAP SDK", "onSuccess: " + task.getPlace().getLatLng());
+
+
+                            getDropOffLocation.setText(task.getPlace().getName() + "\n" + task.getPlace().getAddress());
+                            dropOffLatLong= task.getPlace().getLatLng().latitude+task.getPlace().getLatLng().longitude+"";
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            e.printStackTrace();
+                            getLocationET.setText(e.getMessage());
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    };
+
+    void getCarSelected() {
+        carModelYearsList = cars.getCarModelYearList();
+        carModelColorsList = cars.carColorsList();
+        List<String> carsList = cars.getCarBrands();
+
+
+        ArrayAdapter<String> carYearAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, carModelYearsList);
+        carYearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vehicleYearEt.setAdapter(carYearAdapter);
+
+        ArrayAdapter<String> carColorAdapter = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, carModelColorsList);
+        carColorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        vehicleColor.setAdapter(carColorAdapter);
+
+
+        ArrayAdapter<String> aa = new ArrayAdapter<>(getActivity(),
+                android.R.layout.simple_spinner_item, carsList);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+//        vehicleModelEt.setAdapter(carModelAdapter);
+
+        vehicleMakeEt.setAdapter(aa);
+        vehicleMakeEt.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String item = adapterView.getItemAtPosition(i).toString().trim();
+                if (i == 0) {
+                    selectedCarModels = new ArrayList<>();
+                    ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                            android.R.layout.simple_spinner_item, selectedCarModels);
+                    carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    vehicleModelEt.setAdapter(carModelAdapter);
+                } else {
+                    Log.e("TAG", "onItemSelected: " + carsList.get(i));
+                    if (item.equals("Audi")) {
+                        selectedCarModels = cars.audiModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("GMC")) {
+                        selectedCarModels = cars.gmcModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Hyundai")) {
+                        selectedCarModels = cars.hyundaiModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Honda")) {
+                        selectedCarModels = cars.hondaModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Mercedes-Benz")) {
+                        selectedCarModels = cars.mercedesBenzModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Nissan")) {
+                        selectedCarModels = cars.nissanModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Volkswagen")) {
+                        selectedCarModels = cars.volkswagenModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Subaru")) {
+                        selectedCarModels = cars.subaruModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Cadillac")) {
+                        selectedCarModels = cars.subaruModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Toyota")) {
+                        selectedCarModels = cars.toyotaModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Lamborghini")) {
+                        selectedCarModels = cars.lamborghiniModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Lincoln")) {
+                        selectedCarModels = cars.lincolnModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Bentley")) {
+                        selectedCarModels = cars.bentleyModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Chevrolet")) {
+                        selectedCarModels = cars.chevroletModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Ford")) {
+                        selectedCarModels = cars.fordModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Kia")) {
+                        selectedCarModels = cars.kiaModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Buick")) {
+                        selectedCarModels = cars.buickModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Porsche")) {
+                        selectedCarModels = cars.porscheModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Dodge")) {
+                        selectedCarModels = cars.dodgeModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Jeep")) {
+                        selectedCarModels = cars.jeepModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("MINI")) {
+                        selectedCarModels = cars.miniModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Rolls-Royce")) {
+                        selectedCarModels = cars.rollsRoyceModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("MAZDA")) {
+                        selectedCarModels = cars.mazdaModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Aston Martin")) {
+                        selectedCarModels = cars.astonMartinModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Land Rover")) {
+                        selectedCarModels = cars.landRoverModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Mitsubishi")) {
+                        selectedCarModels = cars.mitsubhishiModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Jaguar")) {
+                        selectedCarModels = cars.jaguarModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Lexus")) {
+                        selectedCarModels = cars.lexusModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("smart")) {
+                        selectedCarModels = cars.smartModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Genesis")) {
+                        selectedCarModels = cars.genesisModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Maserati")) {
+                        selectedCarModels = cars.maseratiModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Alfa Romeo")) {
+                        selectedCarModels = cars.alfaRomeoModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Ferrari")) {
+                        selectedCarModels = cars.ferarriModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("BMW")) {
+                        selectedCarModels = cars.bmwModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Acura")) {
+                        selectedCarModels = cars.acuraModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Tesla")) {
+                        selectedCarModels = cars.teslaModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Chrysler")) {
+                        selectedCarModels = cars.chrylerModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Ram")) {
+                        selectedCarModels = cars.ramModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("INFINITI")) {
+                        selectedCarModels = cars.infinitiModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Rivian")) {
+                        selectedCarModels = cars.rivianModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("Volvo")) {
+                        selectedCarModels = cars.volvoModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("FIAT")) {
+                        selectedCarModels = cars.fiatModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                    if (item.equals("McLaren")) {
+                        selectedCarModels = cars.macLarenModels();
+                        ArrayAdapter<String> carModelAdapter = new ArrayAdapter<>(getActivity(),
+                                android.R.layout.simple_spinner_item, selectedCarModels);
+                        carModelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        vehicleModelEt.setAdapter(carModelAdapter);
+                    }
+                }
+            }
+
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
 
     public static boolean isValidEmail(CharSequence target) {
         return (!TextUtils.isEmpty(target) && Patterns.EMAIL_ADDRESS.matcher(target).matches());

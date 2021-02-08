@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     android:orientation="vertical"
     tools:context=".Activities.Driver.EditActivity">
 
@@ -55,6 +56,63 @@
                     android:orientation="vertical"
                     android:paddingTop="10dp">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".9"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Customer Name"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/textColor" />
+
+                        <TextView
+                            android:id="@+id/customerNameTxt"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1.1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="vendor Id12"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/textColor" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight=".9"
+                            android:fontFamily="@font/poppins_regular"
+                            android:text="Service Needed"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/textColor" />
+
+                        <TextView
+                            android:id="@+id/serviceNeededTxt"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_weight="1.1"
+                            android:fontFamily="@font/poppins_regular"
+                            android:maxLines="1"
+                            android:text="vendor Id12"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?attr/textColor" />
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -63,7 +121,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Select Driver"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -93,16 +151,28 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="ETA"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
-                    <EditText
-                        android:id="@+id/etaET"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:background="@drawable/et_bg_blue"
-                        android:inputType="number"
-                        android:paddingHorizontal="15dp" />
+                        android:layout_height="wrap_content">
+
+                        <Spinner
+                            android:id="@+id/etaET"
+                            android:layout_width="match_parent"
+                            android:layout_height="50dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:background="@drawable/et_bg_blue"
+                            android:paddingHorizontal="15dp" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="20dp"
+                            android:src="@drawable/ic_baseline_keyboard_arrow_down_24" />
+                    </RelativeLayout>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -111,7 +181,8 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Site"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor"
+                        android:visibility="gone" />
 
                     <EditText
                         android:id="@+id/siteET"
@@ -120,7 +191,8 @@
                         android:layout_marginHorizontal="10dp"
                         android:background="@drawable/et_bg_blue"
                         android:inputType="text"
-                        android:paddingHorizontal="15dp" />
+                        android:paddingHorizontal="15dp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -129,11 +201,13 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Dispatch Date"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor"
+                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/dispatchDateTxt"
@@ -161,6 +235,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        android:visibility="gone"
                         android:weightSum="3">
 
                         <LinearLayout
@@ -170,14 +245,14 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
                                 android:layout_marginHorizontal="10dp"
                                 android:layout_marginTop="10dp"
                                 android:fontFamily="@font/poppins_regular"
                                 android:text="Vehicle Make"
-                                android:textColor="@color/black" />
+                                android:textColor="?attr/textColor" />
 
                             <EditText
                                 android:id="@+id/vehicleMakeEt"
@@ -196,14 +271,14 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:layout_gravity="center_horizontal"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
                                 android:layout_marginHorizontal="10dp"
                                 android:layout_marginTop="10dp"
                                 android:fontFamily="@font/poppins_regular"
                                 android:text="Vehicle Model"
-                                android:textColor="@color/black" />
+                                android:textColor="?attr/textColor" />
 
                             <EditText
                                 android:id="@+id/vehicleModelEt"
@@ -216,9 +291,9 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_weight="1"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
@@ -228,7 +303,7 @@
                                 android:layout_marginTop="10dp"
                                 android:fontFamily="@font/poppins_regular"
                                 android:text="Vehicle Color"
-                                android:textColor="@color/black" />
+                                android:textColor="?attr/textColor" />
 
                             <EditText
                                 android:id="@+id/vehicleColor"
@@ -248,7 +323,8 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Dispatched Time"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/dispatchedTime"
@@ -259,44 +335,45 @@
                         android:gravity="center_vertical"
                         android:paddingHorizontal="20dp"
                         android:text="20:46"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:visibility="gone" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="10dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:text="Total Job Time"
-                        android:textColor="@color/black" />
+                    <!--                    <TextView-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginHorizontal="20dp"-->
+                    <!--                        android:layout_marginTop="10dp"-->
+                    <!--                        android:fontFamily="@font/poppins_regular"-->
+                    <!--                        android:text="Total Job Time"-->
+                    <!--                        android:textColor="?attr/textColor" />-->
 
-                    <EditText
-                        android:id="@+id/total_job_time"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:background="@drawable/et_bg_blue"
-                        android:gravity="center_vertical"
-                        android:paddingHorizontal="20dp" />
+                    <!--                    <EditText-->
+                    <!--                        android:id="@+id/total_job_time"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="50dp"-->
+                    <!--                        android:layout_marginHorizontal="10dp"-->
+                    <!--                        android:background="@drawable/et_bg_blue"-->
+                    <!--                        android:gravity="center_vertical"-->
+                    <!--                        android:paddingHorizontal="20dp" />-->
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="20dp"
-                        android:layout_marginTop="10dp"
-                        android:fontFamily="@font/poppins_regular"
-                        android:text="Total Miles"
-                        android:textColor="@color/black" />
+                    <!--                    <TextView-->
+                    <!--                        android:layout_width="wrap_content"-->
+                    <!--                        android:layout_height="wrap_content"-->
+                    <!--                        android:layout_marginHorizontal="20dp"-->
+                    <!--                        android:layout_marginTop="10dp"-->
+                    <!--                        android:fontFamily="@font/poppins_regular"-->
+                    <!--                        android:text="Total Miles"-->
+                    <!--                        android:textColor="?attr/textColor" />-->
 
-                    <EditText
-                        android:id="@+id/total_milesET"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginHorizontal="10dp"
-                        android:background="@drawable/et_bg_blue"
-                        android:gravity="center_vertical"
-                        android:inputType="numberDecimal"
-                        android:paddingHorizontal="20dp" />
+                    <!--                    <EditText-->
+                    <!--                        android:id="@+id/total_milesET"-->
+                    <!--                        android:layout_width="match_parent"-->
+                    <!--                        android:layout_height="50dp"-->
+                    <!--                        android:layout_marginHorizontal="10dp"-->
+                    <!--                        android:background="@drawable/et_bg_blue"-->
+                    <!--                        android:gravity="center_vertical"-->
+                    <!--                        android:inputType="numberDecimal"-->
+                    <!--                        android:paddingHorizontal="20dp" />-->
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -305,7 +382,9 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Invoice Total"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor"
+
+                        android:visibility="gone" />
 
                     <EditText
                         android:id="@+id/invoiceTotal"
@@ -314,7 +393,8 @@
                         android:layout_marginHorizontal="10dp"
                         android:background="@drawable/et_bg_blue"
                         android:inputType="numberDecimal"
-                        android:paddingHorizontal="15dp" />
+                        android:paddingHorizontal="15dp"
+                        android:visibility="gone" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -323,7 +403,9 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Truck"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor"
+
+                        android:visibility="gone" />
 
                     <EditText
                         android:id="@+id/truckET"
@@ -332,7 +414,8 @@
                         android:layout_marginHorizontal="10dp"
                         android:background="@drawable/et_bg_blue"
                         android:inputType="text"
-                        android:paddingHorizontal="15dp" />
+                        android:paddingHorizontal="15dp"
+                        android:visibility="gone" />
 
 
                     <TextView
@@ -342,7 +425,7 @@
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Description"
-                        android:textColor="@color/black" />
+                        android:textColor="?attr/textColor" />
 
                     <EditText
                         android:id="@+id/descriptionET"
@@ -352,8 +435,8 @@
                         android:background="@drawable/et_bg_blue"
                         android:gravity="top"
                         android:hint="Write Instruction here..."
-                        android:inputType="textPhonetic"
-                        android:minHeight="200dp"
+                        android:inputType="textMultiLine"
+                        android:minHeight="100dp"
                         android:paddingHorizontal="15dp"
                         android:paddingTop="10dp" />
 

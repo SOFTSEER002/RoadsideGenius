@@ -60,7 +60,7 @@ public class AssignJobDriverAdapter extends RecyclerView.Adapter<AssignJobDriver
     @Override
     public AssignJobDriverAdapter.RecyclerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.assign_job_recyclerview_driver, parent, false);
-        Log.e("TAG", "startJobAPI: " + simpleDateFormat.format(new Date()));
+//        Log.e("TAG", "startJobAPI: " + simpleDateFormat.format(new Date()));
 
         return new RecyclerHolder(view);
     }

@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#E6E6E6">
+    android:background="?attr/bgColor">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="?attr/recyclerViewBGColor"
+        app:cardCornerRadius="5dp"
         app:cardElevation="5dp"
         app:cardUseCompatPadding="true">
 
@@ -54,6 +56,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:text="vendor Id12"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="?attr/textColor"
                         android:textSize="24sp"
                         android:textStyle="bold" />
                 </LinearLayout>
@@ -77,7 +80,8 @@
                         android:layout_marginHorizontal="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="?attr/textColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -99,7 +103,8 @@
                         android:layout_marginHorizontal="10dp"
                         android:fontFamily="@font/poppins_regular"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="?attr/textColor" />
                 </LinearLayout>
 
 
@@ -118,7 +123,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:text="Service"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#000" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/serviceTypeTxt"
@@ -129,7 +134,8 @@
                         android:fontFamily="@font/poppins_regular"
                         android:maxLines="1"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/metaTextColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -148,7 +154,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:text="Amount "
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#000" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/amount_quoted"
@@ -179,7 +185,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:text="Pickup"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#000" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/pickupTxt"
@@ -190,7 +196,8 @@
                         android:fontFamily="@font/poppins_regular"
                         android:maxLines="1"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/metaTextColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -209,7 +216,7 @@
                         android:fontFamily="@font/poppins_regular"
                         android:text="Drop off"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="#000" />
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/dropoffTxt"
@@ -221,7 +228,8 @@
                         android:fontFamily="@font/poppins_regular"
                         android:maxLines="1"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/metaTextColor" />
                 </LinearLayout>
 
                 <LinearLayout

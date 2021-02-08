@@ -1,8 +1,10 @@
 package com.doozycod.roadsidegenius.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
@@ -28,6 +30,7 @@ import com.doozycod.roadsidegenius.Service.ApiUtils;
 import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import retrofit2.Call;
@@ -39,8 +42,8 @@ public class AddDriverFragment extends Fragment {
 
     private static final String EXTRA_TEXT = "text";
     EditText nameET, emailET, numberET, driverET, driverAddressET, driverZipcodeET, payperJobET, serviceAreaET, serviceTypeET,
-            serviceModelET, serviceYearET, serviceMakeET;
-    Spinner vendorIDSpinner;
+            serviceModelET, serviceMakeET;
+    Spinner vendorIDSpinner, serviceYearET;
     Button addDriverButton;
     ApiService apiService;
     SharedPreferenceMethod sharedPreferenceMethod;
@@ -51,10 +54,21 @@ public class AddDriverFragment extends Fragment {
     CustomProgressBar customProgressBar;
     ArrayAdapter aa;
     Driver driver;
+    List<String> yearList = new ArrayList<>();
 
+    int year = Calendar.getInstance().get(Calendar.YEAR);
 
     public AddDriverFragment() {
         // Required empty public constructor
+    }
+
+
+    void getYears() {
+        yearList.add(year + "");
+        for (int i = 12; i > 0; i--) {
+            yearList.add((year - 1) + "");
+            year--;
+        }
     }
 
     void initUI(View view) {
@@ -72,6 +86,10 @@ public class AddDriverFragment extends Fragment {
         emailET = view.findViewById(R.id.emailET);
         numberET = view.findViewById(R.id.numberET);
         driverET = view.findViewById(R.id.driverET);
+        getYears();
+        ArrayAdapter aa = new ArrayAdapter(getContext(), android.R.layout.simple_spinner_item, yearList);
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        serviceYearET.setAdapter(aa);
     }
 
     void setData() {
@@ -81,7 +99,13 @@ public class AddDriverFragment extends Fragment {
                 break;
             }
         }
-        serviceYearET.setText(driver.getServiceVehicleYear());
+        for (int i = 0; i < yearList.size(); i++) {
+            if (yearList.get(i).equals(driver.getServiceVehicleYear())) {
+                serviceYearET.setSelection(i);
+                break;
+            }
+        }
+//        serviceYearET.setText(driver.getServiceVehicleYear());
         serviceModelET.setText(driver.getServiceVehicleModel());
         serviceTypeET.setText(driver.getServiceVehicleType());
         serviceAreaET.setText(driver.getServiceArea());
@@ -103,10 +127,6 @@ public class AddDriverFragment extends Fragment {
                     return;
                 }
 
-                if (emailET.getText().toString().equals("")) {
-                    Toast.makeText(getActivity(), "Please enter Driver Email", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (!isValidEmail(emailET.getText().toString())) {
                     Toast.makeText(getActivity(), "Please enter a valid email address", Toast.LENGTH_SHORT).show();
                     return;
@@ -144,11 +164,7 @@ public class AddDriverFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please enter Service Vehicle Model", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (serviceYearET.getText().toString().equals("")) {
 
-                    Toast.makeText(getActivity(), "Please enter Service Vehicle Year", Toast.LENGTH_SHORT).show();
-                    return;
-                }
                 if (serviceMakeET.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "Please enter Service Vehicle Make", Toast.LENGTH_SHORT).show();
                     return;
@@ -156,7 +172,7 @@ public class AddDriverFragment extends Fragment {
                     addDriverAPI(emailET.getText().toString(), numberET.getText().toString(), nameET.getText().toString(),
                             driverET.getText().toString(), driverAddressET.getText().toString(), driverZipcodeET.getText().toString(),
                             serviceAreaET.getText().toString(), payperJobET.getText().toString(), serviceTypeET.getText().toString(),
-                            serviceModelET.getText().toString(), serviceYearET.getText().toString(), serviceMakeET.getText().toString());
+                            serviceModelET.getText().toString(), yearList.get(serviceYearET.getSelectedItemPosition()), serviceMakeET.getText().toString());
                 }
             }
         });
@@ -172,10 +188,30 @@ public class AddDriverFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_driver, container, false);
+        // Inflate the layout for this fragment
+        View view = localInflater.inflate(R.layout.fragment_add_driver, container, false);
         apiService = ApiUtils.getAPIService();
         customProgressBar = new CustomProgressBar(getActivity());
         sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
@@ -249,7 +285,6 @@ public class AddDriverFragment extends Fragment {
                     serviceAreaET.setText("");
                     serviceTypeET.setText("");
                     serviceMakeET.setText("");
-                    serviceYearET.setText("");
                     serviceModelET.setText("");
                     payperJobET.setText("");
                 } else {

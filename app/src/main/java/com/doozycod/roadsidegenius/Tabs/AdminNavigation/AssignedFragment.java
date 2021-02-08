@@ -1,12 +1,17 @@
 package com.doozycod.roadsidegenius.Tabs.AdminNavigation;
 
+import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +34,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class AssignedFragment extends Fragment {
+public class AssignedFragment extends Fragment implements AssignJobAdapter.OnJobFinishCallback {
 
     RecyclerView recyclerView;
     SharedPreferenceMethod sharedPreferenceMethod;
@@ -41,11 +46,31 @@ public class AssignedFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_assigned, container, false);
+        View view = localInflater.inflate(R.layout.fragment_assigned, container, false);
 
         apiService = ApiUtils.getAPIService();
         sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
@@ -72,7 +97,7 @@ public class AssignedFragment extends Fragment {
                         Toast.makeText(getActivity(), "No assigned jobs yet!", Toast.LENGTH_SHORT).show();
                         return;
                     }
-                    recyclerView.setAdapter(new AssignJobAdapter(getActivity(), jobs,apiService));
+                    recyclerView.setAdapter(new AssignJobAdapter(getActivity(), jobs, apiService, AssignedFragment.this::onJobFinish));
                 }
             }
 
@@ -82,5 +107,11 @@ public class AssignedFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onJobFinish(boolean refresh) {
+        getAssignedJobsAPI();
+        Log.e("TAG onJobFinish", refresh + "");
     }
 }

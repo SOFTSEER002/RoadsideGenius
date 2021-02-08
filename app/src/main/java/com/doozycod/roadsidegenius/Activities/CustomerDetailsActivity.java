@@ -47,7 +47,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     TextView etaET, siteET, vehicleMakeEt, vehicleModelEt, vehicleColor, total_job_time, total_milesET, invoiceTotal,
             truckET, descriptionET, dispatchedTime, dispatchDateTxt, driverName;
     TextView fullNameET, customerEmailET, amount_quoted, notesET, contactNumberTxt;
-    TextView getLocationET, getDropOffLocation;
+    TextView getLocationET, getDropOffLocation,paymentET;
     Toolbar toolbar;
     SharedPreferenceMethod sharedPreferenceMethod;
     CustomProgressBar customProgressBar;
@@ -66,7 +66,7 @@ public class CustomerDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        paymentMethodSpinner = findViewById(R.id.paymentMethodSpinner);
+//        paymentMethodSpinner = findViewById(R.id.paymentMethodSpinner);
         contactDialogButton = findViewById(R.id.contactDialogButton);
         completeButton = findViewById(R.id.completeButton);
         notesET = findViewById(R.id.notesET);
@@ -96,20 +96,27 @@ public class CustomerDetailsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
         setContentView(R.layout.activity_customer_details);
         initUI();
         customProgressBar = new CustomProgressBar(this);
-        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod = new SharedPreferenceMethod(this);
         apiService = ApiUtils.getAPIService();
 
 
-        paymentType.add("Select Payment Method");
-        paymentType.add("Cash");
-        paymentType.add("Credit Card");
-
-        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, paymentType);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        paymentMethodSpinner.setAdapter(arrayAdapter);
+//        paymentType.add("Select Payment Method");
+//        paymentType.add("Cash");
+//        paymentType.add("Credit Card");
+//
+//        arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, paymentType);
+//        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        paymentMethodSpinner.setAdapter(arrayAdapter);
 
         if (getIntent().hasExtra("tasks")) {
             completeButton.setVisibility(View.VISIBLE);

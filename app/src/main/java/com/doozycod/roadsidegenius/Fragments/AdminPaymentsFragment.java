@@ -1,7 +1,9 @@
 package com.doozycod.roadsidegenius.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.doozycod.roadsidegenius.Activities.Admin.AssignJobActivity;
 import com.doozycod.roadsidegenius.Adapter.AdminPaymentsAdapter;
@@ -68,15 +71,35 @@ public class AdminPaymentsFragment extends Fragment {
     ArrayAdapter aa;
     Button searchButton;
     RecyclerView recyclerView;
-    TextView text;
+    TextView text, paymentTotalTxt;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
+
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_admin_payments, container, false);
+        View view = localInflater.inflate(R.layout.fragment_admin_payments, container, false);
         month_date = new SimpleDateFormat("MMMM");
         text = view.findViewById(R.id.text);
+        paymentTotalTxt = view.findViewById(R.id.paymentTotalTxt);
         driverSpinner = view.findViewById(R.id.driverSpinner);
         searchButton = view.findViewById(R.id.searchButton);
         monthSpinner = view.findViewById(R.id.monthSpinner);
@@ -131,11 +154,19 @@ public class AdminPaymentsFragment extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (driverSpinner.getSelectedItemPosition() == 0) {
-                    getPaymentList();
+                if (monthSpinner.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getActivity(), "Select month", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (yearSpinner.getSelectedItemPosition() == 0) {
+                    Toast.makeText(getActivity(), "Select month", Toast.LENGTH_SHORT).show();
+                    return;
                 } else {
-                    getPaymentList(driverSpinner.getSelectedItemPosition());
-
+                    if (driverSpinner.getSelectedItemPosition() == 0) {
+                        getPaymentList();
+                    } else {
+                        getPaymentList(driverSpinner.getSelectedItemPosition());
+                    }
                 }
             }
         });
@@ -171,7 +202,13 @@ public class AdminPaymentsFragment extends Fragment {
                         text.setVisibility(View.GONE);
                     } else {
                         text.setVisibility(View.VISIBLE);
+                        paymentTotalTxt.setText("$0.00");
                     }
+                    int paymentAmount = 0;
+                    for (int i = 0; payments.size() > i; i++) {
+                        paymentAmount = paymentAmount + Integer.parseInt(payments.get(i).getAmount());
+                    }
+                    paymentTotalTxt.setText("$" + paymentAmount);
                     recyclerView.setAdapter(new AdminPaymentsAdapter(getActivity(), payments));
                 }
             }
@@ -215,7 +252,15 @@ public class AdminPaymentsFragment extends Fragment {
 //                        for(int i)
                     } else {
                         text.setVisibility(View.VISIBLE);
+                        paymentTotalTxt.setText("$0.00");
+
                     }
+
+                    int paymentAmount = 0;
+                    for (int i = 0; payments.size() > i; i++) {
+                        paymentAmount = paymentAmount + Integer.parseInt(payments.get(i).getAmount());
+                    }
+                    paymentTotalTxt.setText("$" + paymentAmount);
                     recyclerView.setAdapter(new AdminPaymentsAdapter(getActivity(), payments));
                 }
             }

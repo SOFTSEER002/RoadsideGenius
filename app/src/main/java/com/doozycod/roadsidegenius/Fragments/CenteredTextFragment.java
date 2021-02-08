@@ -1,5 +1,6 @@
 package com.doozycod.roadsidegenius.Fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,12 +9,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 
 import com.doozycod.roadsidegenius.Activities.Admin.CreateJobAssignActivity;
 import com.doozycod.roadsidegenius.Adapter.ViewPagerAdapter.AdminPagerAdapter;
 import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Utils.CustomViewPager;
+import com.doozycod.roadsidegenius.Utils.SharedPreferenceMethod;
 import com.google.android.material.tabs.TabLayout;
 
 
@@ -33,17 +36,36 @@ public class CenteredTextFragment extends Fragment {
         return fragment;
     }
 
-
+    SharedPreferenceMethod sharedPreferenceMethod;
     AdminPagerAdapter pagerAdapter;
     CustomViewPager viewPager;
     TabLayout tabLayout;
     Button assignJobButton;
     boolean allowRefresh = false;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
 
+    }
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_text, container, false);
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
+
+
+        View view = localInflater.inflate(R.layout.fragment_text, container, false);
         pagerAdapter = new AdminPagerAdapter(getFragmentManager());
         assignJobButton = view.findViewById(R.id.assignJobButton);
         viewPager = view.findViewById(R.id.pager);

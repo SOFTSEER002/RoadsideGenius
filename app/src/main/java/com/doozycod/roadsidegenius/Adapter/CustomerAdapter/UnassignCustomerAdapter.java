@@ -40,7 +40,7 @@ public class UnassignCustomerAdapter extends RecyclerView.Adapter<UnassignCustom
         holder.phoneTxt.setText("+" + job.getCustomerNumber());
         holder.emailTxt.setText(job.getCustomerEmail());
         holder.serviceTypeTxt.setText(job.getServiceNeeded());
-        holder.amount_quoted.setText(job.getAmountQuoted());
+        holder.amount_quoted.setText("$"+job.getAmountQuoted());
         holder.pickupTxt.setText(job.getCustomerPickup());
         holder.dropoffTxt.setText(job.getCustomerDropoff());
         holder.notesTxt.setText(job.getCustomerNotes());

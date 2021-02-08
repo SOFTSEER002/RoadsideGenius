@@ -4,7 +4,9 @@ package com.doozycod.roadsidegenius.Model.ServiceList;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Service {
+import java.io.Serializable;
+
+public class Service implements Serializable {
 
     @SerializedName("id")
     @Expose
@@ -24,6 +26,38 @@ public class Service {
     @SerializedName("admin_id")
     @Expose
     private String adminId;
+
+    @SerializedName("service_image")
+    @Expose
+    private String serviceImage;
+
+    private boolean expanded;
+
+    public String getServiceImage() {
+        return serviceImage;
+    }
+
+    public void setServiceImage(String serviceImage) {
+        this.serviceImage = serviceImage;
+    }
+
+    public Service(String id, String serviceId, String serviceType, String serviceDescription, String serviceCost, String adminId, boolean expanded) {
+        this.id = id;
+        this.serviceId = serviceId;
+        this.serviceType = serviceType;
+        this.serviceDescription = serviceDescription;
+        this.serviceCost = serviceCost;
+        this.adminId = adminId;
+        expanded = false;
+    }
+
+    public boolean isExpanded() {
+        return expanded;
+    }
+
+    public void setExpanded(boolean expanded) {
+        this.expanded = expanded;
+    }
 
     public String getId() {
         return id;

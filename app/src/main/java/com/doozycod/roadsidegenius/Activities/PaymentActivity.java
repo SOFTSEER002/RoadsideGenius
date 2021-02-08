@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -66,11 +68,19 @@ public class PaymentActivity extends AppCompatActivity {
     SharedPreferenceMethod sharedPreferenceMethod;
     CustomProgressBar customProgressBar;
     ApiService apiService;
-    String name, email, service, number, getLocation, getDropOffLocation, notes;
+    String name, email, service, number, getLocation, getDropOffLocation, notes,vehicleMake,model,color,year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod != null) {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            setTheme(R.style.LightTheme);
+        }
+
         setContentView(R.layout.activity_payment);
         bonus = findViewById(R.id.bonusAmountTxt);
         priceTXT = findViewById(R.id.priceTXT);
@@ -88,6 +98,10 @@ public class PaymentActivity extends AppCompatActivity {
                 getApplicationContext(),
                 Objects.requireNonNull(Constants.STRIPE_CLIENT_ID_TEST)
         );
+        year = getIntent().getStringExtra("year");
+        color = getIntent().getStringExtra("color");
+        model = getIntent().getStringExtra("model");
+        vehicleMake = getIntent().getStringExtra("vehicleMake");
         price = getIntent().getStringExtra("amount");
         name = getIntent().getStringExtra("name");
         email = getIntent().getStringExtra("email");
@@ -96,8 +110,30 @@ public class PaymentActivity extends AppCompatActivity {
         number = getIntent().getStringExtra("number");
         getLocation = getIntent().getStringExtra("getLocationET");
         getDropOffLocation = getIntent().getStringExtra("getDropOffLocation");
+        Log.e("TAG", "onCreate: 0"+vehicleMake+model+color+year );
 //        payment = getIntent().getStringExtra("payment");
         priceTXT.setText("$" + price);
+        bonus.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.toString().equals("")){
+                    priceTXT.setText("$" + Double.parseDouble(price));
+                }else{
+                    priceTXT.setText("$" +(Double.parseDouble(price) + Double.parseDouble(bonus.getText().toString())));
+
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         Button payButton = findViewById(R.id.payButton);
         payButton.setOnClickListener((View view) -> {
 //            double amount = (Double.parseDouble(price) + Double.parseDouble(bonus.getText().toString())) * 100;
@@ -131,6 +167,9 @@ public class PaymentActivity extends AppCompatActivity {
         payMap.put("state", "UP");
         payMap.put("country", countryET.getText().toString());
 
+
+        customProgressBar.showProgress();
+
 //        shipping.put("address", address);
 //        payMap.put("items", itemList);
 //        itemList.add(itemMap);
@@ -160,7 +199,7 @@ public class PaymentActivity extends AppCompatActivity {
     void createRequestCustomer(PaymentMethodCreateParams params) {
         apiService.createJobRequest(sharedPreferenceMethod.getJWTToken(),
                 sharedPreferenceMethod.getCustomerID(),
-                name, number, getLocation, getDropOffLocation, email, service, notes, price)
+                name, number, getLocation, getDropOffLocation, email, service, notes, price,vehicleMake,model,color,year)
                 .enqueue(new retrofit2.Callback<JobRequestModel>() {
                     @Override
                     public void onResponse(retrofit2.Call<JobRequestModel> call, retrofit2.Response<JobRequestModel> response) {
@@ -238,6 +277,7 @@ public class PaymentActivity extends AppCompatActivity {
                             activity, "Error: " + e.toString(), Toast.LENGTH_LONG
                     ).show();
                     Log.e("TAG", "run: " + e.getMessage());
+                    activity.customProgressBar.hideProgress();
                 }
             });
         }
@@ -328,7 +368,6 @@ public class PaymentActivity extends AppCompatActivity {
 
         @Override
         public void onSuccess(@NonNull PaymentIntentResult result) {
-            customProgressBar.showProgress();
             final PaymentActivity activity = activityRef.get();
             if (activity == null) {
                 return;

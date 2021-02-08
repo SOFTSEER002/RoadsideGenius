@@ -1,7 +1,9 @@
 package com.doozycod.roadsidegenius.Tabs.AdminNavigation;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.doozycod.roadsidegenius.Adapter.AdminAdapter.UnassignAdapter;
+import com.doozycod.roadsidegenius.Adapter.AdminAdapter.NewRequestAdapter;
 import com.doozycod.roadsidegenius.Model.JobList.JobsListModel;
 import com.doozycod.roadsidegenius.R;
 import com.doozycod.roadsidegenius.Service.ApiService;
@@ -45,10 +47,29 @@ public class NewRequestFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
+
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Context contextThemeWrapper;
+        if (sharedPreferenceMethod != null) {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(),
+                    sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        } else {
+            contextThemeWrapper = new ContextThemeWrapper(getActivity(), R.style.LightTheme);
+
+        }
+        // create ContextThemeWrapper from the original Activity Context with the custom theme
+
+// clone the inflater using the ContextThemeWrapper
+        LayoutInflater localInflater = inflater.cloneInContext(contextThemeWrapper);
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_new_request, container, false);
+        View view = localInflater.inflate(R.layout.fragment_new_request, container, false);
 
         sharedPreferenceMethod = new SharedPreferenceMethod(getActivity());
         customProgressBar = new CustomProgressBar(getActivity());
@@ -92,10 +113,10 @@ public class NewRequestFragment extends Fragment {
                 if (response.body().getResponse().getStatus().equals("Success")) {
                     if (response.body().getResponse().getJobs().size() > 0) {
                         text.setVisibility(View.GONE);
-                        recyclerView.setAdapter(new UnassignAdapter(getContext(), response.body().getResponse().getJobs()));
+                        recyclerView.setAdapter(new NewRequestAdapter(getContext(), response.body().getResponse().getJobs()));
                     } else {
                         text.setVisibility(View.VISIBLE);
-                        Toast.makeText(getActivity(), "No Jobs Found yet!", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(), "No Jobs Found yet!", Toast.LENGTH_SHORT).show();
                     }
                 }
             }

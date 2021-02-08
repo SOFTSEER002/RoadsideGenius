@@ -3,23 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#E6E6E6">
+    android:background="?attr/bgColor">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardElevation="5dp"
+        app:cardBackgroundColor="?attr/recyclerViewBGColor"
+        app:cardCornerRadius="5dp"
         app:cardUseCompatPadding="true">
 
         <RelativeLayout
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <ImageView
                 android:id="@+id/editDriverButton"
-                android:layout_alignParentRight="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
                 android:layout_margin="10dp"
                 android:src="@drawable/ic_baseline_edit_road_24" />
 
@@ -27,8 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:paddingTop="160dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingTop="160dp">
 
 
                 <ImageView
@@ -58,8 +61,8 @@
                         android:layout_weight="0.8"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Vendor Id"
-                        android:textColor="#000"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/vendorId"
@@ -69,7 +72,8 @@
                         android:layout_weight="1.2"
                         android:fontFamily="@font/poppins_regular"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/metaTextColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -85,8 +89,8 @@
                         android:layout_weight=".8"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Driver Name"
-                        android:textColor="#000"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/driverNameTxt"
@@ -96,7 +100,8 @@
                         android:layout_weight="1.2"
                         android:fontFamily="@font/poppins_regular"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/metaTextColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -112,8 +117,8 @@
                         android:layout_weight=".8"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Driver Number"
-                        android:textColor="#000"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/driverNumber"
@@ -123,7 +128,8 @@
                         android:layout_weight="1.2"
                         android:fontFamily="@font/poppins_regular"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/metaTextColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -139,8 +145,8 @@
                         android:layout_weight=".8"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Service Area"
-                        android:textColor="#000"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/serviceArea"
@@ -150,7 +156,8 @@
                         android:layout_weight="1.2"
                         android:fontFamily="@font/poppins_regular"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/metaTextColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -166,8 +173,8 @@
                         android:layout_weight=".8"
                         android:fontFamily="@font/poppins_regular"
                         android:text="Pay Per Job"
-                        android:textColor="#000"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/textColor" />
 
                     <TextView
                         android:id="@+id/payperjobTxt"
@@ -177,7 +184,8 @@
                         android:layout_weight="1.2"
                         android:fontFamily="@font/poppins_regular"
                         android:text="vendor Id12"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="?attr/metaTextColor" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

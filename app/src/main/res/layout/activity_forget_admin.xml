@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/bgColor"
     tools:context=".Activities.Admin.ForgetAdminActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -45,7 +46,7 @@
             android:layout_marginTop="10dp"
             android:fontFamily="@font/poppins_regular"
             android:text="Email"
-            android:textColor="@color/black" />
+            android:textColor="?attr/textColor" />
 
         <EditText
             android:id="@+id/emailET"

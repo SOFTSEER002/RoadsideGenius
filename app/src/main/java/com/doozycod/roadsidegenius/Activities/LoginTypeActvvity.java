@@ -28,11 +28,20 @@ public class LoginTypeActvvity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+//        setTheme(R.style.DarkTheme);
+        sharedPreferenceMethod = new SharedPreferenceMethod(this);
+//        sharedPreferenceMethod.setTheme("dark");
+        if (sharedPreferenceMethod.getTheme().equals("")) {
+            setTheme(R.style.LightTheme);
+            sharedPreferenceMethod.setTheme("light");
+        } else {
+            setTheme(sharedPreferenceMethod.getTheme().equals("light") ? R.style.LightTheme : R.style.DarkTheme);
+        }
         setContentView(R.layout.activity_login_type_actvvity);
         adminButton = findViewById(R.id.adminButton);
         driverButton = findViewById(R.id.driverButton);
         customerButton = findViewById(R.id.customerButton);
-        sharedPreferenceMethod = new SharedPreferenceMethod(this);
         if (sharedPreferenceMethod.getFCMToken().equals("")) {
             generatePushToken();
 //            registerReceiver(new FirebaseBroadcastReceiver(),new IntentFilter("android.intent.category.LAUNCHER"));
