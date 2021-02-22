@@ -24,6 +24,7 @@ public class SharedPreferenceMethod {
         sp_editior.apply();
 
     }
+
     public void setTheme(String themeType) {
         sp = context.getSharedPreferences("roadsideGeniusTHEME", Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editior = sp.edit();
@@ -31,6 +32,7 @@ public class SharedPreferenceMethod {
         sp_editior.apply();
 
     }
+
     public String getTheme() {
         sp = context.getSharedPreferences("roadsideGeniusTHEME", Context.MODE_PRIVATE);
 //        SharedPreferences.Editor sp_editior = sp.edit();
@@ -51,6 +53,7 @@ public class SharedPreferenceMethod {
         sp_editior.putString("userPassword", userPassword);
         sp_editior.apply();
     }
+
     public void saveDriverLoginPassword(String userEmail, String userPassword) {
         sp = context.getSharedPreferences("roadsideGeniusDriverLOGIN", Context.MODE_PRIVATE);
         SharedPreferences.Editor sp_editior = sp.edit();
